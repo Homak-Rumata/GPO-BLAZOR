@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Xml;
 using System.Xml.Serialization;
 using System;
-using GPO_BLAZOR.DBAgents;
+using GPO_BLAZOR.PDFConstructor;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -31,7 +31,7 @@ using System.Diagnostics.Eventing.Reader;
 
 namespace GPO_BLAZOR
 {
-
+    
 
     class Date
     {
@@ -154,6 +154,8 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
+            TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
             Console.WriteLine($"Envirment Tunnel URL {urlstr}");

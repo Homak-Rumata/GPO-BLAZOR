@@ -19,12 +19,11 @@ using MigraDoc.Rendering;
 using static PdfSharp.Snippets.Drawing.ImageHelper;
 using System.Text;
 
-namespace GPO_BLAZOR.DBAgents
+namespace GPO_BLAZOR.PDFConstructor
 {
-
-   /* public class FileFontResolver : IFontResolver // FontResolverBase
+    public class FileFontResolver : IFontResolver // FontResolverBase
     {
-        public string DefaultFontName => throw new NotImplementedException();
+        public string DefaultFontName => "Times";
 
         public byte[] GetFont(string faceName)
         {
@@ -119,24 +118,37 @@ namespace GPO_BLAZOR.DBAgents
             // Test code to find the names of embedded fonts
             //var ourResources = assembly.GetManifestResourceNames();
 
-            using (Stream stream = assembly.GetManifestResourceStream(name))
+            using (Stream? stream = assembly.GetManifestResourceStream(name))
             {
                 if (stream == null)
                     throw new ArgumentException("No resource with name " + name);
 
                 int count = (int)stream.Length;
                 byte[] data = new byte[count];
-                stream.Read(data, 0, count);
+                stream.ReadExactly(data, 0, count);
                 return data;
             }
         }
     }
 
-    public class DBConnector
+    public class TestPrinter
     {
+        record struct Margins
+        {
+            public Margins(int right, int left, int top, int bottom)
+            {
+                Right = right;
+                Left = left;
+                Top = top;
+                Bottom = bottom;
+            }
+            public int Right { get; init; }
+            public int Left { get; init; }
+            public int Top { get; init; }
+            public int Bottom { get; init; }
+        }
 
-
-        private (int right, int left, int up, int low) margin = (10, 10, 10, 10);
+        private static Margins margin = new(45, 60, 60, 60);
 
         static public MemoryStream F (Stream g)
         {
@@ -151,6 +163,7 @@ namespace GPO_BLAZOR.DBAgents
 
             Console.WriteLine("1");
             fdocument.Language = "ru";
+            //Добавление страницы
             PdfPage page = fdocument.AddPage();
 
             page.Orientation = PageOrientation.Portrait;
@@ -195,7 +208,7 @@ namespace GPO_BLAZOR.DBAgents
                 "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" +
                 "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" +
                 "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" +
-                "hhhhhhh".ToUpper()), h, XBrushes.Black, XPoint.Subtract((new XPoint(20, 850)), (new XVector(2, 3))));*//*
+                "hhhhhhh".ToUpper()), h, XBrushes.Black, XPoint.Subtract((new XPoint(20, 850)), (new XVector(2, 3))));*/
 
             int size = 6;
 
@@ -252,22 +265,26 @@ namespace GPO_BLAZOR.DBAgents
 
 
             MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
+            document.FootnoteLocation = FootnoteLocation.BottomOfPage;
+
             Section section = document.AddSection();
             Section section2 = document.AddSection();
 
 
             section.PageSetup.PageFormat = PageFormat.A4;//стандартный размер страницы
             section.PageSetup.Orientation = Orientation.Portrait;//ориентация
-            section.PageSetup.BottomMargin = 60;//нижний отступ
-            section.PageSetup.TopMargin = 60;//верхний отступ
+            section.PageSetup.BottomMargin = margin.Bottom;//нижний отступ
+            section.PageSetup.TopMargin = margin.Top;//верхний отступ
 
-            section.PageSetup.LeftMargin = 60;
-            section.PageSetup.RightMargin = 45;
+            section.PageSetup.LeftMargin = margin.Left;
+            section.PageSetup.RightMargin = margin.Right;
 
             Paragraph paragraph = section.AddParagraph();
+            paragraph.Format.Font.Size = 14;
+
             Paragraph paragraph2 = section.AddParagraph();
 
-            Paragraph paragraph3 = section2.AddParagraph();
+            Paragraph paragraph3 = section2.;
 
             paragraph.Format.Font.ApplyFont( new Font("Times"));
 
@@ -275,6 +292,7 @@ namespace GPO_BLAZOR.DBAgents
             paragraph.AddText("text");//текст
             paragraph.AddFormattedText("formatted text1", (new Font("Times")));// форматированный текст
             paragraph2.AddFormattedText("formatted text2", (new Font("Times")));
+            paragraph2.Format.Alignment = ParagraphAlignment.Right;
             paragraph3.AddFormattedText("formatted text3", (new Font("Times")));
             paragraph.Add(text);//добавление любого из перечисленых ниже
             paragraph.AddBookmark("Bookmark");//закладка
@@ -318,7 +336,7 @@ namespace GPO_BLAZOR.DBAgents
 
 
 
-            var pdfRenderer = new PdfDocumentRenderer(true);
+            var pdfRenderer = new PdfDocumentRenderer();
             pdfRenderer.Document = document;
             pdfRenderer.RenderDocument();
             pdfRenderer.PdfDocument.Save("PDFFile2.pdf");
@@ -332,9 +350,10 @@ namespace GPO_BLAZOR.DBAgents
             {
                 //fdocument.AddPage(page);
                 Console.WriteLine("2");
+                PdfDocument fdocumentTemp = fdocument.Clone() as PdfDocument ?? fdocument;
                 fdocument.Save("PDFFile1.pdf");
                 Console.WriteLine("2");
-                fdocument.Save(jk);
+                //fdocumentTemp.Save(jk);
                 fdocument.Close();
                 return jk;
             }
@@ -346,7 +365,7 @@ namespace GPO_BLAZOR.DBAgents
 
 
     }
-            */
+            
 
 
 }

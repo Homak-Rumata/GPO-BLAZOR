@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization.DataContracts;
 using System.Xml;
 
-namespace GPO_BLAZOR.DBAgents
+namespace GPO_BLAZOR.PDFConstructor
 {
     public abstract class XMLReader
     {
