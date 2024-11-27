@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPO BLAZOR", "GPO BLAZOR\GPO BLAZOR\GPO BLAZOR.csproj", "{14B63779-E8B3-43FE-A996-EB4535A68E38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPO BLAZOR.Client", "GPO BLAZOR\GPO BLAZOR.Client\GPO BLAZOR.Client.csproj", "{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleTestGPO", "ModuleTestGPO\ModuleTestGPO.csproj", "{834D1EB1-310B-40FB-959D-AF5FAD37B27D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14B63779-E8B3-43FE-A996-EB4535A68E38} = {14B63779-E8B3-43FE-A996-EB4535A68E38}
+		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F} = {B20BC9E3-6A94-4F80-9AFC-235A82B9406F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebInterfaseTest", "WebInterfaseTest\WebInterfaseTest.csproj", "{C8AF64E2-6289-44FA-BB5A-3CD39A22CCB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspieXUnit", "AspieXUnit\AspieXUnit.csproj", "{BE52322B-6A1F-4E00-A372-955AA727B8B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTest", "NUnitTest\NUnitTest.csproj", "{7E021FAB-EB26-42A7-A819-47F5759D16F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14B63779-E8B3-43FE-A996-EB4535A68E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B63779-E8B3-43FE-A996-EB4535A68E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B63779-E8B3-43FE-A996-EB4535A68E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B63779-E8B3-43FE-A996-EB4535A68E38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{834D1EB1-310B-40FB-959D-AF5FAD37B27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{834D1EB1-310B-40FB-959D-AF5FAD37B27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{834D1EB1-310B-40FB-959D-AF5FAD37B27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{834D1EB1-310B-40FB-959D-AF5FAD37B27D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8AF64E2-6289-44FA-BB5A-3CD39A22CCB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8AF64E2-6289-44FA-BB5A-3CD39A22CCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8AF64E2-6289-44FA-BB5A-3CD39A22CCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8AF64E2-6289-44FA-BB5A-3CD39A22CCB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE52322B-6A1F-4E00-A372-955AA727B8B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE52322B-6A1F-4E00-A372-955AA727B8B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE52322B-6A1F-4E00-A372-955AA727B8B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE52322B-6A1F-4E00-A372-955AA727B8B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E021FAB-EB26-42A7-A819-47F5759D16F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E021FAB-EB26-42A7-A819-47F5759D16F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E021FAB-EB26-42A7-A819-47F5759D16F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E021FAB-EB26-42A7-A819-47F5759D16F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78231F2D-C73F-40FF-A57E-B0F05721557A}
+	EndGlobalSection
+EndGlobal
