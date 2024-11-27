@@ -1,0 +1,51 @@
+﻿@using GPO_BLAZOR.Client.Class.Date
+
+
+<tr>
+    <td>
+        @Date.Tyme.ToString()
+    </td>
+    <td>
+        @switch (Date.PracticType)
+        {
+            case PracticType.Studing:
+                <a>Учебная</a>
+                break;
+            case PracticType.Factory:
+                <a>Производственная</a>
+                break;
+        }
+    </td>
+    <td>
+        @switch (Date.State)
+        {
+            case State.Partial:
+                <a>Незаполненно</a>
+                break;
+            case State.Agree:
+                <a>Принято</a>
+                break;
+            case State.Full:
+                <a>Заполненно</a>
+                break;
+        }
+    </td>
+    <td>
+        <input type="button" @onclick="Click" value="Открыть"/>
+    </td>
+</tr>
+
+@code {
+    [Parameter]
+    public StatmentDate Date { get; set; }
+
+    [Parameter]
+    public EventCallback<(string, int)> ViemStatmen { get; set; }
+
+    async Task Click()
+    {
+        
+        await ViemStatmen.InvokeAsync((Date.ID, Date.Num));
+    }
+
+}

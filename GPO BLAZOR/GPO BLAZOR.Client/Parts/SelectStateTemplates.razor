@@ -1,0 +1,45 @@
+﻿@using GPO_BLAZOR.Client.Class.Date;
+@inherits StatmenCreator
+
+@page "/test";
+
+<body>
+@if (isLoading)
+{
+    <h2>
+        Загрузка
+    </h2>
+}
+else
+{
+    <form>
+            @foreach (var temp in values != null ? values : new Dictionary<string, IEnumerable<string>>
+        {{ "ErrorMessage", new string[] { "Ошибка в запросе" } }})
+    {
+                <h3>@temp.Key;</h3>
+
+                <SelectStateTemplates_razor eventer="@(async(string value)=>{var function = await ReturnCallBack(temp.Key); function(value);})"  Key="@temp.Key" values="@temp.Value"/>
+
+        <button value="Отправить" @onclick="@ButtonClicked">
+            Отправить
+        </button>
+    }
+     </form>
+}
+</body>
+
+
+
+@code {
+
+    async Task<Action<string>> ReturnCallBack (string key)
+    {
+        async void Function (string value)
+        {
+            fields[key] = value;
+        }
+
+        return Function;
+    }
+
+}

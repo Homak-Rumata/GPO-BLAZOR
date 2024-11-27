@@ -1,0 +1,30 @@
+﻿
+@inherits Date.Field;
+
+<body>
+    <div>
+        <h5>
+            @namevalue
+            @field.textvalue
+        </h5>
+        @if (field.CollectionValues is not null)
+        {
+        <InputSelect @bind-Value="@field.value" id="@field.idvalue" class="@field.classvvalue">
+            
+            @foreach (string item in field.CollectionValues)
+            {
+                <option value="@item">@item</option>
+            }
+        </InputSelect>
+        }
+        else
+        {
+            <InputSelect @bind-Value="@field.value" id="@field.idvalue" class="@field.classvvalue" style="background-color:red" disabled="disabled">
+                <option style="background-color:red">
+                    Ошибка в получении значений
+                </option>
+            </InputSelect>
+        }
+    </div>
+</body>
+

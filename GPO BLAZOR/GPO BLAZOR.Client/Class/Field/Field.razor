@@ -1,0 +1,22 @@
+﻿@using GPO_BLAZOR.Client.Class.Date
+@inherits Date.Field
+@typeparam T
+@implements Date.ITextField<T>
+
+<body>
+    <h5>
+        @textvalue
+        @a=this;
+    </h5>
+
+    <input type="text" class="@classvvalue" name="@namevalue" @bind="this.value" />
+</body>
+
+@code {
+    //[Parameter]
+    //public ITextField<string> Date { get; set; }
+    ITextField<T> a;
+
+
+    public T value { get; set; }
+}

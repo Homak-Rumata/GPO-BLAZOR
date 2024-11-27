@@ -1,0 +1,39 @@
+﻿@using GPO_BLAZOR.Client.Class.Date
+@using GPO_BLAZOR.Client.Class.Field
+
+<body>
+    <h3>
+        @Date.NameBlock
+    </h3>
+    
+    <div>
+    @foreach (IField temp in Date.TextValues)
+    {
+            switch (temp)
+            {
+                case CollectionValue<string> textvalue:
+                    <SelectedTextField field="(ICollectionValue<string>)temp" />
+                    break;
+                case TextValue<string> textvalue:
+                    <TextField field="(ITextField<string>)temp" />
+                    break;
+                default:
+                    <h1> ComponentError </h1>
+                    <TextField field="(ITextField<string>)temp" />
+                    break;
+            }
+            
+    }
+    </div>
+
+</body>
+
+@code {
+    [Parameter]
+    public IBlockValues Date { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+}

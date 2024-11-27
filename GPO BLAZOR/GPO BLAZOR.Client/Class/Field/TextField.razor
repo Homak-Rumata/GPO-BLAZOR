@@ -1,0 +1,33 @@
+﻿@using GPO_BLAZOR.Client.Class.Date;
+@inherits Date.Field
+
+<body>
+    <div>
+    <h5>
+        @field.textvalue
+    </h5>
+
+    <input id="@field.idvalue" type="text" class="@field.classvvalue" name="@field.namevalue" @bind="this.value" />
+    </div>
+</body>
+
+@code {
+    //[Parameter]
+    //public ITextField<string> Date { get; set; }
+    //ITextField<string> a;
+
+
+
+
+    public string value
+    {
+        get
+        {
+            return field.value;
+        }
+        set
+        {
+            field.value = value;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+﻿@using GPO_BLAZOR.Client.Class.Date;
+
+<InputSelect name="@Key" @bind-Value="@actualresult" @onchange="@ChangeValue">
+    @foreach (var item in values)
+    {
+        <option value="@item">@item</option>
+    }
+</InputSelect>
+
+@code {
+    [Parameter]
+    public EventCallback<string> eventer { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> values { get; set; }
+
+    [Parameter]
+    public string Key { get; set; }
+
+    private string actualresult;
+
+    private async Task ChangeValue ()
+    {
+        eventer.InvokeAsync(actualresult);
+    }
+}

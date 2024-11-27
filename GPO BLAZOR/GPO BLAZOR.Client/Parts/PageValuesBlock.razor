@@ -1,0 +1,24 @@
+﻿@using GPO_BLAZOR.Client.Class.Date
+
+<body>
+    @if(Date != null) {
+        <h2>
+            @Date.NamePageBlock
+        </h2>
+        @foreach (IBlockValues temp in Date.TextValues)
+        {
+            <Block Date="temp" />
+        }
+    }
+    else
+    {
+        
+    }
+</body>
+
+@code {
+    [Parameter]
+    public IPageValues Date { get; set; }
+
+    
+}
