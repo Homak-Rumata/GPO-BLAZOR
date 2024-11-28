@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Sections>
+    <Section>
+      <paragrapfs>
+        <Paragrapf>
+          <text>
+            <BaseElement xsi:type="Text">
+              <TextValue>Гоооги</TextValue>
+            </BaseElement>
+            <BaseElement xsi:type="InjectElement">
+              <TextValue>234</TextValue>
+              <Name>InputName</Name>
+            </BaseElement>
+          </text>
+          <Bold>false</Bold>
+          <Size>14</Size>
+          <Alignment>Justify</Alignment>
+          <Underline>None</Underline>
+          <Italic>false</Italic>
+        </Paragrapf>
+      </paragrapfs>
+    </Section>
+  </Sections>
+  <margin>
+    <Right>45</Right>
+    <Left>60</Left>
+    <Top>60</Top>
+    <Bottom>60</Bottom>
+  </margin>
+</Document>

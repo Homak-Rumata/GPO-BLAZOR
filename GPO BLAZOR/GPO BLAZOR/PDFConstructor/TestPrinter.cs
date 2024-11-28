@@ -284,7 +284,7 @@ namespace GPO_BLAZOR.PDFConstructor
 
             Paragraph paragraph2 = section.AddParagraph();
 
-            Paragraph paragraph3 = section2.;
+            Paragraph paragraph3 = section2.AddParagraph();
 
             paragraph.Format.Font.ApplyFont( new Font("Times"));
 

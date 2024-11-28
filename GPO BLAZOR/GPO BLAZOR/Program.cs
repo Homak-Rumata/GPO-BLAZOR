@@ -27,6 +27,8 @@ using BlockDateContainer = GPO_BLAZOR.FiledConfiguration.BlockDateContainer;
 using FieldDateContainer = GPO_BLAZOR.FiledConfiguration.FieldDateContainer;
 using StatmenDate = GPO_BLAZOR.FiledConfiguration.StatmenDate;
 using System.Diagnostics.Eventing.Reader;
+using Document = GPO_BLAZOR.PDFConstructor.DocumentService.Document;
+using MigraDoc.Rendering;
 
 
 namespace GPO_BLAZOR
@@ -154,7 +156,22 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
-            TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+            
+            XmlSerializer xmlSerializer = new(typeof(Document));
+
+            // получаем поток, куда будем записывать сериализованный объект
+
+                xmlSerializer.Serialize(Console.Out, PDFConstructor.DocumentService.F.FA());
+            
+
+            var pdfRenderer = new PdfDocumentRenderer();
+            pdfRenderer.Document = PDFConstructor.DocumentService.F.FA().Render(); ;
+            pdfRenderer.RenderDocument();
+            pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
+
+
+            Console.WriteLine("Object has been serialized");
+            //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
