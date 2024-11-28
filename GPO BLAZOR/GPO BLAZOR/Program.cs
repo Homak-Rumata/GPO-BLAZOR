@@ -29,6 +29,7 @@ using StatmenDate = GPO_BLAZOR.FiledConfiguration.StatmenDate;
 using System.Diagnostics.Eventing.Reader;
 using Document = GPO_BLAZOR.PDFConstructor.DocumentService.Document;
 using MigraDoc.Rendering;
+using System.Text.Json;
 
 
 namespace GPO_BLAZOR
@@ -158,19 +159,25 @@ namespace GPO_BLAZOR
         {
             
             XmlSerializer xmlSerializer = new(typeof(Document));
+            Stream str = new FileStream ("person.xml", FileMode.OpenOrCreate);
 
             // получаем поток, куда будем записывать сериализованный объект
 
-                xmlSerializer.Serialize(Console.Out, PDFConstructor.DocumentService.F.FA());
+                xmlSerializer.Serialize(str, PDFConstructor.DocumentService.F.FA());
             
 
             var pdfRenderer = new PdfDocumentRenderer();
-            pdfRenderer.Document = PDFConstructor.DocumentService.F.FA().Render(); ;
+            pdfRenderer.Document = PDFConstructor.DocumentService.F.FA().Render(); 
             pdfRenderer.RenderDocument();
             pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
 
 
-            Console.WriteLine("Object has been serialized");
+            Console.WriteLine("\nObject has been serialized\n");
+            var temp2 = PDFConstructor.DocumentService.F.FA().Render();
+            var JSONSer = JsonSerializer.Serialize(PDFConstructor.DocumentService.F.FA());
+            str.Close();
+            str = new FileStream("person.xml", FileMode.OpenOrCreate);
+            Document? res = xmlSerializer.Deserialize(str) as Document?;
             //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");

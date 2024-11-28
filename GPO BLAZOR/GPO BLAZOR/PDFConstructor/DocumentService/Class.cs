@@ -8,6 +8,8 @@ using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
 using System.Runtime.Serialization;
 using System.Reflection.Metadata;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace GPO_BLAZOR.PDFConstructor.DocumentService
 {
@@ -61,8 +63,11 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
 
     public interface IDocument : IElement;
     public interface ISections : IElement<RenderingDocument>;
+
+
     public interface IParagraph : IElement<RenderingSection>;
 
+    
     public interface IBaseElement : IElement<Paragraph>
     {
         string TextValue { get; set; }
@@ -87,21 +92,28 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
             Top = top;
             Bottom = bottom;
         }
+        [XmlAttribute("right")]
         public int Right { get; init; }
+        [XmlAttribute("left")]
         public int Left { get; init; }
+        [XmlAttribute("top")]
         public int Top { get; init; }
+        [XmlAttribute("bottom")]
         public int Bottom { get; init; }
     }
 
 
 
-
+    [DataContract]
+    //[XmlRoot(Namespace = "Templates", ElementName = "Document", IsNullable = false, DataType = "string")]
+    [XmlInclude(typeof(Paragrapf))]
     public struct Document: IDocument
     {
         public Document()
         {
 
         }
+        [XmlArray]
         public Section[] Sections { get; set; }
         public Margins margin { get; set; } = new(45, 60, 60, 60);
 
@@ -123,7 +135,9 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         {
 
         }
-        public Paragrapf[] paragrapfs { get; set; }
+        [XmlArray]
+        [XmlArrayItem("Paragrapf", typeof(Paragrapf))]
+        public BaseParagraph[] paragrapfs { get; set; }
 
         public void Render(in RenderingDocument document)
         {
@@ -137,25 +151,44 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
 
     }
 
-    [DataContract]
-    public record struct Paragrapf: IParagraph
+
+    [XmlInclude(typeof(Paragrapf))]
+    [JsonArray]
+    [Serializable]
+    public abstract record class BaseParagraph : IParagraph
+    {
+        public abstract void Render(in RenderingSection element);
+    }
+
+
+    [JsonArray]
+    [Serializable]
+    public record class Paragrapf: BaseParagraph, IParagraph
     {
         public Paragrapf()
         {
 
         }
+        [XmlArray]
+        [XmlArrayItem("InjectElement", typeof(InjectElement))]
+        [XmlArrayItem("Text", typeof(Text))]
         public BaseElement[] text { get; set; }
 
+        [XmlAttribute]
         public bool Bold { get; set; } = false;
+        [XmlAttribute]
         public int Size { get; set; } = 14;
+        [XmlAttribute]
         public ParagraphAlignment Alignment { get; set; } = ParagraphAlignment.Justify;
+        [XmlAttribute]
         public Underline Underline { get; set; } = Underline.None;
+        [XmlAttribute]
         public bool Italic { get; set; } = false;
         public Borders Borders { get; set; }
 
         
 
-        public void Render(in RenderingSection section)
+        public override void Render(in RenderingSection section)
         {
             var paragraph = section.AddParagraph();
             paragraph.Format.Font.Name = "Times";
@@ -177,28 +210,32 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
 
     }
 
-    [DataContract]
-    //[XmlRoot(Namespace = Constants.Namespace)]
-    [XmlInclude(typeof(InjectElement))]
-    [XmlInclude(typeof(Text))]
+
+    [JsonArray]
+    [Serializable]
     public abstract record class BaseElement : IBaseElement
     {
         public BaseElement()
         {
 
         }
+
         public abstract string TextValue { get; set; }
         public abstract void Render(in Paragraph element);
     }
 
-    [DataContract]
+
+    [JsonArray]
     public record class InjectElement: BaseElement, IInjectValue
     {
         public InjectElement()
         {
 
         }
+        [DataMember]
+        [XmlAttribute]
         public string Name { get; set; }
+        [DataMember]
         public override string TextValue { get; set; }
 
         public override void Render(in Paragraph paragraph)
@@ -207,13 +244,15 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         }
     }
 
-    [DataContract]
+
+    [JsonArray]
     public record class Text : BaseElement, IText
     {
         public Text()
         {
 
         }
+        [DataMember]
         public override string TextValue { get; set; }
 
         public override void Render(in Paragraph paragraph)

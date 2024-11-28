@@ -3,29 +3,25 @@
   <Sections>
     <Section>
       <paragrapfs>
-        <Paragrapf>
+        <Paragrapf Bold="true" Size="14" Alignment="Justify" Underline="None" Italic="false">
           <text>
-            <BaseElement xsi:type="Text">
-              <TextValue>Гоооги</TextValue>
-            </BaseElement>
-            <BaseElement xsi:type="InjectElement">
-              <TextValue>234</TextValue>
-              <Name>InputName</Name>
-            </BaseElement>
+            <Text TextValue="Договор о практической подготовке обучающихся в форме практики №" />
+            <InjectElement TextValue="1">
+              <Name>ContractNumber</Name>
+            </InjectElement>
+            <Text TextValue="г. Томск" />
           </text>
-          <Bold>false</Bold>
-          <Size>14</Size>
-          <Alignment>Justify</Alignment>
-          <Underline>None</Underline>
-          <Italic>false</Italic>
+        </Paragrapf>
+        <Paragrapf Bold="false" Size="14" Alignment="Justify" Underline="None" Italic="false">
+          <text>
+            <Text TextValue="Федеральное государственное автономное образовательное учреждение высшего образования «Томский государственный университет систем управления и радиоэлектроники» (ТУСУР), именуемое в дальнейшем «Университет», в лице директора центра карьеры И.А. Трубчениновой, действующего на основании доверенности от 19.09.2024 №20/3460, с одной стороны, и" />
+            <InjectElement TextValue="ООО ДИВИЛАЙН">
+              <Name>CompanyName</Name>
+            </InjectElement>
+          </text>
         </Paragrapf>
       </paragrapfs>
     </Section>
   </Sections>
-  <margin>
-    <Right>45</Right>
-    <Left>60</Left>
-    <Top>60</Top>
-    <Bottom>60</Bottom>
-  </margin>
+  <margin right="45" left="60" top="60" bottom="60" />
 </Document>
