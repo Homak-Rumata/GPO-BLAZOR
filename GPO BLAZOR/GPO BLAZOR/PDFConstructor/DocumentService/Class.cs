@@ -1,5 +1,6 @@
 ﻿using RenderingDocument = MigraDoc.DocumentObjectModel.Document;
 using RenderingSection = MigraDoc.DocumentObjectModel.Section;
+using RenderingTable = MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Internals;
 using System.Xml.Serialization;
@@ -10,6 +11,9 @@ using System.Runtime.Serialization;
 using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using System.Text;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace GPO_BLAZOR.PDFConstructor.DocumentService
 {
@@ -30,16 +34,16 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
                             Bold = true,
                             text = new BaseElement[]
                         {
-                            new Text { TextValue = "Договор о практической подготовке обучающихся в форме практики №" },
+                            new RawText { TextValue = "Договор о практической подготовке обучающихся в форме практики №" },
                             new InjectElement { Name = "ContractNumber", TextValue = "1" },
-                            new Text { TextValue = "г. Томск" },
+                            new RawText { TextValue = "г. Томск" },
                         }
                         },
                         new Paragrapf()
                         {
                             text = new BaseElement[]
                             {
-                                new Text {TextValue = "Федеральное государственное автономное образовательное учреждение высшего образования «Томский государственный университет систем управления и радиоэлектроники» (ТУСУР), именуемое в дальнейшем «Университет», в лице директора центра карьеры И.А. Трубчениновой, действующего на основании доверенности от 19.09.2024 №20/3460, с одной стороны, и" },
+                                new RawText {TextValue = ("Федеральное государственное автономное образовательное учреждение высшего образования «Томский государственный университет систем управления и радиоэлектроники» (ТУСУР), именуемое в дальнейшем «Университет», в лице директора центра карьеры И.А. Трубчениновой, действующего на основании доверенности от 19.09.2024 №20/3460, с одной стороны, и" ).ToString()},
                                 new InjectElement() {Name = "CompanyName", TextValue="ООО ДИВИЛАЙН" } 
                                 }
                             }
@@ -137,12 +141,12 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         }
         [XmlArray]
         [XmlArrayItem("Paragrapf", typeof(Paragrapf))]
+        [XmlArrayItem("Table", typeof(Table))]
         public BaseParagraph[] paragrapfs { get; set; }
 
         public void Render(in RenderingDocument document)
         {
             var section = document.AddSection();
-            
             foreach (IParagraph temp in paragrapfs)
             {
                 temp.Render(section);
@@ -151,17 +155,45 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
 
     }
 
-
-    [XmlInclude(typeof(Paragrapf))]
     [JsonArray]
     [Serializable]
-    public abstract record class BaseParagraph : IParagraph
+    [JsonDerivedType(typeof(FormatedElement), "FormatedElement")]
+    public abstract record class FormatedElement
+    {
+        [XmlAttribute]
+        public bool? Bold { get; set; }
+        [XmlAttribute]
+        public int? Size { get; set; }
+        [XmlAttribute]
+        public ParagraphAlignment? Alignment { get; set; }
+        [XmlAttribute]
+        public Underline? Underline { get; set; }
+        [XmlAttribute]
+        public bool? Italic { get; set; }
+        public Borders Borders { get; set; }
+
+        protected ParagraphFormat SetParametress(ParagraphFormat paragraphFormat)
+        {
+            paragraphFormat.Font.Name = "Times";
+            paragraphFormat.Font.Bold = Bold ?? false;
+            paragraphFormat.Font.Size = Size ?? 14;
+            paragraphFormat.Font.Underline = Underline ?? MigraDoc.DocumentObjectModel.Underline.None;
+            paragraphFormat.Font.Italic = Italic ?? false;
+            paragraphFormat.Borders = Borders;
+            paragraphFormat.Alignment = Alignment ?? ParagraphAlignment.Justify;
+            return paragraphFormat;
+        }
+    }
+
+    [JsonArray]
+    [Serializable]
+    [JsonDerivedType(typeof(Paragrapf), "Paragrapf")]
+    public abstract record class BaseParagraph : FormatedElement, IParagraph
     {
         public abstract void Render(in RenderingSection element);
     }
 
 
-    [JsonArray]
     [Serializable]
     public record class Paragrapf: BaseParagraph, IParagraph
     {
@@ -169,35 +201,16 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         {
 
         }
-        [XmlArray]
+        [XmlArray("Text")]
         [XmlArrayItem("InjectElement", typeof(InjectElement))]
-        [XmlArrayItem("Text", typeof(Text))]
+        [XmlArrayItem("Text", typeof(RawText))]
         public BaseElement[] text { get; set; }
 
-        [XmlAttribute]
-        public bool Bold { get; set; } = false;
-        [XmlAttribute]
-        public int Size { get; set; } = 14;
-        [XmlAttribute]
-        public ParagraphAlignment Alignment { get; set; } = ParagraphAlignment.Justify;
-        [XmlAttribute]
-        public Underline Underline { get; set; } = Underline.None;
-        [XmlAttribute]
-        public bool Italic { get; set; } = false;
-        public Borders Borders { get; set; }
-
-        
 
         public override void Render(in RenderingSection section)
         {
             var paragraph = section.AddParagraph();
-            paragraph.Format.Font.Name = "Times";
-            paragraph.Format.Font.Bold = Bold;
-            paragraph.Format.Font.Size = Size;
-            paragraph.Format.Font.Underline = Underline;
-            paragraph.Format.Font.Italic = Italic;
-            paragraph.Format.Borders = Borders;
-            paragraph.Format.Alignment = Alignment;
+            paragraph.Format = SetParametress(paragraph.Format);
 
             foreach (IBaseElement temp in text)
             {
@@ -210,22 +223,83 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
 
     }
 
+    public record class Table: BaseParagraph
+    {
+        public Row Head { get; set; }
 
-    [JsonArray]
-    [Serializable]
+        [XmlArray]
+        public Row[]Body { get; set; }
+        public override void Render(in RenderingSection section)
+        {
+            var Table = section.AddTable();
+            Table.Format = SetParametress(Table.Format);
+
+            Head.Render(Table, true);
+            foreach (Row row in Body)
+                row.Render(Table);
+
+        }
+    }
+
+    public record class  Row: FormatedElement
+    {
+        public Cell[] Cells { get; set; }
+
+        public void Render(in RenderingTable.Table section, bool isHead = false)
+        {
+            var row = section.AddRow();
+            row.Format = SetParametress(row.Format);
+            row.HeadingFormat = isHead;
+            foreach (Cell cell in Cells)
+                cell.Render(row);
+        }
+    }
+
+    public record class Column: FormatedElement
+    {
+        public Cell[] Cells { get; set; }
+
+        public void Render(in RenderingTable.Table section, bool isHead = false)
+        {
+            var column = section.AddColumn();
+            column.Format = SetParametress(column.Format);
+            column.HeadingFormat = isHead;
+            foreach (Cell cell in Cells)
+                cell.Render(column);
+        }
+    }
+
+    public record class Cell: FormatedElement
+    {
+        public Paragrapf[] Text { get; set; }
+        public void Render(in RenderingTable.Row section)
+        {
+            var t = section.Cells[0];
+        }
+
+        public void Render(in RenderingTable.Column section)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+    [JsonDerivedType(typeof(InjectElement), "InjectElement")]
+    [JsonDerivedType(typeof(RawText), "Text")]
     public abstract record class BaseElement : IBaseElement
     {
         public BaseElement()
         {
 
         }
-
+        [XmlText]
         public abstract string TextValue { get; set; }
         public abstract void Render(in Paragraph element);
     }
 
 
-    [JsonArray]
+    
     public record class InjectElement: BaseElement, IInjectValue
     {
         public InjectElement()
@@ -235,7 +309,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         [DataMember]
         [XmlAttribute]
         public string Name { get; set; }
-        [DataMember]
+        [XmlText]
         public override string TextValue { get; set; }
 
         public override void Render(in Paragraph paragraph)
@@ -245,14 +319,14 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
     }
 
 
-    [JsonArray]
-    public record class Text : BaseElement, IText
+    
+    public record class RawText : BaseElement, IText
     {
-        public Text()
+        public RawText()
         {
 
         }
-        [DataMember]
+        [XmlText]
         public override string TextValue { get; set; }
 
         public override void Render(in Paragraph paragraph)

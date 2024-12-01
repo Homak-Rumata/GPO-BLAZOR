@@ -1,0 +1,56 @@
+{
+  "Sections": [
+    {
+      "paragrapfs": [
+        {
+          "$type": "Paragrapf",
+          "text": [
+            {
+              "$type": "Text",
+              "TextValue": "Договор о практической подготовке обучающихся в форме практики №"
+            },
+            {
+              "$type": "InjectElement",
+              "Name": "ContractNumber",
+              "TextValue": "1"
+            },
+            {
+              "$type": "Text",
+              "TextValue": "г. Томск"
+            }
+          ],
+          "Bold": true,
+          "Size": 14,
+          "Alignment": 3,
+          "Underline": 0,
+          "Italic": false
+        },
+        {
+          "$type": "Paragrapf",
+          "text": [
+            {
+              "$type": "Text",
+              "TextValue": "Федеральное государственное автономное образовательное учреждение высшего образования «Томский государственный университет систем управления и радиоэлектроники» (ТУСУР), именуемое в дальнейшем «Университет», в лице директора центра карьеры И.А. Трубчениновой, действующего на основании доверенности от 19.09.2024 №20/3460, с одной стороны, и"
+            },
+            {
+              "$type": "InjectElement",
+              "Name": "CompanyName",
+              "TextValue": "ООО ДИВИЛАЙН"
+            }
+          ],
+          "Bold": false,
+          "Size": 14,
+          "Alignment": 3,
+          "Underline": 0,
+          "Italic": false
+        }
+      ]
+    }
+  ],
+  "margin": {
+    "Right": 45,
+    "Left": 60,
+    "Top": 60,
+    "Bottom": 60
+  }
+}

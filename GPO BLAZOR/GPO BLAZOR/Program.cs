@@ -30,6 +30,8 @@ using System.Diagnostics.Eventing.Reader;
 using Document = GPO_BLAZOR.PDFConstructor.DocumentService.Document;
 using MigraDoc.Rendering;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Encodings.Web;
 
 
 namespace GPO_BLAZOR
@@ -157,9 +159,24 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
-            
+            var options = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                AllowTrailingCommas = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+
+            };
+            var hjobj = PDFConstructor.DocumentService.F.FA();
+            var JSONSer = JsonSerializer.Serialize(hjobj, options);
+            byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
+            FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
+            str.Write(inputBuffer, 0, inputBuffer.Length);
+            str.Close();
+
+
             XmlSerializer xmlSerializer = new(typeof(Document));
-            Stream str = new FileStream ("person.xml", FileMode.OpenOrCreate);
+            str = new FileStream ("person.xml", FileMode.OpenOrCreate);
 
             // получаем поток, куда будем записывать сериализованный объект
 
@@ -174,7 +191,7 @@ namespace GPO_BLAZOR
 
             Console.WriteLine("\nObject has been serialized\n");
             var temp2 = PDFConstructor.DocumentService.F.FA().Render();
-            var JSONSer = JsonSerializer.Serialize(PDFConstructor.DocumentService.F.FA());
+            
             str.Close();
             str = new FileStream("person.xml", FileMode.OpenOrCreate);
             Document? res = xmlSerializer.Deserialize(str) as Document?;
