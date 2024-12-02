@@ -160,27 +160,32 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
     [JsonDerivedType(typeof(FormatedElement), "FormatedElement")]
     public abstract record class FormatedElement
     {
+        private bool? _bold;
         [XmlAttribute]
-        public bool? Bold { get; set; }
+        public bool Bold { get=>_bold ?? false; set=>_bold=value; }
+        private int? _size;
         [XmlAttribute]
-        public int? Size { get; set; }
+        public int Size { get=> _size ?? 14; set => _size = value; }
+        private ParagraphAlignment? _alignment;
         [XmlAttribute]
-        public ParagraphAlignment? Alignment { get; set; }
+        public ParagraphAlignment Alignment { get => _alignment ?? ParagraphAlignment.Justify; set=>_alignment=value; }
+        private Underline? _underline;
         [XmlAttribute]
-        public Underline? Underline { get; set; }
+        public Underline Underline { get => _underline ?? MigraDoc.DocumentObjectModel.Underline.None; set => _underline = value; }
+        public bool? _italic;
         [XmlAttribute]
-        public bool? Italic { get; set; }
+        public bool Italic { get => _italic ?? false; set => _italic=value; }
         public Borders Borders { get; set; }
 
         protected ParagraphFormat SetParametress(ParagraphFormat paragraphFormat)
         {
             paragraphFormat.Font.Name = "Times";
-            paragraphFormat.Font.Bold = Bold ?? false;
-            paragraphFormat.Font.Size = Size ?? 14;
-            paragraphFormat.Font.Underline = Underline ?? MigraDoc.DocumentObjectModel.Underline.None;
-            paragraphFormat.Font.Italic = Italic ?? false;
+            paragraphFormat.Font.Bold = Bold;
+            paragraphFormat.Font.Size = Size;
+            paragraphFormat.Font.Underline = Underline;
+            paragraphFormat.Font.Italic = Italic;
             paragraphFormat.Borders = Borders;
-            paragraphFormat.Alignment = Alignment ?? ParagraphAlignment.Justify;
+            paragraphFormat.Alignment = Alignment;
             return paragraphFormat;
         }
     }
@@ -188,6 +193,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
     [JsonArray]
     [Serializable]
     [JsonDerivedType(typeof(Paragrapf), "Paragrapf")]
+    [JsonDerivedType(typeof(Table), "Table")]
     public abstract record class BaseParagraph : FormatedElement, IParagraph
     {
         public abstract void Render(in RenderingSection element);
@@ -210,7 +216,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         public override void Render(in RenderingSection section)
         {
             var paragraph = section.AddParagraph();
-            paragraph.Format = SetParametress(paragraph.Format);
+            SetParametress(paragraph.Format);
 
             foreach (IBaseElement temp in text)
             {
@@ -228,14 +234,17 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         public Row Head { get; set; }
 
         [XmlArray]
-        public Row[]Body { get; set; }
+        public Row[]Rows { get; set; }
+
+        [XmlArray]
+        public Column[] Columns { get; set; }
         public override void Render(in RenderingSection section)
         {
             var Table = section.AddTable();
-            Table.Format = SetParametress(Table.Format);
+            SetParametress(Table.Format);
 
             Head.Render(Table, true);
-            foreach (Row row in Body)
+            foreach (Row row in Rows)
                 row.Render(Table);
 
         }
@@ -248,7 +257,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         public void Render(in RenderingTable.Table section, bool isHead = false)
         {
             var row = section.AddRow();
-            row.Format = SetParametress(row.Format);
+            SetParametress(row.Format);
             row.HeadingFormat = isHead;
             foreach (Cell cell in Cells)
                 cell.Render(row);
@@ -262,7 +271,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         public void Render(in RenderingTable.Table section, bool isHead = false)
         {
             var column = section.AddColumn();
-            column.Format = SetParametress(column.Format);
+            SetParametress(column.Format);
             column.HeadingFormat = isHead;
             foreach (Cell cell in Cells)
                 cell.Render(column);

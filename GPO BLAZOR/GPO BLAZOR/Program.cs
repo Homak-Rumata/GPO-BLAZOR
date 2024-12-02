@@ -159,6 +159,7 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
+            TestPrinter.F(null);
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true,

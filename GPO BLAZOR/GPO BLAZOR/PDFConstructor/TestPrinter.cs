@@ -18,6 +18,7 @@ using System.Security.Cryptography.X509Certificates;
 using MigraDoc.Rendering;
 using static PdfSharp.Snippets.Drawing.ImageHelper;
 using System.Text;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace GPO_BLAZOR.PDFConstructor
 {
@@ -335,7 +336,8 @@ namespace GPO_BLAZOR.PDFConstructor
             }
 
 
-
+            var RtfDoc = new MigraDoc.RtfRendering.RtfDocumentRenderer();
+            RtfDoc.Render(document, "PDFFile2.rtf","./");
             var pdfRenderer = new PdfDocumentRenderer();
             pdfRenderer.Document = document;
             pdfRenderer.RenderDocument();

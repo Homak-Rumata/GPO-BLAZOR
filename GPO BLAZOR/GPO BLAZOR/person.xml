@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Sections>
+    <Section>
+      <paragrapfs>
+        <Paragrapf Bold="true" Size="14" Alignment="Justify" Underline="None" Italic="false">
+          <_italic xsi:nil="true" />
+          <Text>
+            <Text>Договор о практической подготовке обучающихся в форме практики №</Text>
+            <InjectElement Name="ContractNumber">1</InjectElement>
+            <Text>г. Томск</Text>
+          </Text>
+        </Paragrapf>
+        <Paragrapf Bold="false" Size="14" Alignment="Justify" Underline="None" Italic="false">
+          <_italic xsi:nil="true" />
+          <Text>
+            <Text>Федеральное государственное автономное образовательное учреждение высшего образования «Томский государственный университет систем управления и радиоэлектроники» (ТУСУР), именуемое в дальнейшем «Университет», в лице директора центра карьеры И.А. Трубчениновой, действующего на основании доверенности от 19.09.2024 №20/3460, с одной стороны, и</Text>
+            <InjectElement Name="CompanyName">ООО ДИВИЛАЙН</InjectElement>
+          </Text>
+        </Paragrapf>
+      </paragrapfs>
+    </Section>
+  </Sections>
+  <margin right="45" left="60" top="60" bottom="60" />
+</Document>
