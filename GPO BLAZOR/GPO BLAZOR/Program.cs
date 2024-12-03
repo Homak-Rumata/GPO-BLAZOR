@@ -32,6 +32,7 @@ using MigraDoc.Rendering;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Encodings.Web;
+using MigraDoc.RtfRendering;
 
 
 namespace GPO_BLAZOR
@@ -177,7 +178,7 @@ namespace GPO_BLAZOR
 
 
             XmlSerializer xmlSerializer = new(typeof(Document));
-            str = new FileStream ("person.xml", FileMode.OpenOrCreate);
+            str = new FileStream ("person.xml", FileMode.Create);
 
             // получаем поток, куда будем записывать сериализованный объект
 
@@ -188,7 +189,8 @@ namespace GPO_BLAZOR
             pdfRenderer.Document = PDFConstructor.DocumentService.F.FA().Render(); 
             pdfRenderer.RenderDocument();
             pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
-
+            var rtfRender = new RtfDocumentRenderer();
+            rtfRender.Render(PDFConstructor.DocumentService.F.FA().Render(), "Contract.rtf", "./");
 
             Console.WriteLine("\nObject has been serialized\n");
             var temp2 = PDFConstructor.DocumentService.F.FA().Render();
