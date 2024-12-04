@@ -27,7 +27,7 @@ using BlockDateContainer = GPO_BLAZOR.FiledConfiguration.BlockDateContainer;
 using FieldDateContainer = GPO_BLAZOR.FiledConfiguration.FieldDateContainer;
 using StatmenDate = GPO_BLAZOR.FiledConfiguration.StatmenDate;
 using System.Diagnostics.Eventing.Reader;
-using Document = GPO_BLAZOR.PDFConstructor.DocumentService.Document;
+using Document = PdfFilePrinting.DocumentService.Document;
 using MigraDoc.Rendering;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -169,7 +169,7 @@ namespace GPO_BLAZOR
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
             };
-            var hjobj = PDFConstructor.DocumentService.F.FA();
+            var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
             var JSONSer = JsonSerializer.Serialize(hjobj, options);
             byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
             FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
@@ -182,18 +182,20 @@ namespace GPO_BLAZOR
 
             // получаем поток, куда будем записывать сериализованный объект
 
-                xmlSerializer.Serialize(str, PDFConstructor.DocumentService.F.FA());
-            
+                xmlSerializer.Serialize(str, PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make());
+
+
+            var rtfRender = new RtfDocumentRenderer();
+            rtfRender.Render(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(), "Contract.rtf", "./");
 
             var pdfRenderer = new PdfDocumentRenderer();
-            pdfRenderer.Document = PDFConstructor.DocumentService.F.FA().Render(); 
+            pdfRenderer.Document = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(); 
             pdfRenderer.RenderDocument();
             pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
-            var rtfRender = new RtfDocumentRenderer();
-            rtfRender.Render(PDFConstructor.DocumentService.F.FA().Render(), "Contract.rtf", "./");
+            
 
             Console.WriteLine("\nObject has been serialized\n");
-            var temp2 = PDFConstructor.DocumentService.F.FA().Render();
+            var temp2 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render();
             
             str.Close();
             str = new FileStream("person.xml", FileMode.OpenOrCreate);
