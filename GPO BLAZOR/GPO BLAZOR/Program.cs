@@ -1,18 +1,9 @@
-using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.Components;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Xml;
 using System.Xml.Serialization;
-using System;
-using GPO_BLAZOR.PDFConstructor;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,24 +11,17 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using GPO_BLAZOR.API_Functions;
 using DBAgent;
-
-using StatmenDateContainer = GPO_BLAZOR.FiledConfiguration.StatmenDateContainer;
-using PageDateContainer = GPO_BLAZOR.FiledConfiguration.PageDateContainer;
-using BlockDateContainer = GPO_BLAZOR.FiledConfiguration.BlockDateContainer;
-using FieldDateContainer = GPO_BLAZOR.FiledConfiguration.FieldDateContainer;
 using StatmenDate = GPO_BLAZOR.FiledConfiguration.StatmenDate;
-using System.Diagnostics.Eventing.Reader;
 using Document = PdfFilePrinting.DocumentService.Document;
 using MigraDoc.Rendering;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Encodings.Web;
 using MigraDoc.RtfRendering;
 
 
 namespace GPO_BLAZOR
 {
-    
+
 
     class Date
     {
@@ -160,7 +144,6 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
-            TestPrinter.F(null);
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true,
@@ -169,37 +152,6 @@ namespace GPO_BLAZOR
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
             };
-            var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
-            var JSONSer = JsonSerializer.Serialize(hjobj, options);
-            byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
-            FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
-            str.Write(inputBuffer, 0, inputBuffer.Length);
-            str.Close();
-
-
-            XmlSerializer xmlSerializer = new(typeof(Document));
-            str = new FileStream ("person.xml", FileMode.Create);
-
-            // получаем поток, куда будем записывать сериализованный объект
-
-                xmlSerializer.Serialize(str, PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make());
-
-
-            var rtfRender = new RtfDocumentRenderer();
-            rtfRender.Render(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(), "Contract.rtf", "./");
-
-            var pdfRenderer = new PdfDocumentRenderer();
-            pdfRenderer.Document = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(); 
-            pdfRenderer.RenderDocument();
-            pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
-            
-
-            Console.WriteLine("\nObject has been serialized\n");
-            var temp2 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render();
-            
-            str.Close();
-            str = new FileStream("person.xml", FileMode.OpenOrCreate);
-            Document? res = xmlSerializer.Deserialize(str) as Document?;
             //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
@@ -283,9 +235,6 @@ namespace GPO_BLAZOR
                 {2, new Dictionary<string, string>() { {"id", "2" }, { "Template", "based" } } },
                 {3, new Dictionary<string, string>() { {"id", "3" }, { "Template", "based" } } }
             };
-
-            XmlDocument fgh = new XmlDocument();
-            fgh.LoadXml("<reply success=\"true\">More nodes go here</reply>");
 
             Dictionary<string, string> PrintTemplate = null;
 
