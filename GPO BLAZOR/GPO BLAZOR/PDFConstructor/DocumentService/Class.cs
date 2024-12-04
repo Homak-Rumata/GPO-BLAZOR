@@ -15,6 +15,9 @@ using System.Text;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.DocumentObjectModel.Visitors;
+using static System.Collections.Specialized.BitVector32;
+using PdfSharp.Pdf.IO;
+using static MigraDoc.DocumentObjectModel.Text;
 
 namespace GPO_BLAZOR.PDFConstructor.DocumentService
 {
@@ -42,7 +45,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
                             new Table()
                             {
                                 Alignment = ParagraphAlignment.Justify,
-                                Columns = new Column[] {new Column(), new Column()},
+                                Columns = new Column[] {new Column() { Priorety = 1}, new Column() { Priorety = 1} },
                                 Rows = new Row[]
                                 {
                                     new Row()
@@ -465,7 +468,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
                             {
                                 KeepTogether = true,
                                 KeepWithNext = true,
-                                Columns = new Column[] {new Column(), new Column()},
+                                Columns = new Column[] {new Column() { Priorety = 1}, new Column() { Priorety = 1 } },
                                 Rows = new Row[]
                                 {
                                     new Row()
@@ -796,6 +799,146 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
                                         Name = "ContractNumber"
                                     },
                                 }
+                            },
+                            new Paragrapf()
+                            {
+                                Alignment = ParagraphAlignment.Center,
+                                Bold= true,
+                                text = new BaseElement[]
+                                {
+                                    new RawText()
+                                    {
+                                        TextValue = "План-график прохождения практической подготовки в форме практики обучающихся в профильной организации"
+                                    }
+                                }
+                            },
+                            new Paragrapf()
+                            {
+
+                            },
+                            new Table()
+                            {
+                                Alignment = ParagraphAlignment.Left,
+                                TableBorders = new Borders()
+                                {
+                                    Visible = true,
+                                    DistanceFromRight = 0,
+                                    DistanceFromLeft = 0,
+                                },
+                                Columns = new Column[]
+                                {
+                                    new Column() {Priorety = 25},
+                                    new Column() {Priorety = 25},
+                                    new Column() {Priorety = 16},
+                                    new Column() {Priorety = 16},
+                                    new Column() {Priorety = 18},
+                                },
+                                Rows = new Row[]
+                                {
+                                    new Row()
+                                    {
+                                        Cells = new Cell[]
+                                        {
+                                            new Cell()
+                                            {
+                                                Text = new Paragrapf[]
+                                                {
+                                                    new Paragrapf()
+                                                    {
+                                                        text = new BaseElement[]
+                                                        {
+                                                            new RawText()
+                                                            {
+                                                                TextValue =  "Об|ра|зо|ва|тель|на|я прог|рам|ма".Replace('|','\u00AD')
+                                                            },
+                                                        }
+                                                    }
+                                                }
+
+                                            },
+                                            new Cell()
+                                            {
+                                                Text = new Paragrapf[]
+                                                {
+                                                    new Paragrapf()
+                                                    {
+                                                        text = new BaseElement[]
+                                                        {
+                                                            new RawText()
+                                                            {
+                                                                TextValue = "Ком|по|нент(-ы) об|ра|зо|ва|тель|ной прог|рам|мы".Replace('|','\u00AD')
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            },
+                                            new Cell()
+                                            {
+                                                Text = new Paragrapf[]
+                                                {
+                                                    new Paragrapf()
+                                                    {
+                                                        Alignment = ParagraphAlignment.Left,
+                                                        text = new BaseElement[]
+                                                        {
+                                                            new RawText()
+                                                            {
+                                                                TextValue = "Ко|ли|чест|во о|бу|ча|ю|щих|ся".Replace('|','\u00AD')
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            },
+                                            new Cell()
+                                            {
+                                                Text = new Paragrapf[]
+                                                {
+                                                    new Paragrapf()
+                                                    {
+                                                        text = new BaseElement[]
+                                                        {
+                                                            new RawText()
+                                                            {
+                                                                TextValue =  "Ф.И.О., курс, груп|па".Replace('|','\u00AD')
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            },
+                                            new Cell()
+                                            {
+                                                Text = new Paragrapf[]
+                                                {
+                                                    new Paragrapf()
+                                                    {
+                                                        text = new BaseElement[]
+                                                        {
+                                                            new RawText()
+                                                            {
+                                                                TextValue = "Сро|ки ор|га|ни|за|ции прак|ти|чес|кой под|го|тов|ки".Replace('|','\u00AD')
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    },
+                                    new Row()
+                                    {
+                                        Cells = new Cell[]
+                                        {
+                                            new Cell()
+                                            {
+
+                                            }
+                                        }
+                                    }
+                                }
+                                
                             }
                         }
                     }
@@ -954,6 +1097,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
             paragraphFormat.Font.Size = Size;
             paragraphFormat.Font.Underline = Underline;
             paragraphFormat.Font.Italic = Italic;
+            if (Borders is not null)
             paragraphFormat.Borders = Borders;
             paragraphFormat.Alignment = Alignment;
             return paragraphFormat;
@@ -968,6 +1112,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
     {
         public abstract void Render(in RenderingSection element);
         public abstract void Render(in RenderingTable.Cell element);
+        public abstract void Render(in RenderingTable.Cell element, Unit with);
     }
 
 
@@ -997,21 +1142,39 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
             SetParametress(paragraph.Format);
             paragraph.AddSpace(SpaceNum);
             if (tab) paragraph.AddTab();
-            foreach (IBaseElement temp in text)
-            {
-                temp.Render(paragraph);
-            }
+            if (text is not null)
+                foreach (IBaseElement temp in text)
+                {
+                    temp.Render(paragraph);
+                }
         }
 
         public override void Render(in RenderingTable.Cell section)
         {
             var paragraph = section.AddParagraph();
             SetParametress(paragraph.Format);
+            paragraph.AddSpace(SpaceNum);
+            if (tab) paragraph.AddTab();
+            if (text is not null)
+                foreach (IBaseElement temp in text)
+                {
+                    temp.Render(paragraph);
+                }
+        }
+        public override void Render(in RenderingTable.Cell section, Unit With)
+        {
+            var paragraph = section.AddParagraph();
+            SetParametress(paragraph.Format);
+            paragraph.Format.LeftIndent = With;
+            paragraph.Format.RightIndent = With;
 
-            foreach (IBaseElement temp in text)
-            {
-                temp.Render(paragraph);
-            }
+            paragraph.AddSpace(SpaceNum);
+            if (tab) paragraph.AddTab();
+            if (text is not null)
+                foreach (IBaseElement temp in text)
+                {
+                    temp.Render(paragraph);
+                }
         }
 
 
@@ -1025,6 +1188,7 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         {
 
         }
+        public Borders TableBorders { get; set; }
         public Row Head { get; set; }
 
         [XmlArray]
@@ -1037,12 +1201,12 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
             var Table = section.AddTable();
             Table.KeepTogether = KeepTogether;
             SetParametress(Table.Format);
-            Unit width = (Table.Section.PageSetup.PageWidth - Table.Section.PageSetup.LeftMargin - Table.Section.PageSetup.RightMargin) / Columns.Length;
+            Table.Borders = TableBorders;
+            Unit width = (Table.Section.PageSetup.PageWidth - Table.Section.PageSetup.LeftMargin - Table.Section.PageSetup.RightMargin) / Columns.Sum(x=>x.Priorety);
             foreach (Column column in Columns)
-                column.Render(Table, width);
+                column.Render(Table, width*column.Priorety);
             if (Head is not null)
             {
-
                 Head.Render(Table, true);
             }
             foreach (Row row in Rows)
@@ -1050,7 +1214,22 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         }
         public override void Render(in RenderingTable.Cell section)
         {
+            TableRender (section.AddTextFrame().AddTable());
+        }
+
+        public override void Render(in RenderingTable.Cell section, Unit with)
+        {
+
             var Table = section.AddTextFrame().AddTable();
+            Table.Format.RightIndent = with;
+            Table.Format.LeftIndent = with;
+            TableRender(Table);
+
+        }
+
+        public void TableRender (RenderingTable.Table Table)
+        {
+
             SetParametress(Table.Format);
             Unit width = Table.Section.PageSetup.PageWidth / Columns.Length;
             Head.Render(Table, true);
@@ -1065,17 +1244,20 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         {
 
         }
+        
         public Cell[] Cells { get; set; }
         [XmlAttribute]
         public int KeepWith { get; set; }
-        public void Render(in RenderingTable.Table section, bool isHead = false)
+        public void Render(in RenderingTable.Table section,bool isHead = false)
         {
             var row = section.AddRow();
             row.KeepWith = KeepWith;
             SetParametress(row.Format);
             row.HeadingFormat = isHead;
             for (int i = 0; Cells.Length > i; i++)
+            {
                 Cells[i].Render(row.Cells[i]);
+            }
         }
     }
 
@@ -1085,13 +1267,20 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         {
 
         }
+        [XmlAttribute]
+        public int Priorety { get; set; }
         public Cell[] Cells { get; set; }
 
         public void Render(in RenderingTable.Table section, Unit width, bool isHead = false)
         {
-                var column = section.AddColumn(width);
-                SetParametress(column.Format);
-                column.HeadingFormat = isHead;
+            RenderingTable.Column column;
+            var dob = width.Value;
+            if (!dob.Equals(double.NaN))
+                column = section.AddColumn(width);
+            else
+                column = section.AddColumn();
+            SetParametress(column.Format);
+            column.HeadingFormat = isHead;
             if (Cells is not null)
             {
                 for (int i = 0; Cells.Length > i; i++)
@@ -1116,6 +1305,17 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
                 SetParametress(cell.Format);
                 foreach (var text in Text)
                     text.Render(cell);
+            }
+            return;
+        }
+
+        public void Render(in RenderingTable.Cell cell, Unit with)
+        {
+            if (cell is not null)
+            {
+                SetParametress(cell.Format);
+                foreach (var text in Text)
+                    text.Render(cell, with);
             }
             return;
         }
@@ -1167,9 +1367,9 @@ namespace GPO_BLAZOR.PDFConstructor.DocumentService
         public string Name { get; set; }
         [XmlText]
         public override string TextValue { get; set; }
-
-
     }
+
+    
 
 
     

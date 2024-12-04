@@ -158,6 +158,7 @@
           ],
           "Columns": [
             {
+              "Priorety": 1,
               "Alignment": 3,
               "KeepWithNext": false,
               "KeepTogether": false,
@@ -167,6 +168,7 @@
               "Italic": false
             },
             {
+              "Priorety": 1,
               "Alignment": 3,
               "KeepWithNext": false,
               "KeepTogether": false,
@@ -1666,6 +1668,7 @@
           ],
           "Columns": [
             {
+              "Priorety": 1,
               "Alignment": 3,
               "KeepWithNext": false,
               "KeepTogether": false,
@@ -1675,6 +1678,7 @@
               "Italic": false
             },
             {
+              "Priorety": 1,
               "Alignment": 3,
               "KeepWithNext": false,
               "KeepTogether": false,
@@ -1701,7 +1705,7 @@
           "text": [
             {
               "$type": "Text",
-              "TextValue": "Приложение № 1\r\nк договору о практической подготовке обучающихся \r\nв форме практики\r\nот",
+              "TextValue": "Приложение № 1\r\nк договору о практической подготовке обучающихся \r\nв форме практики\r\nот ",
               "Size": 14,
               "Bold": false,
               "Underline": 0,
@@ -1710,7 +1714,7 @@
             {
               "$type": "InjectElement",
               "Name": "DateTimeStart",
-              "TextValue": "04.12.2024 3:39:22",
+              "TextValue": "04.12.2024 6:12:39",
               "Size": 14,
               "Bold": false,
               "Underline": 0,
@@ -1726,8 +1730,8 @@
             },
             {
               "$type": "InjectElement",
-              "Name": "DateTimeEnd",
-              "TextValue": "18.12.2024 3:39:22",
+              "Name": "ContractNumber",
+              "TextValue": "1",
               "Size": 14,
               "Bold": false,
               "Underline": 0,
@@ -1743,23 +1747,13 @@
           "Bold": false,
           "Underline": 0,
           "Italic": false
-        }
-      ]
-    }
-  ],
-  "margin": {
-    "Right": 45,
-    "Left": 60,
-    "Top": 60,
-    "Bottom": 60
-  }
-}       },
+        },
         {
           "$type": "Paragrapf",
           "text": [
             {
               "$type": "Text",
-              "TextValue": "\n\r",
+              "TextValue": "План-график прохождения практической подготовки в форме практики обучающихся в профильной организации",
               "Size": 14,
               "Bold": false,
               "Underline": 0,
@@ -1767,7 +1761,19 @@
             }
           ],
           "SpaceNum": 0,
-          "Tab": true,
+          "Tab": false,
+          "Alignment": 1,
+          "KeepWithNext": false,
+          "KeepTogether": false,
+          "Size": 14,
+          "Bold": true,
+          "Underline": 0,
+          "Italic": false
+        },
+        {
+          "$type": "Paragrapf",
+          "SpaceNum": 0,
+          "Tab": false,
           "Alignment": 3,
           "KeepWithNext": false,
           "KeepTogether": false,
@@ -1777,267 +1783,908 @@
           "Italic": false
         },
         {
-          "$type": "Paragrapf",
-          "text": [
+          "$type": "Table",
+          "TableBorders": {
+            "Top": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Top",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Left": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Left",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Bottom": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Bottom",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Right": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Right",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "DiagonalUp": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "DiagonalUp",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "DiagonalDown": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "DiagonalDown",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Visible": true,
+            "Style": 0,
+            "Width": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "Color": {
+              "IsCmyk": false,
+              "IsEmpty": true,
+              "Argb": 0,
+              "RGB": 0,
+              "A": 0,
+              "R": 0,
+              "G": 0,
+              "B": 0,
+              "Alpha": 0,
+              "C": 0,
+              "M": 0,
+              "Y": 0,
+              "K": 0
+            },
+            "DistanceFromTop": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "DistanceFromBottom": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "DistanceFromLeft": {
+              "IsEmpty": false,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "DistanceFromRight": {
+              "IsEmpty": false,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "BordersCleared": false,
+            "Values": {
+              "Top": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Top",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Left": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Left",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Bottom": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Bottom",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Right": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Right",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "DiagonalUp": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "DiagonalUp",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "DiagonalDown": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "DiagonalDown",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Visible": true,
+              "DistanceFromLeft": {
+                "IsEmpty": false,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "DistanceFromRight": {
+                "IsEmpty": false,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Owner": {}
+            }
+          },
+          "Rows": [
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Cells": [
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Об­ра­зо­ва­тель­на­я прог­рам­ма",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ком­по­нент(-ы) об­ра­зо­ва­тель­ной прог­рам­мы",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ко­ли­чест­во о­бу­ча­ю­щих­ся",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 0,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ф.И.О., курс, груп­па",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Сро­ки ор­га­ни­за­ции прак­ти­чес­кой под­го­тов­ки",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                }
+              ],
+              "KeepWith": 0,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
+            },
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Cells": [
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Образовательная программа",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Компонент(-ы) образовательной программы",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ко‌ли‌чест‌во обу‌ча‌ю‌щих‌ся",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ф.И.О., курс, группа",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Сроки организации практической подготовки",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                }
+              ],
+              "KeepWith": 0,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
             }
           ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
+          "Columns": [
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Priorety": 25,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
+            },
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Priorety": 25,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
+            },
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Priorety": 16,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        }
-      ]
-    }
-  ],
-  "margin": {
-    "Right": 45,
-    "Left": 60,
-    "Top": 60,
-    "Bottom": 60
-  }
-}type": "Text",
-              "TextValue": "\n\r",
-              "Size": 14,
-              "Bold": false,
-              "Underline": 0,
-              "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
+            },
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Priorety": 16,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
+            },
             {
-              "$type": "Text",
-              "TextValue": "\n\r",
+              "Priorety": 18,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
               "Size": 14,
               "Bold": false,
               "Underline": 0,
               "Italic": false
             }
           ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
-            {
-              "$type": "Text",
-              "TextValue": "\n\r",
-              "Size": 14,
-              "Bold": false,
-              "Underline": 0,
-              "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
-            {
-              "$type": "Text",
-              "TextValue": "\n\r",
-              "Size": 14,
-              "Bold": false,
-              "Underline": 0,
-              "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
-            {
-              "$type": "Text",
-              "TextValue": "\n\r",
-              "Size": 14,
-              "Bold": false,
-              "Underline": 0,
-              "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
-          "KeepWithNext": false,
-          "KeepTogether": false,
-          "Size": 14,
-          "Bold": false,
-          "Underline": 0,
-          "Italic": false
-        },
-        {
-          "$type": "Paragrapf",
-          "text": [
-            {
-              "$type": "Text",
-              "TextValue": "\n\r",
-              "Size": 14,
-              "Bold": false,
-              "Underline": 0,
-              "Italic": false
-            }
-          ],
-          "SpaceNum": 0,
-          "Tab": true,
-          "Alignment": 3,
+          "Alignment": 0,
           "KeepWithNext": false,
           "KeepTogether": false,
           "Size": 14,
@@ -2055,6 +2702,894 @@
     "Bottom": 60
   }
 }
-}}m": 60
+    "Left": 60,
+    "Top": 60,
+    "Bottom": 60
+  }
+}}
+}0,
+    "Top": 60,
+    "Bottom": 60
+  }
+} {
+                "IsEmpty": false,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Owner": {}
+            }
+          },
+          "KeepWithNext": false,
+          "KeepTogether": false,
+          "Size": 14,
+          "Bold": false,
+          "Underline": 0,
+          "Italic": false
+        }
+      ]
+    }
+  ],
+  "margin": {
+    "Right": 45,
+    "Left": 60,
+    "Top": 60,
+    "Bottom": 60
+  }
+}  "$type": "Text",
+                          "TextValue": "Компонент(-ы) образовательной программы",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Количество обучающихся",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ф.И.О., курс, группа",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Сроки организации практической подготовки",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                }
+              ],
+              "KeepWith": 0,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            },
+            {
+              "Cells": [
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Образовательная программа",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Компонент(-ы) образовательной программы",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Количество обучающихся",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Ф.И.О., курс, группа",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                },
+                {
+                  "Text": [
+                    {
+                      "text": [
+                        {
+                          "$type": "Text",
+                          "TextValue": "Сроки организации практической подготовки",
+                          "Size": 14,
+                          "Bold": false,
+                          "Underline": 0,
+                          "Italic": false
+                        }
+                      ],
+                      "SpaceNum": 0,
+                      "Tab": false,
+                      "Alignment": 3,
+                      "KeepWithNext": false,
+                      "KeepTogether": false,
+                      "Size": 14,
+                      "Bold": false,
+                      "Underline": 0,
+                      "Italic": false
+                    }
+                  ],
+                  "Alignment": 3,
+                  "KeepWithNext": false,
+                  "KeepTogether": false,
+                  "Size": 14,
+                  "Bold": false,
+                  "Underline": 0,
+                  "Italic": false
+                }
+              ],
+              "KeepWith": 0,
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            }
+          ],
+          "Columns": [
+            {
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            },
+            {
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            },
+            {
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            },
+            {
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            },
+            {
+              "Alignment": 3,
+              "KeepWithNext": false,
+              "KeepTogether": false,
+              "Size": 14,
+              "Bold": false,
+              "Underline": 0,
+              "Italic": false
+            }
+          ],
+          "Alignment": 3,
+          "Borders": {
+            "Top": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Top",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Left": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Left",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Bottom": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Bottom",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Right": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "Right",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "DiagonalUp": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "DiagonalUp",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "DiagonalDown": {
+              "Visible": false,
+              "Style": 0,
+              "Width": {
+                "IsEmpty": true,
+                "Value": 0,
+                "Type": 0,
+                "Point": 0,
+                "Centimeter": 0,
+                "Inch": 0,
+                "Millimeter": 0,
+                "Pica": 0
+              },
+              "Color": {
+                "IsCmyk": false,
+                "IsEmpty": true,
+                "Argb": 0,
+                "RGB": 0,
+                "A": 0,
+                "R": 0,
+                "G": 0,
+                "B": 0,
+                "Alpha": 0,
+                "C": 0,
+                "M": 0,
+                "Y": 0,
+                "K": 0
+              },
+              "Name": "DiagonalDown",
+              "BorderCleared": false,
+              "Values": {
+                "Owner": {}
+              }
+            },
+            "Visible": true,
+            "Style": 0,
+            "Width": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "Color": {
+              "IsCmyk": false,
+              "IsEmpty": true,
+              "Argb": 0,
+              "RGB": 0,
+              "A": 0,
+              "R": 0,
+              "G": 0,
+              "B": 0,
+              "Alpha": 0,
+              "C": 0,
+              "M": 0,
+              "Y": 0,
+              "K": 0
+            },
+            "DistanceFromTop": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "DistanceFromBottom": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "DistanceFromLeft": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "DistanceFromRight": {
+              "IsEmpty": true,
+              "Value": 0,
+              "Type": 0,
+              "Point": 0,
+              "Centimeter": 0,
+              "Inch": 0,
+              "Millimeter": 0,
+              "Pica": 0
+            },
+            "BordersCleared": false,
+            "Values": {
+              "Top": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Top",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Left": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Left",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Bottom": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Bottom",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Right": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "Right",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "DiagonalUp": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "DiagonalUp",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "DiagonalDown": {
+                "Visible": false,
+                "Style": 0,
+                "Width": {
+                  "IsEmpty": true,
+                  "Value": 0,
+                  "Type": 0,
+                  "Point": 0,
+                  "Centimeter": 0,
+                  "Inch": 0,
+                  "Millimeter": 0,
+                  "Pica": 0
+                },
+                "Color": {
+                  "IsCmyk": false,
+                  "IsEmpty": true,
+                  "Argb": 0,
+                  "RGB": 0,
+                  "A": 0,
+                  "R": 0,
+                  "G": 0,
+                  "B": 0,
+                  "Alpha": 0,
+                  "C": 0,
+                  "M": 0,
+                  "Y": 0,
+                  "K": 0
+                },
+                "Name": "DiagonalDown",
+                "BorderCleared": false,
+                "Values": {
+                  "Owner": {}
+                }
+              },
+              "Visible": true,
+              "Owner": {}
+            }
+          },
+          "KeepWithNext": false,
+          "KeepTogether": false,
+          "Size": 14,
+          "Bold": false,
+          "Underline": 0,
+          "Italic": false
+        }
+      ]
+    }
+  ],
+  "margin": {
+    "Right": 45,
+    "Left": 60,
+    "Top": 60,
+    "Bottom": 60
   }
 }

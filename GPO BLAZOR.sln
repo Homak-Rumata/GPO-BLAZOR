@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPO BLAZOR", "GPO BLAZOR\GP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPO BLAZOR.Client", "GPO BLAZOR\GPO BLAZOR.Client\GPO BLAZOR.Client.csproj", "{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfFilePrinting", "PdfFilePrinting\PdfFilePrinting.csproj", "{BBB0054F-774E-432D-9352-44DB63AEFB2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,12 @@ Global
 		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.IIS DEBUG|Any CPU.Build.0 = IIS DEBUG|Any CPU
 		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B20BC9E3-6A94-4F80-9AFC-235A82B9406F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBB0054F-774E-432D-9352-44DB63AEFB2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB0054F-774E-432D-9352-44DB63AEFB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB0054F-774E-432D-9352-44DB63AEFB2A}.IIS DEBUG|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB0054F-774E-432D-9352-44DB63AEFB2A}.IIS DEBUG|Any CPU.Build.0 = Debug|Any CPU
+		{BBB0054F-774E-432D-9352-44DB63AEFB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB0054F-774E-432D-9352-44DB63AEFB2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -40,8 +40,8 @@
             </Row>
           </Rows>
           <Columns>
-            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" />
-            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="1" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="1" />
           </Columns>
         </Table>
         <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="true">
@@ -404,8 +404,8 @@
             </Row>
           </Rows>
           <Columns>
-            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" />
-            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="1" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="1" />
           </Columns>
         </Table>
       </paragrapfs>
@@ -417,12 +417,289 @@
             <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Приложение № 1
 к договору о практической подготовке обучающихся 
 в форме практики
-от</Text>
-            <InjectElement Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false" Name="DateTimeStart">04.12.2024 3:39:23</InjectElement>
+от </Text>
+            <InjectElement Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false" Name="DateTimeStart">04.12.2024 6:12:40</InjectElement>
             <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false"> № </Text>
-            <InjectElement Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false" Name="DateTimeEnd">18.12.2024 3:39:23</InjectElement>
+            <InjectElement Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false" Name="ContractNumber">1</InjectElement>
           </Text>
         </Paragrapf>
+        <Paragrapf Size="14" Bold="true" Underline="None" Italic="false" Alignment="Center" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+          <Text>
+            <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">План-график прохождения практической подготовки в форме практики обучающихся в профильной организации</Text>
+          </Text>
+        </Paragrapf>
+        <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false" />
+        <Table Size="14" Bold="false" Underline="None" Italic="false" Alignment="Left" KeepWithNext="false" KeepTogether="false">
+          <TableBorders>
+            <Top>
+              <Visible>false</Visible>
+              <Style>None</Style>
+              <Width>
+                <Value>0</Value>
+                <Type>Point</Type>
+                <Point>0</Point>
+                <Centimeter>0</Centimeter>
+                <Inch>0</Inch>
+                <Millimeter>0</Millimeter>
+                <Pica>0</Pica>
+              </Width>
+              <Color>
+                <Argb>0</Argb>
+                <RGB>0</RGB>
+              </Color>
+              <BorderCleared>false</BorderCleared>
+            </Top>
+            <Left>
+              <Visible>false</Visible>
+              <Style>None</Style>
+              <Width>
+                <Value>0</Value>
+                <Type>Point</Type>
+                <Point>0</Point>
+                <Centimeter>0</Centimeter>
+                <Inch>0</Inch>
+                <Millimeter>0</Millimeter>
+                <Pica>0</Pica>
+              </Width>
+              <Color>
+                <Argb>0</Argb>
+                <RGB>0</RGB>
+              </Color>
+              <BorderCleared>false</BorderCleared>
+            </Left>
+            <Bottom>
+              <Visible>false</Visible>
+              <Style>None</Style>
+              <Width>
+                <Value>0</Value>
+                <Type>Point</Type>
+                <Point>0</Point>
+                <Centimeter>0</Centimeter>
+                <Inch>0</Inch>
+                <Millimeter>0</Millimeter>
+                <Pica>0</Pica>
+              </Width>
+              <Color>
+                <Argb>0</Argb>
+                <RGB>0</RGB>
+              </Color>
+              <BorderCleared>false</BorderCleared>
+            </Bottom>
+            <Right>
+              <Visible>false</Visible>
+              <Style>None</Style>
+              <Width>
+                <Value>0</Value>
+                <Type>Point</Type>
+                <Point>0</Point>
+                <Centimeter>0</Centimeter>
+                <Inch>0</Inch>
+                <Millimeter>0</Millimeter>
+                <Pica>0</Pica>
+              </Width>
+              <Color>
+                <Argb>0</Argb>
+                <RGB>0</RGB>
+              </Color>
+              <BorderCleared>false</BorderCleared>
+            </Right>
+            <DiagonalUp>
+              <Visible>false</Visible>
+              <Style>None</Style>
+              <Width>
+                <Value>0</Value>
+                <Type>Point</Type>
+                <Point>0</Point>
+                <Centimeter>0</Centimeter>
+                <Inch>0</Inch>
+                <Millimeter>0</Millimeter>
+                <Pica>0</Pica>
+              </Width>
+              <Color>
+                <Argb>0</Argb>
+                <RGB>0</RGB>
+              </Color>
+              <BorderCleared>false</BorderCleared>
+            </DiagonalUp>
+            <DiagonalDown>
+              <Visible>false</Visible>
+              <Style>None</Style>
+              <Width>
+                <Value>0</Value>
+                <Type>Point</Type>
+                <Point>0</Point>
+                <Centimeter>0</Centimeter>
+                <Inch>0</Inch>
+                <Millimeter>0</Millimeter>
+                <Pica>0</Pica>
+              </Width>
+              <Color>
+                <Argb>0</Argb>
+                <RGB>0</RGB>
+              </Color>
+              <BorderCleared>false</BorderCleared>
+            </DiagonalDown>
+            <Visible>true</Visible>
+            <Style>None</Style>
+            <Width>
+              <Value>0</Value>
+              <Type>Point</Type>
+              <Point>0</Point>
+              <Centimeter>0</Centimeter>
+              <Inch>0</Inch>
+              <Millimeter>0</Millimeter>
+              <Pica>0</Pica>
+            </Width>
+            <Color>
+              <Argb>0</Argb>
+              <RGB>0</RGB>
+            </Color>
+            <DistanceFromTop>
+              <Value>0</Value>
+              <Type>Point</Type>
+              <Point>0</Point>
+              <Centimeter>0</Centimeter>
+              <Inch>0</Inch>
+              <Millimeter>0</Millimeter>
+              <Pica>0</Pica>
+            </DistanceFromTop>
+            <DistanceFromBottom>
+              <Value>0</Value>
+              <Type>Point</Type>
+              <Point>0</Point>
+              <Centimeter>0</Centimeter>
+              <Inch>0</Inch>
+              <Millimeter>0</Millimeter>
+              <Pica>0</Pica>
+            </DistanceFromBottom>
+            <DistanceFromLeft>
+              <Value>0</Value>
+              <Type>Point</Type>
+              <Point>0</Point>
+              <Centimeter>0</Centimeter>
+              <Inch>0</Inch>
+              <Millimeter>0</Millimeter>
+              <Pica>0</Pica>
+            </DistanceFromLeft>
+            <DistanceFromRight>
+              <Value>0</Value>
+              <Type>Point</Type>
+              <Point>0</Point>
+              <Centimeter>0</Centimeter>
+              <Inch>0</Inch>
+              <Millimeter>0</Millimeter>
+              <Pica>0</Pica>
+            </DistanceFromRight>
+            <BordersCleared>false</BordersCleared>
+          </TableBorders>
+          <Rows>
+            <Row Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" KeepWith="0">
+              <Cells>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Об­ра­зо­ва­тель­на­я прог­рам­ма</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Ком­по­нент(-ы) об­ра­зо­ва­тель­ной прог­рам­мы</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Left" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Ко­ли­чест­во о­бу­ча­ю­щих­ся</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Ф.И.О., курс, груп­па</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Сро­ки ор­га­ни­за­ции прак­ти­чес­кой под­го­тов­ки</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+              </Cells>
+            </Row>
+            <Row Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" KeepWith="0">
+              <Cells>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Образовательная программа</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Компонент(-ы) образовательной программы</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Ко‌ли‌чест‌во обу‌ча‌ю‌щих‌ся</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Ф.И.О., курс, группа</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+                <Cell Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false">
+                  <Text>
+                    <Paragrapf Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" SpaceNum="0" Tab="false">
+                      <Text>
+                        <Text Size="14" Bold="false" Underline="None" Italic="false" SpecialLine="false" SuperScript="false" SubScript="false">Сроки организации практической подготовки</Text>
+                      </Text>
+                    </Paragrapf>
+                  </Text>
+                </Cell>
+              </Cells>
+            </Row>
+          </Rows>
+          <Columns>
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="25" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="25" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="16" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="16" />
+            <Column Size="14" Bold="false" Underline="None" Italic="false" Alignment="Justify" KeepWithNext="false" KeepTogether="false" Priorety="18" />
+          </Columns>
+        </Table>
       </paragrapfs>
     </Section>
   </Sections>
