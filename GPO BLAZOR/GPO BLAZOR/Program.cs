@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Xml;
 using System.Xml.Serialization;
 using System;
-using GPO_BLAZOR.DBAgents;
+using GPO_BLAZOR.PDFConstructor;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -27,11 +27,17 @@ using BlockDateContainer = GPO_BLAZOR.FiledConfiguration.BlockDateContainer;
 using FieldDateContainer = GPO_BLAZOR.FiledConfiguration.FieldDateContainer;
 using StatmenDate = GPO_BLAZOR.FiledConfiguration.StatmenDate;
 using System.Diagnostics.Eventing.Reader;
+using Document = PdfFilePrinting.DocumentService.Document;
+using MigraDoc.Rendering;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Encodings.Web;
+using MigraDoc.RtfRendering;
 
 
 namespace GPO_BLAZOR
 {
-
+    
 
     class Date
     {
@@ -154,6 +160,48 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
+            TestPrinter.F(null);
+            var options = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                AllowTrailingCommas = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+
+            };
+            var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+            var JSONSer = JsonSerializer.Serialize(hjobj, options);
+            byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
+            FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
+            str.Write(inputBuffer, 0, inputBuffer.Length);
+            str.Close();
+
+
+            XmlSerializer xmlSerializer = new(typeof(Document));
+            str = new FileStream ("person.xml", FileMode.Create);
+
+            // получаем поток, куда будем записывать сериализованный объект
+
+                xmlSerializer.Serialize(str, PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make());
+
+
+            var rtfRender = new RtfDocumentRenderer();
+            rtfRender.Render(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(), "Contract.rtf", "./");
+
+            var pdfRenderer = new PdfDocumentRenderer();
+            pdfRenderer.Document = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(); 
+            pdfRenderer.RenderDocument();
+            pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
+            
+
+            Console.WriteLine("\nObject has been serialized\n");
+            var temp2 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render();
+            
+            str.Close();
+            str = new FileStream("person.xml", FileMode.OpenOrCreate);
+            Document? res = xmlSerializer.Deserialize(str) as Document?;
+            //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
             Console.WriteLine($"Envirment Tunnel URL {urlstr}");
