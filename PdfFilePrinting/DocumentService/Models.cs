@@ -1,25 +1,12 @@
-﻿
-using PdfFilePrinting;
-using RenderingDocument = MigraDoc.DocumentObjectModel.Document;
+﻿using RenderingDocument = MigraDoc.DocumentObjectModel.Document;
 using RenderingSection = MigraDoc.DocumentObjectModel.Section;
 using RenderingTable = MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.DocumentObjectModel;
-using MigraDoc.DocumentObjectModel.Internals;
 using System.Xml.Serialization;
-using System.Xml.Schema;
 using System.Xml;
-using static System.Net.Mime.MediaTypeNames;
 using System.Runtime.Serialization;
-using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using System.Text;
-//using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
-using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.DocumentObjectModel.Visitors;
-using static System.Collections.Specialized.BitVector32;
-using PdfSharp.Pdf.IO;
-using static MigraDoc.DocumentObjectModel.Text;
 
 namespace PdfFilePrinting.DocumentService
 {
