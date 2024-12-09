@@ -13,6 +13,14 @@
 
   <ItemGroup>
     <Content Remove="Pages\Statmen.razor.razor" />
+    <Content Remove="wwwroot\arial.ttf" />
+    <Content Remove="wwwroot\arialbd.ttf" />
+    <Content Remove="wwwroot\arialbi.ttf" />
+    <Content Remove="wwwroot\ariali.ttf" />
+    <Content Remove="wwwroot\times.ttf" />
+    <Content Remove="wwwroot\timesbd.ttf" />
+    <Content Remove="wwwroot\timesbi.ttf" />
+    <Content Remove="wwwroot\timesi.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +39,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
+    <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
 	
@@ -42,6 +51,25 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Class\Field\TymeField.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\arial.ttf" />
+    <None Include="wwwroot\fonts\arialbd.ttf" />
+    <None Include="wwwroot\fonts\arialbi.ttf" />
+    <None Include="wwwroot\fonts\ariali.ttf" />
+    <None Include="wwwroot\fonts\times.ttf" />
+    <None Include="wwwroot\fonts\timesbd.ttf" />
+    <None Include="wwwroot\fonts\timesbi.ttf" />
+    <None Include="wwwroot\fonts\timesi.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PdfFilePrinting\PdfFilePrinting.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+
   </ItemGroup>
 
 </Project>

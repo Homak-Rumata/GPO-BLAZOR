@@ -1,0 +1,31 @@
+﻿
+@page "/print"
+
+<h3>PDF Generator</h3>
+
+<button class="btn btn-primary" @onclick="DownloadPdf">Download PDF</button>
+<button class="btn btn-primary" @onclick="ReadXml">Download PDF</button>
+
+@code {
+    private async Task DownloadPdf()
+    {
+        byte[] pdfBytes = PdfGenerator.CreatePdf();
+        var fileName = "GeneratedPdf.pdf";
+        await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(pdfBytes));
+    }
+}
+
+<script>
+    window.saveAsFile = (filename, bytesBase64) => {
+    var link = document.createElement('a');
+    link.href = 'data:application/octet-stream;base64,' + bytesBase64;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    };
+</script>
+
+@code {
+    
+}

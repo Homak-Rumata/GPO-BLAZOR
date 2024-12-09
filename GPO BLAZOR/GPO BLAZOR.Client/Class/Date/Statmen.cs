@@ -60,7 +60,7 @@ namespace GPO_BLAZOR.Client.Class.Date
             Dictionary<string, string> values;
             try
             {
-                    values = await Requesting.AutorizationRequest<Dictionary<string, string>>(
+                    values = await Requesting.AutorizationedGetRequest<Dictionary<string, string>>(
                         new Uri($"https://{IPaddress.IPAddress}/getformDate:{id}"),
                         jsr);
             }
@@ -78,7 +78,7 @@ namespace GPO_BLAZOR.Client.Class.Date
                     return statmen;
                 };
 
-                IStatmen StatmenTemplate = addId(await Requesting.AutorizationRequest<Statmen>(
+                IStatmen StatmenTemplate = addId(await Requesting.AutorizationedGetRequest<Statmen>(
                     new Uri($"https://{IPaddress.IPAddress}/getTepmlate/{values["Template"]}"),
                     jsr), id);
 
