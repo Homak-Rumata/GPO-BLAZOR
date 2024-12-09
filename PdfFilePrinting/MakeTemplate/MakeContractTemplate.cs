@@ -11,8 +11,18 @@ using MigraDoc.DocumentObjectModel.Tables;
 
 namespace PdfFilePrinting.MakeTemplate
 {
+
     public static class MakeContractTemplate
     {
+        private static Border ClearBorder
+        {
+            get
+            {
+                var temp = new Border();
+                temp.Clear();
+                return temp;
+            }
+        }
         public static Document Make()
         {
             return new Document()
@@ -71,18 +81,10 @@ namespace PdfFilePrinting.MakeTemplate
                                                          Alignment = ParagraphAlignment.Right,
                                                         text = new BaseElement[]
                                                         {
-                                                            new RawText()
-                                                            {
-                                                                TextValue ="«"
-                                                            },
                                                             new InjectElement()
                                                             {
                                                                 Name = "ContractDay",
                                                                 TextValue = DateTime.Now.Day.ToString()
-                                                            },
-                                                            new RawText()
-                                                            {
-                                                                TextValue ="» "
                                                             },
                                                             new InjectElement()
                                                             {
@@ -678,7 +680,10 @@ namespace PdfFilePrinting.MakeTemplate
                                                                             Bottom = new Border()
                                                                             {
                                                                                 Visible = true
-                                                                            }
+                                                                            },
+                                                                            Top = ClearBorder,
+                                                                            Left = ClearBorder,
+                                                                            Right = ClearBorder,
                                                                         },
                                                                         Text = new BaseParagraph[]
                                                                         {
@@ -762,7 +767,11 @@ namespace PdfFilePrinting.MakeTemplate
                                                                             Bottom = new Border()
                                                                             {
                                                                                 Visible = true
-                                                                            }
+                                                                            },
+                                                                            Top = ClearBorder,
+                                                                            Left = ClearBorder,
+                                                                            Right = ClearBorder
+
                                                                         },
                                                                         Text = new BaseParagraph[]
                                                                         {
@@ -911,6 +920,10 @@ namespace PdfFilePrinting.MakeTemplate
                                     Visible = true,
                                     DistanceFromRight = 0,
                                     DistanceFromLeft = 0,
+                                    Bottom = ClearBorder,
+                                    Top = ClearBorder,
+                                    Right = ClearBorder,
+                                    Left = ClearBorder,
                                 },
                                 Columns = new Column[]
                                 {
@@ -1345,7 +1358,11 @@ namespace PdfFilePrinting.MakeTemplate
                             {
                                 TableBorders = new Borders()
                                 {
-                                    Visible= true
+                                    Visible= true,
+                                    Bottom = ClearBorder,
+                                    Top = ClearBorder,
+                                    Right = ClearBorder,
+                                    Left = ClearBorder,
                                 },
                                 Columns = new Column[]
                                 {
@@ -1796,7 +1813,10 @@ namespace PdfFilePrinting.MakeTemplate
                                                                             Bottom = new Border()
                                                                             {
                                                                                 Visible = true
-                                                                            }
+                                                                            },
+                                                                            Top = ClearBorder,
+                                                                            Right = ClearBorder,
+                                                                            Left = ClearBorder,
                                                                         },
                                                                         Text = new BaseParagraph[]
                                                                         {
@@ -1880,7 +1900,10 @@ namespace PdfFilePrinting.MakeTemplate
                                                                             Bottom = new Border()
                                                                             {
                                                                                 Visible = true
-                                                                            }
+                                                                            },
+                                                                            Top = ClearBorder,
+                                                                            Right = ClearBorder,
+                                                                            Left = ClearBorder,
                                                                         },
                                                                         Text = new BaseParagraph[]
                                                                         {

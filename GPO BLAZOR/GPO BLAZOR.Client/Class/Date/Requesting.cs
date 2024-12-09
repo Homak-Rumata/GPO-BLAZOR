@@ -23,7 +23,7 @@ namespace GPO_BLAZOR.Client.Class.Date
             remove => _errorAutorization -= value;
         }
 
-        public async static Task<T> AutorizationRequest<T> (Uri uri, IJSRuntime jsr)
+        public async static Task<T> AutorizationedGetRequest<T> (Uri uri, IJSRuntime jsr)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -42,7 +42,26 @@ namespace GPO_BLAZOR.Client.Class.Date
             }
         }
 
-        public async static Task<T> AutorizationRequest<T, C>(Uri uri, IJSRuntime jsr, C Date)
+        public async static Task<Stream> AutorizationedRequest(Uri uri, IJSRuntime jsr)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var cookieStorage = new CookieStorageAccessor(jsr);
+                httpClient.BaseAddress = uri;
+                var jwt = await cookieStorage.ReadCookieAsync<string>("Autorization");
+                //Console.WriteLine ("Path2: "+ IPaddress.helper + " " + IPaddress.IPAddress);
+                using var requestMessage = new HttpRequestMessage(HttpMethod.Get, httpClient.BaseAddress);
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+                var tempresponce = await httpClient.SendAsync(requestMessage);
+                if (tempresponce.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _errorAutorization();
+                }
+                return await tempresponce.Content.ReadAsStreamAsync();
+            }
+        }
+
+        public async static Task<T> AutorizationedPostRequest<T, C>(Uri uri, IJSRuntime jsr, C Date)
         {
             using (HttpClient httpClient = new HttpClient())
             {

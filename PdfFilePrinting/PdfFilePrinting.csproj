@@ -7,6 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\arial.ttf" />
+    <None Remove="Fonts\arialbd.ttf" />
+    <None Remove="Fonts\arialbi.ttf" />
+    <None Remove="Fonts\ariali.ttf" />
+    <None Remove="Fonts\times.ttf" />
+    <None Remove="Fonts\timesbd.ttf" />
+    <None Remove="Fonts\timesbi.ttf" />
+    <None Remove="Fonts\timesi.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Fonts\arial.ttf" />
+    <EmbeddedResource Include="Fonts\arialbd.ttf" />
+    <EmbeddedResource Include="Fonts\arialbi.ttf" />
+    <EmbeddedResource Include="Fonts\ariali.ttf" />
+    <EmbeddedResource Include="Fonts\times.ttf" />
+    <EmbeddedResource Include="Fonts\timesbd.ttf" />
+    <EmbeddedResource Include="Fonts\timesbi.ttf" />
+    <EmbeddedResource Include="Fonts\timesi.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.1.1" />
   </ItemGroup>

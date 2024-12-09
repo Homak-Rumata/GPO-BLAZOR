@@ -2,6 +2,7 @@ using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MigraDoc.Rendering;
 
 namespace GPO_BLAZOR.Client
 {
@@ -14,9 +15,12 @@ namespace GPO_BLAZOR.Client
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<CookieStorageAccessor>();
             builder.Services.AddScoped<LocalStorageAccessor>();
+            builder.Services.AddScoped<PdfDocumentRenderer>();
+
 
 
             var app = builder.Build();
+
 
             var c = builder.HostEnvironment.BaseAddress;
 

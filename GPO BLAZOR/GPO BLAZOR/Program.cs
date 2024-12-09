@@ -17,6 +17,9 @@ using MigraDoc.Rendering;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MigraDoc.RtfRendering;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using MigraDoc.DocumentObjectModel;
 
 
 namespace GPO_BLAZOR
@@ -118,13 +121,13 @@ namespace GPO_BLAZOR
     }
 
     /// <summary>
-    /// Исправить
+    /// Г€Г±ГЇГ°Г ГўГЁГІГј
     /// </summary>
     public static class AuthOptions
     {
-        public const string ISSUER = "MyAuthServer"; // издатель токена
-        public const string AUDIENCE = "MyAuthClient"; // потребитель токена
-        const string KEY = "mysupersecret_secretsecretsecretkey!123";   // ключ для шифрации
+        public const string ISSUER = "MyAuthServer"; // ГЁГ§Г¤Г ГІГҐГ«Гј ГІГ®ГЄГҐГ­Г 
+        public const string AUDIENCE = "MyAuthClient"; // ГЇГ®ГІГ°ГҐГЎГЁГІГҐГ«Гј ГІГ®ГЄГҐГ­Г 
+        const string KEY = "mysupersecret_secretsecretsecretkey!123";   // ГЄГ«ГѕГ· Г¤Г«Гї ГёГЁГґГ°Г Г¶ГЁГЁ
         public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
     }
@@ -135,15 +138,65 @@ namespace GPO_BLAZOR
         static Dictionary<string, List<string>> SpecialArray = new Dictionary<string, List<string>>()
         {
             {"Grp", new List<string>() {"711-1", "721-1", "731-1", "731-2", "741-1", "761-1" } } ,
-            {"Direction", new List<string>(){"Информационная безопасность", "Безопасность автоматизированных систем", "Безопасность телекомуникационных систем", "Аналитическая безопасность", "Экономическая безопасность" } },
-            {"PracticeSort", new List<string>(){"Производственная", "Преддипломаная" } },
-            {"PracticeType", new List<string>(){"Эксплуатационная"} },
+            {"Direction", new List<string>(){"Г€Г­ГґГ®Г°Г¬Г Г¶ГЁГ®Г­Г­Г Гї ГЎГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГј", "ГЃГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГј Г ГўГІГ®Г¬Г ГІГЁГ§ГЁГ°Г®ГўГ Г­Г­Г»Гµ Г±ГЁГ±ГІГҐГ¬", "ГЃГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГј ГІГҐГ«ГҐГЄГ®Г¬ГіГ­ГЁГЄГ Г¶ГЁГ®Г­Г­Г»Гµ Г±ГЁГ±ГІГҐГ¬", "ГЂГ­Г Г«ГЁГІГЁГ·ГҐГ±ГЄГ Гї ГЎГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГј", "ГќГЄГ®Г­Г®Г¬ГЁГ·ГҐГ±ГЄГ Гї ГЎГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГј" } },
+            {"PracticeSort", new List<string>(){"ГЏГ°Г®ГЁГ§ГўГ®Г¤Г±ГІГўГҐГ­Г­Г Гї", "ГЏГ°ГҐГ¤Г¤ГЁГЇГ«Г®Г¬Г Г­Г Гї" } },
+            {"PracticeType", new List<string>(){"ГќГЄГ±ГЇГ«ГіГ ГІГ Г¶ГЁГ®Г­Г­Г Гї"} },
             {"Postlist", new List<string>(){"based", "post", "contract" } },
             {"",  new List<string>(){"based", "post", "contract"}}
         };
 
         public static void Main(string[] args)
         {
+            
+                /*{
+                    FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
+                    var options = new JsonSerializerOptions()
+                    {
+                        WriteIndented = true,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                        AllowTrailingCommas = true,
+                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+
+                    };
+                    var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+                    var JSONSer = JsonSerializer.Serialize(hjobj, options);
+                    byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
+                
+                    str.Write(inputBuffer, 0, inputBuffer.Length);
+                    str.Close();
+
+
+                    XmlSerializer xmlSerializer = new(typeof(Document));
+                    str = new FileStream("person.xml", FileMode.Create);
+
+                // ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЇГ®ГІГ®ГЄ, ГЄГіГ¤Г  ГЎГіГ¤ГҐГ¬ Г§Г ГЇГЁГ±Г»ГўГ ГІГј Г±ГҐГ°ГЁГ Г«ГЁГ§Г®ГўГ Г­Г­Г»Г© Г®ГЎГєГҐГЄГІ
+                    var rest = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+
+                    xmlSerializer.Serialize(str, rest);
+
+
+                    var rtfRender = new RtfDocumentRenderer();
+                    rtfRender.Render(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(), "Contract.rtf", "./");
+
+                    
+
+
+                    Console.WriteLine("\nObject has been serialized\n");
+                    var temp2 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render();
+
+                    str.Close();
+                    str = new FileStream("person.xml", FileMode.Open);
+                    Document? res = xmlSerializer.Deserialize(str) as Document?;
+                Document Res1 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+                Document Res2 = res.Value;
+                var pdfRenderer = new PdfDocumentRenderer();
+                pdfRenderer.Document = Res2.Render();
+                pdfRenderer.RenderDocument();
+                pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
+
+                //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+                str.Close();
+                }
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true,
@@ -151,7 +204,7 @@ namespace GPO_BLAZOR
                 AllowTrailingCommas = true,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
-            };
+            };*/
             //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
@@ -259,7 +312,7 @@ namespace GPO_BLAZOR
             app.UseAntiforgery();
 
 
-            ///API списка полей
+            ///API Г±ГЇГЁГ±ГЄГ  ГЇГ®Г«ГҐГ©
             app.MapGet("/GetAtributes/{Field}", (string Field) =>
             {
                 try
@@ -273,11 +326,11 @@ namespace GPO_BLAZOR
             });
 
 
-            app.MapGet("/GetAtributes", () => new string[] { "A", "Б", "В" });
+            app.MapGet("/GetAtributes", () => new string[] { "A", "ГЃ", "Г‚" });
 
             app.Logger.LogDebug("DEBUGSTART:");
 
-            ///API авторизации
+            ///API Г ГўГІГ®Г°ГЁГ§Г Г¶ГЁГЁ
             app.MapPost("/autorization", (Autorization.AutorizationDate date) =>
             {
                 try
@@ -295,7 +348,7 @@ namespace GPO_BLAZOR
                             issuer: AuthOptions.ISSUER,
                             audience: AuthOptions.AUDIENCE,
                             claims: claims,
-                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // время действия 2 минуты
+                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // ГўГ°ГҐГ¬Гї Г¤ГҐГ©Г±ГІГўГЁГї 2 Г¬ГЁГ­ГіГІГ»
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
 
@@ -317,7 +370,7 @@ namespace GPO_BLAZOR
                 }
             });
 
-            ///API перевыдача токена
+            ///API ГЇГҐГ°ГҐГўГ»Г¤Г Г·Г  ГІГ®ГЄГҐГ­Г 
             app.Map("/newJWT", (HttpContext a) =>
             {
                 app.Logger.LogInformation("ResponceJWT");
@@ -332,7 +385,7 @@ namespace GPO_BLAZOR
                     var jwt = new JwtSecurityToken(
                             issuer: AuthOptions.ISSUER,
                             claims: claims,
-                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // время действия 2 минуты
+                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // ГўГ°ГҐГ¬Гї Г¤ГҐГ©Г±ГІГўГЁГї 2 Г¬ГЁГ­ГіГІГ»
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
                     app.Logger.LogInformation($"User: {a.User.Identity.Name} \nnewJWT: {jwt}");
                     return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt) });
@@ -343,10 +396,10 @@ namespace GPO_BLAZOR
                 
             });
 
-            ///API списка заявлений
+            ///API Г±ГЇГЁГ±ГЄГ  Г§Г ГїГўГ«ГҐГ­ГЁГ©
             app.MapGet("/getstatmens/user:{Token}",[Authorize]()=>b);
 
-            ///API заявления
+            ///API Г§Г ГїГўГ«ГҐГ­ГЁГї
             app.MapGet("/getformDate:{ID}", [Authorize] (string ID) => {
                 int id;
                 if (Int32.TryParse(ID, out id))
@@ -362,7 +415,7 @@ namespace GPO_BLAZOR
             });
             //app.MapGet("/getformDate:{TypePost}", [Authorize] (string TypePost) => new { id = TypePost + "new", Template = TypePost });
 
-            ///API Получение полей данных
+            ///API ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ ГЇГ®Г«ГҐГ© Г¤Г Г­Г­Г»Гµ
             app.MapPost("/getInfo", (Dictionary<string, string> x)=>
             {
                 Console.WriteLine("------------------------------------------------");
@@ -377,7 +430,7 @@ namespace GPO_BLAZOR
 
                 x.Remove("id");
 
-                ///Заполнение аккамулятора для лога + добавление в словарь
+                ///Г‡Г ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г ГЄГЄГ Г¬ГіГ«ГїГІГ®Г°Г  Г¤Г«Гї Г«Г®ГЈГ  + Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Гў Г±Г«Г®ГўГ Г°Гј
                 foreach (var item in x)
                 {
                      accamulator+=$"{item.Key}: {(item.Value==null||item.Value==("")?("none"):item.Value)}: {AddOnDictionary(temp[id], item)}\n";
@@ -386,13 +439,20 @@ namespace GPO_BLAZOR
                     app.Logger.LogInformation((new EventId(calculator++, "getInfo")), accamulator);
                     return Results.Ok("sucsefull");
             });
+            FileStream fstream = new FileStream("person.xml", FileMode.OpenOrCreate);
+            // ГўГ»Г¤ГҐГ«ГїГҐГ¬ Г¬Г Г±Г±ГЁГў Г¤Г«Гї Г±Г·ГЁГІГ»ГўГ Г­ГЁГї Г¤Г Г­Г­Г»Гµ ГЁГ§ ГґГ Г©Г«Г 
+            byte[] buffer = new byte[fstream.Length];
+            // Г±Г·ГЁГІГ»ГўГ ГҐГ¬ Г¤Г Г­Г­Г»ГҐ
+            fstream.Read(buffer, 0, buffer.Length);
+            // Г¤ГҐГЄГ®Г¤ГЁГ°ГіГҐГ¬ ГЎГ Г©ГІГ» Гў Г±ГІГ°Г®ГЄГі
+            string textFromFile = Encoding.Default.GetString(buffer);
 
-            ///API шаблона документа
-            app.MapGet("/getTepmlate/{TeplateName}", [Authorize](string TeplateName) => (StatmenDate.DefaultInfo));
+            ///API ГёГ ГЎГ«Г®Г­Г  Г¤Г®ГЄГіГ¬ГҐГ­ГІГ 
+            app.MapGet("/GetTemplate", [Authorize]() => textFromFile);
 
-            //API шаблона печати
+            //API ГёГ ГЎГ«Г®Г­Г  ГЇГҐГ·Г ГІГЁ
             app.MapGet("/GetPrintAtribute/{TemplateName}", [Authorize](string TemplateName) => PrintTemplate[TemplateName]);
-
+            app.UseStaticFiles();
             app.MapStaticAssets();
             app.MapRazorComponents<App>()
                 .AddInteractiveWebAssemblyRenderMode()

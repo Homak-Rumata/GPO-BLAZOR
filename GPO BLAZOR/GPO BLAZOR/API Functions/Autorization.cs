@@ -1,6 +1,5 @@
 ﻿using DBAgent;
 
-
 namespace GPO_BLAZOR.API_Functions
 {
     public class Autorization

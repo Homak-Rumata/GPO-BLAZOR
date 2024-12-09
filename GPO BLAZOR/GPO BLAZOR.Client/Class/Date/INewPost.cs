@@ -19,7 +19,7 @@ namespace GPO_BLAZOR.Client.Class.Date
             {
                 try
                 {
-                    var values = (async () => (await Requesting.AutorizationRequest<string[]>(
+                    var values = (async () => (await Requesting.AutorizationedGetRequest<string[]>(
                             new Uri($"https://{IPaddress.IPAddress}/GetAtributes/Postlist"),
                             newpost.JSRuntime)));
                     newpost._fields = await values();

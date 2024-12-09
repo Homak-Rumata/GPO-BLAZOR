@@ -47,7 +47,7 @@ namespace GPO_BLAZOR.Client.Class.Date
 
         private static async Task<IStatmenTableLineModel[]> GetLines(string? token, IJSRuntime jsr)
         {
-            var response = await Requesting.AutorizationRequest<StatmenTableLineModel[]>(
+            var response = await Requesting.AutorizationedGetRequest<StatmenTableLineModel[]>(
                 new Uri($"https://{IPaddress.IPAddress}/getstatmens/user:{(token != null ? "token" : "-")}"),
                 jsr);
 
