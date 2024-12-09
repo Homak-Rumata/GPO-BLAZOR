@@ -36,7 +36,7 @@
     <Content Remove="wwwroot\Fonts\timesi.ttf" />
   </ItemGroup>
 
-  <ItemGroup>
+    <ProjectReference Include="..\..\DBAccess\DBAccess.csproj" />
     <ProjectReference Include="..\..\PdfFilePrinting\PdfFilePrinting.csproj" />
     <ProjectReference Include="..\GPO BLAZOR.Client\GPO BLAZOR.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
