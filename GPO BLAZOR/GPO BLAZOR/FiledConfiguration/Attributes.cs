@@ -301,6 +301,10 @@ namespace GPO_BLAZOR.FiledConfiguration
     {
         static public IDateContainer<PageDateContainer> DefaultInfo = DefaultInfoF();
 
+        /// <summary>
+        /// Метод сопоставления Списка полей и Полей в документе
+        /// </summary>
+        /// <returns></returns>
         public static (IDictionary<string, IDateContainer<PageDateContainer>> Templates, IDictionary<string, FieldCont.IField> Values) ExperementalTemplate ()
         {
             IDocument doc = new Documnet()

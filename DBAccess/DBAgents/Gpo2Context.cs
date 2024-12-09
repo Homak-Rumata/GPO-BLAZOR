@@ -19,26 +19,49 @@ public partial class Gpo2Context : DbContext
         _connectionPassword = connectionPassword;
     }
 
+    /// <summary>
+    /// Анкета
+    /// </summary>
     public virtual DbSet<AskForm> AskForms { get; set; }
-
+    /// <summary>
+    /// Вид и тип практики
+    /// </summary>
     public virtual DbSet<PracticeType> PracticeTypes { get; set; }
-
+    /// <summary>
+    /// Группы
+    /// </summary>
     public virtual DbSet<Group> Groups { get; set; }
-
+    /// <summary>
+    /// Договор
+    /// </summary>
     public virtual DbSet<Contract> Contracts { get; set; }
-
+    /// <summary>
+    /// Кафедра
+    /// </summary>
     public virtual DbSet<Cafedral> Cafedrals { get; set; }
-
+    /// <summary>
+    /// Направление
+    /// </summary>
     public virtual DbSet<Direction> Directions { get; set; }
-
+    /// <summary>
+    /// Организация
+    /// </summary>
     public virtual DbSet<Organization> Organizations { get; set; }
-
+    /// <summary>
+    /// Пользователь
+    /// </summary>
     public virtual DbSet<User> Users { get; set; }
-
+    /// <summary>
+    /// Роль
+    /// </summary>
     public virtual DbSet<Role> Roles { get; set; }
-
+    /// <summary>
+    /// Статус
+    /// </summary>
     public virtual DbSet<Status> Statuses { get; set; }
-
+    /// <summary>
+    /// Студент
+    /// </summary>
     public virtual DbSet<Student> Students { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
