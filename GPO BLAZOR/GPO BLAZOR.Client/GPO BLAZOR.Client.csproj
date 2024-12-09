@@ -66,11 +66,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\PdfFilePrinting\PdfFilePrinting.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-
-  </ItemGroup>
     <ProjectReference Include="..\..\PdfFilePrinting\PdfFilePrinting.csproj" />
   </ItemGroup>
 

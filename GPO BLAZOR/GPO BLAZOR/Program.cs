@@ -439,7 +439,7 @@ namespace GPO_BLAZOR
                     app.Logger.LogInformation((new EventId(calculator++, "getInfo")), accamulator);
                     return Results.Ok("sucsefull");
             });
-            FileStream fstream = new FileStream("person.xml", FileMode.OpenOrCreate);
+            FileStream fstream = new FileStream("person.xml", FileMode.Open);
             // âûäåëÿåì ìàññèâ äëÿ ñ÷èòûâàíèÿ äàííûõ èç ôàéëà
             byte[] buffer = new byte[fstream.Length];
             // ñ÷èòûâàåì äàííûå
