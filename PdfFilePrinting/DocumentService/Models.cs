@@ -7,6 +7,9 @@ using System.Xml;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
+using static MigraDoc.DocumentObjectModel.Text;
+using System.ComponentModel;
 
 namespace PdfFilePrinting.DocumentService
 {
@@ -113,6 +116,13 @@ namespace PdfFilePrinting.DocumentService
             }
         }
 
+        public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetNames()
+        {
+            var temp = paragrapfs.SelectMany(x => x.GetName());
+
+            return temp;
+        }
+
     }
 
 
@@ -123,24 +133,26 @@ namespace PdfFilePrinting.DocumentService
     {
 
         [XmlAttribute]
-        public int Size { get => _size ?? 14; set => _size = value; }
-        protected int? _size;
+        [DefaultValue(14)]
+        public int Size { get; set; } = 14;
         [XmlAttribute]
-        public bool Bold { get => _bold ?? false; set => _bold = value; }
-        protected bool? _bold;
+        [DefaultValue(false)]
+        public bool Bold { get; set; } = false;
 
         [XmlAttribute]
-        public Underline Underline { get => _underline ?? Underline.None; set => _underline = value; }
-        protected Underline? _underline;
+        [DefaultValue(Underline.None)]
+        public Underline Underline { get; set; } = Underline.None;
 
         [XmlAttribute]
-        public bool Italic { get => _italic ?? false; set => _italic = value; }
-        protected bool? _italic;
+        [DefaultValue(false)]
+        public bool Italic { get; set; } = false;
 
         [XmlAttribute]
-        public int SpaceBefore { get; set; }
+        [DefaultValue(0)]
+        public int SpaceBefore { get; set; } = 0;
         [XmlAttribute]
-        public int SpaceAfter { get; set; }
+        [DefaultValue(0)]
+        public int SpaceAfter { get; set; } = 0;
     }
 
     [JsonArray]
@@ -149,27 +161,41 @@ namespace PdfFilePrinting.DocumentService
     public abstract record class FormatedElement: TextFormat
     {
         [XmlAttribute]
+        [DefaultValue(ParagraphAlignment.Justify)]
         public ParagraphAlignment Alignment { get => _alignment ?? ParagraphAlignment.Justify; set => _alignment = value; }
         private ParagraphAlignment? _alignment;
         public Borders Borders { get; set; }
         [XmlAttribute]
-        public bool KeepWithNext { get; set; }
+        [DefaultValue(false)]
+        public bool KeepWithNext { get; set; } = false;
         [XmlAttribute]
-        public bool KeepTogether { get; set; }
+        [DefaultValue(false)]
+        public bool KeepTogether { get; set; } = false;
 
         protected ParagraphFormat SetParametress(ParagraphFormat paragraphFormat)
         {
             paragraphFormat.KeepWithNext = KeepWithNext;
             paragraphFormat.KeepTogether = KeepTogether;
-            paragraphFormat.Font.Name = "Times";
+            paragraphFormat.Font = new MigraDoc.DocumentObjectModel.Font("Times New Roman", Size==0?14:Size);
             paragraphFormat.Font.Bold = Bold;
-            paragraphFormat.Font.Size = Size;
             paragraphFormat.Font.Underline = Underline;
             paragraphFormat.Font.Italic = Italic;
             paragraphFormat.SpaceBefore = SpaceBefore * paragraphFormat.Font.Size;
             paragraphFormat.SpaceAfter = SpaceAfter * paragraphFormat.Font.Size;
-            if (Borders is not null)
-            paragraphFormat.Borders = Borders;
+            if (Borders is null || Borders.BordersCleared)
+            {
+                paragraphFormat.Borders = new Borders();
+            }
+            else
+            {
+                paragraphFormat.Borders = new Borders();
+                paragraphFormat.Borders.Visible = Borders.Visible;
+
+                paragraphFormat.Borders.Top.Visible = Borders.Top.Visible;
+                paragraphFormat.Borders.Bottom.Visible = Borders.Bottom.Visible;
+                paragraphFormat.Borders.Left.Visible = Borders.Left.Visible;
+                paragraphFormat.Borders.Right.Visible = Borders.Right.Visible;
+            }
             paragraphFormat.Alignment = Alignment;
             return paragraphFormat;
         }
@@ -185,6 +211,8 @@ namespace PdfFilePrinting.DocumentService
         public abstract void Render(in RenderingSection element);
         public abstract void Render(in RenderingTable.Cell element);
         public abstract void Render(in RenderingTable.Cell element, Unit with);
+
+        public abstract IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName();
     }
 
 
@@ -203,10 +231,12 @@ namespace PdfFilePrinting.DocumentService
         public virtual BaseElement[] text { get; set; }
         
         [XmlAttribute]
+        [DefaultValue(0)]
         public int SpaceNum { get=>spaceNum; set=>spaceNum=value; }
         private int spaceNum = 0;
 
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool Tab { get => tab; set => tab = value; }
         private bool tab = false;
 
@@ -252,9 +282,11 @@ namespace PdfFilePrinting.DocumentService
                 }
         }
 
-
-
-
+        public override IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
+        {
+            var u = text.Select(x => x.GetName()).Where(x => x is not null).Select(x=>x.Value);
+            return u;
+        }
     }
 
     [XmlType("MyltiplyParagraph")]
@@ -327,12 +359,25 @@ namespace PdfFilePrinting.DocumentService
 
         [XmlArray]
         public Column[] Columns { get; set; }
+
+        public override IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
+        {
+            var tempRows = Rows.SelectMany(x => x.GetName());
+            var tempColumns = Columns.SelectMany(x => x.GetName());
+            var tempHead = Head.GetName();
+            var tempsumm = tempRows.Concat(tempColumns);
+            var result = tempsumm.Concat(tempHead);
+            return result;
+        }
+
         public override void Render(in RenderingSection section)
         {
             var Table = section.AddTable();
             Table.KeepTogether = KeepTogether;
+
             SetParametress(Table.Format);
-            Table.Borders = TableBorders;
+
+            Table = SetBorders(Table);
             Unit width = (Table.Section.PageSetup.PageWidth - Table.Section.PageSetup.LeftMargin - Table.Section.PageSetup.RightMargin) / Columns.Sum(x=>x.Priorety);
             foreach (Column column in Columns)
                 column.Render(Table, width*column.Priorety);
@@ -357,11 +402,50 @@ namespace PdfFilePrinting.DocumentService
 
         }
 
+        private RenderingTable.Table SetBorders(RenderingTable.Table Table)
+        {
+            if (TableBorders is not null)
+            {
+                var a = new Borders();
+                var b = TableBorders;
+                if (b.Visible)
+                    a.Visible = b.Visible;
+
+                if (b.Bottom.Values.BorderCleared.HasValue && ((!b.Bottom.Values.BorderCleared.Value)))
+                {
+                    a.Bottom = new Border();
+                    a.Bottom.Visible = b.Bottom.Visible;
+                }
+                if (b.Top.Values.BorderCleared.HasValue && (!b.Top.Values.BorderCleared.Value))
+                {
+                    a.Top = new Border();
+                    a.Top.Visible = b.Top.Visible;
+                }
+                if (b.Left.Values.BorderCleared.HasValue && (!b.Left.Values.BorderCleared.Value))
+                {
+                    a.Left = new Border();
+                    a.Left.Visible = b.Left.Visible;
+                }
+                if (b.Right.Values.BorderCleared.HasValue && (!b.Right.Values.BorderCleared.Value))
+                {
+                    a.Right = new Border();
+                    a.Right.Visible = b.Right.Visible;
+                }
+                TableBorders = a;
+                ///
+                Table.Borders = TableBorders;
+            }
+            return Table;
+        }
+
         public void TableRender (RenderingTable.Table Table, Unit with = default(Unit))
         {
             Table.KeepTogether = KeepTogether;
+
             SetParametress(Table.Format);
-            Table.Borders = TableBorders;
+
+            Table = SetBorders(Table);
+
             Unit width;
             if (!with.Equals(default(Unit)))
                 width = (with) / Columns.Sum(x => x.Priorety);
@@ -386,11 +470,13 @@ namespace PdfFilePrinting.DocumentService
 
         }
         [XmlAttribute("Count")]
+        [DefaultValue(0)]
         public int Count { get; set; }
         
         public Cell[] Cells { get; set; }
+        [DefaultValue(0)]
         [XmlAttribute]
-        public int KeepWith { get; set; }
+        public int KeepWith { get; set; } = 0;
         public virtual void Render(in RenderingTable.Table section, bool isHead = false)
         {
             var row = section.AddRow();
@@ -402,6 +488,12 @@ namespace PdfFilePrinting.DocumentService
                 {
                     Cells[i].Render(row.Cells[i]);
                 }
+        }
+
+        public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
+        {
+            var temp = Cells.SelectMany(x => x.GetName());
+            return temp;
         }
     }
 
@@ -415,7 +507,8 @@ namespace PdfFilePrinting.DocumentService
 
         }
         [XmlAttribute]
-        public int Priorety { get; set; }
+        [DefaultValue(1)]
+        public int Priorety { get; set; } = 1;
         public Cell[] Cells { get; set; }
 
         public void Render(in RenderingTable.Table section, Unit width, bool isHead = false)
@@ -435,6 +528,12 @@ namespace PdfFilePrinting.DocumentService
             }
             return;
         }
+
+        public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
+        {
+            var temp = Cells.SelectMany(x => x.GetName());
+            return temp;
+        }
     }
 
     public record class Cell: FormatedElement
@@ -444,7 +543,8 @@ namespace PdfFilePrinting.DocumentService
 
         }
         [XmlAttribute]
-        public int MergeDown { get; set; }
+        [DefaultValue(0)]
+        public int MergeDown { get; set; } = 0;
         [XmlArrayItem("Table", typeof(Table))]
         [XmlArrayItem("Paragrapf", typeof(Paragrapf))]
         [XmlArrayItem("MyltiplyParagraph", typeof(MyltiplyParagraph))]
@@ -473,6 +573,12 @@ namespace PdfFilePrinting.DocumentService
             return;
         }
 
+        public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
+        {
+            var temp = Text.SelectMany(x => x.GetName());
+            return temp;
+        }
+
     }
 
 
@@ -487,11 +593,14 @@ namespace PdfFilePrinting.DocumentService
 
         }
         [XmlAttribute]
-        public bool SpecialLine;
+        [DefaultValue(false)]
+        public bool SpecialLine { get; set; } = false;
         [XmlAttribute]
-        public bool SuperScript;
+        [DefaultValue(false)]
+        public bool SuperScript { get; set; } = false;
         [XmlAttribute]
-        public bool SubScript;
+        [DefaultValue(false)]
+        public bool SubScript { get; set; } = false;
         [XmlText]
         public abstract string TextValue { get; set; }
         public void Render(in Paragraph paragraph)
@@ -506,6 +615,8 @@ namespace PdfFilePrinting.DocumentService
                 formatedText.Superscript = SuperScript;
             }
         }
+
+        public abstract (string  Name, Func<string> getter, Action<string> setter)? GetName();
     }
 
 
@@ -522,6 +633,13 @@ namespace PdfFilePrinting.DocumentService
         public string Name { get; set; }
         [XmlText]
         public override string TextValue { get; set; }
+
+        public override (string, Func<string>, Action<string>)? GetName()
+        {
+            var setter = () => (TextValue);
+            var getter = (string val) => { TextValue = val; };
+            return (Name, setter, getter);
+        }
     }
     [XmlType("MyltiplyInjectElement")]
     public record class MyltiplyInjectElement: InjectElement
@@ -538,6 +656,7 @@ namespace PdfFilePrinting.DocumentService
         }
         [XmlIgnore]
         public Stack<string> map;
+        [XmlIgnore]
         private Stack<string> map2;
 
         [XmlIgnore]
@@ -578,6 +697,11 @@ namespace PdfFilePrinting.DocumentService
         }
         [XmlText]
         public override string TextValue { get; set; }
+
+        public override (string, Func<string>, Action<string>)? GetName()
+        {
+            return null;
+        }
 
     }
 }
