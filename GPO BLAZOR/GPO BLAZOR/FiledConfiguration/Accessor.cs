@@ -41,7 +41,11 @@ namespace GPO_BLAZOR.FiledConfiguration
         {
             public readonly string Name { get; init; }
             public readonly string Description { get; init; }
+
+            
             private Stack<IFields> _fields;
+
+            [XmlArray]
             public IEnumerable<IFields> Fields 
             { 
                 get => _fields; 
@@ -53,6 +57,8 @@ namespace GPO_BLAZOR.FiledConfiguration
         {
             public string Name { get; init; }
             public string Attribute { get; init; }
+
+            
             private Dictionary<string, IAttribute> _attributes;
             public IDictionary<string, IAttribute> Attributes { get;}
             [XmlIgnore]
@@ -117,7 +123,9 @@ namespace GPO_BLAZOR.FiledConfiguration
         }
         record struct Path : IPath
         {
+            [XmlAttribute]
             public readonly string Page { get; init; }
+            [XmlAttribute]
             public readonly string Block { get; init; }
         }
 
@@ -129,8 +137,9 @@ namespace GPO_BLAZOR.FiledConfiguration
                 _getter = Getter;
                 _setter = Setter;
             }
-
+            [XmlIgnore]
             Func<string, string> _getter;
+            [XmlIgnore]
             Action<string, string> _setter;
 
             public string Name { get; init; }

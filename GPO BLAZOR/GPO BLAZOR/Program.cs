@@ -20,6 +20,8 @@ using MigraDoc.RtfRendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using MigraDoc.DocumentObjectModel;
+using GPO_BLAZOR.Client.Class.Date;
+using GPO_BLAZOR.FiledConfiguration.Document;
 
 
 namespace GPO_BLAZOR
@@ -261,6 +263,7 @@ namespace GPO_BLAZOR
             fstream.ReadExactly(buffer);
             string textFromFile = Encoding.Default.GetString(buffer);
 
+            #region Create Accesor
             var CustomDoc = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
             var h1 = CustomDoc.GetNames().GroupBy(x=>x.Name).Select(x=>new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) => 
             {
@@ -276,7 +279,23 @@ namespace GPO_BLAZOR
             renderer.Document = RDoc;
             renderer.RenderDocument();
             var result = renderer.PdfDocument;
+            result.Save("Pdf4.pdf");
+            #endregion
 
+            #region Create Fields
+            FiledConfiguration.Document.IDocument doc = new FiledConfiguration.Document.Documnet()
+            {
+                Name = "Заявление",
+                Description = "Something",
+                Fields = CustomDoc.GetNames().Select(x=>x.Name).Distinct().Select(x=>(IFields)(new Fields() { Name = x}))
+            };
+            #endregion
+
+
+
+
+
+            
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
             Console.WriteLine($"Envirment Tunnel URL {urlstr}");

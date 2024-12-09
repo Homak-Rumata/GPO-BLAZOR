@@ -7,6 +7,7 @@ using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 
 namespace GPO_BLAZOR.FiledConfiguration
@@ -15,14 +16,15 @@ namespace GPO_BLAZOR.FiledConfiguration
     {
         public record Path
         {
+            [XmlAttribute]
             public string Name { get; init; }
+            [XmlAttribute]
             public string Page { get; init; }
+            [XmlAttribute]
             public string Block { get; init; }
         }
         public Path path { get; init; }
         public FieldDateContainer field { get; init; }
-
-        Gpo2Context cntx;
                
     }
 
@@ -112,6 +114,7 @@ namespace GPO_BLAZOR.FiledConfiguration
     abstract record class Based<DateType>: IDateContainer<DateType> where DateType : IPathElement
     {
         [JsonIgnore]
+        [XmlIgnore]
         public abstract string Name { get; init; }
         
 
@@ -195,6 +198,7 @@ namespace GPO_BLAZOR.FiledConfiguration
         }
 
         [JsonPropertyName("BlockName")]
+        [XmlAttribute("BlockName")]
         public override string Name { get; init; }
 
         public override IDateContainer<FieldDateContainer> ToFronzeFieldContainer()
@@ -232,7 +236,10 @@ namespace GPO_BLAZOR.FiledConfiguration
             Date = date.ToImmutableArray();
         }
         [JsonPropertyName("PageName")]
+        [XmlAttribute("PageName")]
         public override string Name { get; init; }
+
+        
         public override IDateContainer<BlockDateContainer> ToFronzeFieldContainer()
         {
             return this with { Date = base.ToFronzeFieldContainer().Date};
@@ -261,6 +268,7 @@ namespace GPO_BLAZOR.FiledConfiguration
             Date = date.ToImmutableArray();
         }
         [JsonIgnore]
+        [XmlIgnore]
         public override string Name { get; init; }
 
         //public string StatmenName { get; set; }
@@ -327,7 +335,7 @@ namespace GPO_BLAZOR.FiledConfiguration
 
             IDictionary<string, FieldCont.IField> t;
 
-            return (Constructor.GetFields(d, [doc], out t), t);
+            return (Constructor.GetFields(d, new[] { doc } , out t), t);
         }
         static public IDateContainer<PageDateContainer> DefaultInfoF ()
         {

@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using System.Net.Http.Json;
 using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace GPO_BLAZOR.Client.Pages
 {
@@ -150,6 +151,15 @@ namespace GPO_BLAZOR.Client.Pages
                     Console.WriteLine(ex.Message);
                     return ("ReadCookies Error");
                 }
+        }
+
+        public async void Enter(KeyboardEventArgs e)
+        {
+            if (e.Code == "Enter" || e.Code == "NumpadEnter")
+            {
+                await AuthorizationInterface.Send(value, timer); 
+                await ButtonClicked();
+            }
         }
 
     }
