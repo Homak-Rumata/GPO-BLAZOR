@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using static System.Net.Mime.MediaTypeNames;
 using static MigraDoc.DocumentObjectModel.Text;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace PdfFilePrinting.DocumentService
 {
@@ -89,6 +90,13 @@ namespace PdfFilePrinting.DocumentService
             }
 
             return document;
+        }
+
+        public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetNames()
+        {
+            var temp = Sections.SelectMany(x => x.GetNames());
+
+            return temp;
         }
     }
 
@@ -284,8 +292,15 @@ namespace PdfFilePrinting.DocumentService
 
         public override IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
         {
-            var u = text.Select(x => x.GetName()).Where(x => x is not null).Select(x=>x.Value);
-            return u;
+            if (text is not null)
+            {
+                var u = text.Select(x => x.GetName()).Where(x => x is not null).Select(x => x.Value);
+                return u;
+            }
+            else
+            {
+                return Enumerable.Empty < (string Name, Func<string> getter, Action<string> setter) > ();
+            }
         }
     }
 
@@ -364,10 +379,11 @@ namespace PdfFilePrinting.DocumentService
         {
             var tempRows = Rows.SelectMany(x => x.GetName());
             var tempColumns = Columns.SelectMany(x => x.GetName());
-            var tempHead = Head.GetName();
+            var tempHead = Head is not null ? Head.GetName() : null;
             var tempsumm = tempRows.Concat(tempColumns);
-            var result = tempsumm.Concat(tempHead);
-            return result;
+            if (tempHead is not null)
+                return tempsumm.Concat(tempHead);
+            return tempsumm;
         }
 
         public override void Render(in RenderingSection section)
@@ -531,7 +547,11 @@ namespace PdfFilePrinting.DocumentService
 
         public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
         {
-            var temp = Cells.SelectMany(x => x.GetName());
+            IEnumerable<(string Name, Func<string> getter, Action<string> setter)> temp;
+            if (Cells is not null)
+                temp = Cells.SelectMany(x => x.GetName());
+            else
+                temp = Enumerable.Empty<(string Name, Func<string> getter, Action<string> setter)>();
             return temp;
         }
     }

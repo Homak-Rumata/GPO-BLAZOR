@@ -25,6 +25,55 @@ using MigraDoc.DocumentObjectModel;
 namespace GPO_BLAZOR
 {
 
+    struct GetSet
+    {
+        public delegate string Getter(string Name);
+        public delegate void Setter(string Name, string Value);
+        private Func<string>? _getter;
+        private Action<string>? _setter;
+
+
+        public event Func<string> AddGet
+        {
+            add
+            {
+                _getter += value;
+            }
+            remove
+            {
+                if (_getter != null)
+                    _getter -= value;
+            }
+        }
+
+        public event Action<string> AddSet
+        {
+            add
+            {
+                _setter += value;
+            }
+            remove
+            {
+                if (_setter is not null)
+                    _setter -= value;
+            }
+        }
+
+        public string Get()
+        {
+            if (_getter is not null)
+                return _getter();
+            return "";
+        }
+
+        public void Set(string Value)
+        {
+            if (_setter != null)
+                _setter(Value);
+        }
+
+    }
+
 
     class Date
     {
@@ -212,7 +261,21 @@ namespace GPO_BLAZOR
             fstream.ReadExactly(buffer);
             string textFromFile = Encoding.Default.GetString(buffer);
 
-            PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().;
+            var CustomDoc = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+            var h1 = CustomDoc.GetNames().GroupBy(x=>x.Name).Select(x=>new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) => 
+            {
+                a.AddGet += b.getter;
+                a.AddSet += b.setter;
+                return a;
+            })));
+            var h2 = h1.ToDictionary();
+            var tempManeM = "FactoryLeaderName";//"OrganiztionLeaderName";
+            h2[tempManeM].Set("Сергеев Сергей Сергеевич");
+            var RDoc = CustomDoc.Render();
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer();
+            renderer.Document = RDoc;
+            renderer.RenderDocument();
+            var result = renderer.PdfDocument;
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
