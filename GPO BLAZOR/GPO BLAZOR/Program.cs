@@ -147,65 +147,72 @@ namespace GPO_BLAZOR
 
         public static void Main(string[] args)
         {
-            
-                /*{
-                    FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
-                    var options = new JsonSerializerOptions()
-                    {
-                        WriteIndented = true,
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                        AllowTrailingCommas = true,
-                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
-                    };
-                    var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
-                    var JSONSer = JsonSerializer.Serialize(hjobj, options);
-                    byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
-                
-                    str.Write(inputBuffer, 0, inputBuffer.Length);
-                    str.Close();
+            /*{
+                FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
+                var options = new JsonSerializerOptions()
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    AllowTrailingCommas = true,
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
+                };
+                var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+                var JSONSer = JsonSerializer.Serialize(hjobj, options);
+                byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
 
-                    XmlSerializer xmlSerializer = new(typeof(Document));
-                    str = new FileStream("person.xml", FileMode.Create);
-
-                // ïîëó÷àåì ïîòîê, êóäà áóäåì çàïèñûâàòü ñåðèàëèçîâàííûé îáúåêò
-                    var rest = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
-
-                    xmlSerializer.Serialize(str, rest);
-
-
-                    var rtfRender = new RtfDocumentRenderer();
-                    rtfRender.Render(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(), "Contract.rtf", "./");
-
-                    
-
-
-                    Console.WriteLine("\nObject has been serialized\n");
-                    var temp2 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render();
-
-                    str.Close();
-                    str = new FileStream("person.xml", FileMode.Open);
-                    Document? res = xmlSerializer.Deserialize(str) as Document?;
-                Document Res1 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
-                Document Res2 = res.Value;
-                var pdfRenderer = new PdfDocumentRenderer();
-                pdfRenderer.Document = Res2.Render();
-                pdfRenderer.RenderDocument();
-                pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
-
-                //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+                str.Write(inputBuffer, 0, inputBuffer.Length);
                 str.Close();
-                }
-            var options = new JsonSerializerOptions()
-            {
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                AllowTrailingCommas = true,
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
-            };*/
+
+                XmlSerializer xmlSerializer = new(typeof(Document));
+                str = new FileStream("person.xml", FileMode.Create);
+
+            // ïîëó÷àåì ïîòîê, êóäà áóäåì çàïèñûâàòü ñåðèàëèçîâàííûé îáúåêò
+                var rest = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+
+                xmlSerializer.Serialize(str, rest);
+
+
+                var rtfRender = new RtfDocumentRenderer();
+                rtfRender.Render(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render(), "Contract.rtf", "./");
+
+
+
+
+                Console.WriteLine("\nObject has been serialized\n");
+                var temp2 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().Render();
+
+                str.Close();
+                str = new FileStream("person.xml", FileMode.Open);
+                Document? res = xmlSerializer.Deserialize(str) as Document?;
+            Document Res1 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
+            Document Res2 = res.Value;
+            var pdfRenderer = new PdfDocumentRenderer();
+            pdfRenderer.Document = Res2.Render();
+            pdfRenderer.RenderDocument();
+            pdfRenderer.PdfDocument.Save("PDFFile3.pdf");
+
             //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+            str.Close();
+            }
+        var options = new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            AllowTrailingCommas = true,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+
+        };*/
+            //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
+
+            FileStream fstream = new FileStream("person.xml", FileMode.Open);
+            byte[] buffer = new byte[fstream.Length];
+            fstream.ReadExactly(buffer);
+            string textFromFile = Encoding.Default.GetString(buffer);
+
+            PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().;
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
@@ -439,15 +446,10 @@ namespace GPO_BLAZOR
                     app.Logger.LogInformation((new EventId(calculator++, "getInfo")), accamulator);
                     return Results.Ok("sucsefull");
             });
-            FileStream fstream = new FileStream("person.xml", FileMode.Open);
-            // âûäåëÿåì ìàññèâ äëÿ ñ÷èòûâàíèÿ äàííûõ èç ôàéëà
-            byte[] buffer = new byte[fstream.Length];
-            // ñ÷èòûâàåì äàííûå
-            fstream.Read(buffer, 0, buffer.Length);
-            // äåêîäèðóåì áàéòû â ñòðîêó
-            string textFromFile = Encoding.Default.GetString(buffer);
 
-            ///API øàáëîíà äîêóìåíòà
+            /// <summary>
+            /// API получение шаблона
+            /// </summary>
             app.MapGet("/GetTemplate", [Authorize]() => textFromFile);
 
             //API øàáëîíà ïå÷àòè
