@@ -24,6 +24,7 @@ using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.FiledConfiguration.Document;
 using DBAgent.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 
 namespace GPO_BLAZOR
@@ -545,7 +546,32 @@ namespace GPO_BLAZOR
             ///<summary>
             ///Запись и чтение значений
             ///</summary>
-            app.MapGet("/getformDate:{ID}", [Authorize] async (string ID) => {
+            app.MapGet("/getformDate:{ID}", [Authorize] async (string ID, HttpContext context) => {
+
+                var askForms = cntx.AskForms.Include(x=>x.ContractNavigation);
+                var askForm = await askForms.FirstAsync(x => x.Id == Int32.Parse(ID));
+
+
+                if (askForm is not null)
+                {
+                    if (askForm.ContractNavigation is not null)
+                    {
+                        var temp = new { id = ID, Template = "Договор" };
+                        return Results.Json(temp);
+                    }
+                    else
+                    {
+                        return Results.Json(new { id = ID, Template = "Заявление" });
+                    }
+                }
+                else
+                {
+                    var UserMail = context.User.Identity.Name;
+                    var User = await cntx.Users.FirstAsync(x => x.Email == UserMail);
+                    var newForm = new AskForm() {StudentNavigation = User, Student = User.Id};
+                    await cntx.AskForms.AddAsync(newForm);
+                    return Results.Json(new { id = ID, Template = "Договор" });
+                }
                 int id;
                 if (Int32.TryParse(ID, out id))
                 {

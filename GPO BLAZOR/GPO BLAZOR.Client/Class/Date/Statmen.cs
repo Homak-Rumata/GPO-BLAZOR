@@ -77,14 +77,24 @@ namespace GPO_BLAZOR.Client.Class.Date
                     statmen.Id = id;
                     return statmen;
                 };
+                IStatmen StatmenTemplate = null;
+                if (values != null)
+                {
+                    if (!values.ContainsKey("Template"))
+                        values.Add("Template", values["template"]);
+                    StatmenTemplate = addId(await Requesting.AutorizationedGetRequest<Statmen>(
+                        new Uri($"https://{IPaddress.IPAddress}/getTepmlate/{values["Template"]}"),
+                        jsr), id);
 
-                IStatmen StatmenTemplate = addId(await Requesting.AutorizationedGetRequest<Statmen>(
-                    new Uri($"https://{IPaddress.IPAddress}/getTepmlate/{values["Template"]}"),
-                    jsr), id);
+                    var t = FillTemplate(values, StatmenTemplate);
 
-                var t = FillTemplate(values, StatmenTemplate);
-
-                return t;
+                    return t;
+                }
+                else
+                {
+                    throw new Exception("Template collection dictionary is nullable ");
+                }
+                
                 
             }
             catch (Exception ex)
