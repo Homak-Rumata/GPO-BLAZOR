@@ -19,6 +19,10 @@ public partial class Gpo2Context : DbContext
         _connectionPassword = connectionPassword;
     }
 
+    public virtual DbSet<Field> Fields { get; set; }
+
+    public virtual DbSet<Template> Templates { get; set; }
+
     /// <summary>
     /// Анкета
     /// </summary>
@@ -135,6 +139,29 @@ public partial class Gpo2Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
+        });
+
+        modelBuilder.Entity<Field>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Fields_pkey");
+
+            entity.HasIndex(e => e.Name, "NameUnique").IsUnique();
+            entity.HasIndex(e => e.Block, "BlockUnique").IsUnique();
+            entity.HasIndex(e => e.Page, "PageUnique").IsUnique();
+            entity.HasIndex(e => e.Mutability, "MutabilityUnique").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Block).HasColumnType("Block");
+            entity.Property(e => e.Page).HasColumnType("Page");
+            entity.Property(e => e.Mutability).HasColumnType("Mutability");
+        });
+
+        modelBuilder.Entity<Template>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Templates_pkey");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.TemplateBody).HasColumnType("xml");
         });
 
         modelBuilder.Entity<Group>(entity =>

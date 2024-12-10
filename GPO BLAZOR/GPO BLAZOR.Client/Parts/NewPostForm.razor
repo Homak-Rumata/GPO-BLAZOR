@@ -13,6 +13,11 @@
         }
         else
         {
+            @if (postModel.Fields.Count()==1)
+            {
+                actionWord = postModel.Fields.Keys.First();
+                Click();
+            }
             @foreach (var el in postModel.Fields.Keys)
             {
                 <option value="@el"><h3>@el</h3></option>

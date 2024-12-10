@@ -22,6 +22,8 @@ using Microsoft.Net.Http.Headers;
 using MigraDoc.DocumentObjectModel;
 using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.FiledConfiguration.Document;
+using DBAgent.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace GPO_BLAZOR
@@ -274,6 +276,10 @@ namespace GPO_BLAZOR
             var h2 = h1.ToDictionary();
             var tempManeM = "FactoryLeaderName";//"OrganiztionLeaderName";
             h2[tempManeM].Set("Сергеев Сергей Сергеевич");
+            foreach (var it in h2)
+            {
+                Console.WriteLine($"{it.Key} {it.Value.Get()}");
+            }
             var RDoc = CustomDoc.Render();
             PdfDocumentRenderer renderer = new PdfDocumentRenderer();
             renderer.Document = RDoc;
@@ -402,11 +408,36 @@ namespace GPO_BLAZOR
 
 
             ///API ñïèñêà ïîëåé
-            app.MapGet("/GetAtributes/{Field}", (string Field) =>
+            app.MapGet("/GetAtributes/{Field}", [Authorize] async (string Field, HttpContext context) =>
             {
+                if (Field == "Postlist")
+                {
+                    var username = context.User.Identity.Name;
+                    var UserInDB = await cntx.Users.AsNoTracking().Where(x => x.Email == username).FirstOrDefaultAsync();
+                    var AskForms = cntx.AskForms.AsNoTracking().Where(x=>x.Student==UserInDB.Id);
+                    if ((await AskForms.FirstOrDefaultAsync()) is null)
+                    {
+                        return ["Заявление"];
+                    }
+                    else
+                    {
+                        var SingleForm = await AskForms.FirstOrDefaultAsync();
+                        var contracts = await cntx.Contracts.AsNoTracking().Where(x => x.AskForms.Contains(SingleForm)).FirstOrDefaultAsync();
+                        if (contracts is not null)
+                        {
+                            return ["Заявление","Договор"];
+                        }
+                        else
+                        {
+                            return ["Иное"];
+                        }
+                    }
+                }
+                
                 try
                 {
-                    return SpecialArray[Field];
+                    var responce = SpecialArray[Field];
+                    return responce;
                 }
                 catch
                 {
@@ -420,19 +451,25 @@ namespace GPO_BLAZOR
             app.Logger.LogDebug("DEBUGSTART:");
 
             ///API àâòîðèçàöèè
-            app.MapPost("/autorization", (Autorization.AutorizationDate date) =>
+            app.MapPost("/autorization", async (Autorization.AutorizationDate date) =>
             {
                 try
                 {
-
-                    if (!(Autorization.checkuser(date, cntx).Result))
+                    var (UserIsNotNull, userID) = await Autorization.checkuser(date, cntx);
+                    if (!UserIsNotNull)
                     {
                         return Results.Problem("not login or password", "nonautorization", 401, "bad login or password)", "nontype", new Dictionary<string, object> { { "messege", "bad login or password" } });
                     }
 
                     app.Logger.LogInformation($"User loging: {date.login}");
 
-                    var claims = new List<Claim> { new Claim(ClaimTypes.Name, date.login), new Claim(ClaimTypes.Role, "student") };
+                    var claims = new List<Claim> 
+                        { 
+                            new Claim(ClaimTypes.Name, date.login),
+                            new Claim(ClaimTypes.Role, "student"), 
+                            new Claim ("ID",userID.ToString()) 
+                        };
+
                     var jwt = new JwtSecurityToken(
                             issuer: AuthOptions.ISSUER,
                             audience: AuthOptions.AUDIENCE,
@@ -485,11 +522,30 @@ namespace GPO_BLAZOR
                 
             });
 
+            ///<summary>
+            ///Получение списка заявлений
+            ///</summary>
             ///API ñïèñêà çàÿâëåíèé
-            app.MapGet("/getstatmens/user:{Token}",[Authorize]()=>b);
+            app.MapGet("/getstatmens/user:{Token}",[Authorize](string Token, HttpContext context)=>
+            {
+                var UserMail = context.User.Identity.Name;
+                var AskFormStudent = cntx.AskForms.Include(x => x.StudentNavigation);
+                var Forms = AskFormStudent.Where(x=>x.StudentNavigation.Email== UserMail);
+
+                var Includers = Forms.Include(x => x.ContractNavigation);
+                var Contracts = Includers.Select(x => x.ContractNavigation);
+
+                var Contaner1 = Forms.Select(x=>new {Id=x.Id.ToString(), Time = DateTime.Now, practicType = x.PracticeType, state = x.Status });
+                var Contaner2 = Contracts.Select(x => new { Id = x.Id.ToString(), Time = DateTime.Now, practicType = x.AskForms.FirstOrDefault().PracticeType, state = x.AskForms.FirstOrDefault().Status });
+                var result = Contaner1.Concat(Contaner2);
+                return result;
+            });
 
             ///API çàÿâëåíèÿ
-            app.MapGet("/getformDate:{ID}", [Authorize] (string ID) => {
+            ///<summary>
+            ///Запись и чтение значений
+            ///</summary>
+            app.MapGet("/getformDate:{ID}", [Authorize] async (string ID) => {
                 int id;
                 if (Int32.TryParse(ID, out id))
                 {
@@ -505,6 +561,9 @@ namespace GPO_BLAZOR
             //app.MapGet("/getformDate:{TypePost}", [Authorize] (string TypePost) => new { id = TypePost + "new", Template = TypePost });
 
             ///API Ïîëó÷åíèå ïîëåé äàííûõ
+            ///<summary>
+            ///Запись и чтение значений
+            ///</summary>
             app.MapPost("/getInfo", (Dictionary<string, string> x)=>
             {
                 Console.WriteLine("------------------------------------------------");
@@ -531,8 +590,9 @@ namespace GPO_BLAZOR
 
             /// <summary>
             /// API получение шаблона
+            /// Ошибка - не тот шаблон
             /// </summary>
-            app.MapGet("/GetTemplate", [Authorize]() => textFromFile);
+            app.MapGet("/GetTemplate", [Authorize]() => cntx.Templates.FirstOrDefault().TemplateBody);
 
             //API øàáëîíà ïå÷àòè
             app.MapGet("/GetPrintAtribute/{TemplateName}", [Authorize](string TemplateName) => PrintTemplate[TemplateName]);
