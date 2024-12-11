@@ -7,10 +7,16 @@ namespace DBAgent;
 
 public partial class Gpo2Context : DbContext
 {
-    string _connectionPassword;
+    static string _connectionPassword;
     public Gpo2Context(string connectionPassword)
     {
         _connectionPassword = connectionPassword;
+    }
+
+    public Gpo2Context(DbContextOptions<Gpo2Context> options)
+        : base(options)
+    {
+        
     }
 
     public Gpo2Context(DbContextOptions<Gpo2Context> options, string connectionPassword)
@@ -146,14 +152,13 @@ public partial class Gpo2Context : DbContext
             entity.HasKey(e => e.Id).HasName("Fields_pkey");
 
             entity.HasIndex(e => e.Name, "NameUnique").IsUnique();
-            entity.HasIndex(e => e.Block, "BlockUnique").IsUnique();
-            entity.HasIndex(e => e.Page, "PageUnique").IsUnique();
-            entity.HasIndex(e => e.Mutability, "MutabilityUnique").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Block).HasColumnType("Block");
             entity.Property(e => e.Page).HasColumnType("Page");
             entity.Property(e => e.Mutability).HasColumnType("Mutability");
+            entity.Property(e => e.Text).HasColumnType("Text");
+            entity.Property(e => e.Type).HasColumnType("Type");
         });
 
         modelBuilder.Entity<Template>(entity =>

@@ -2,6 +2,7 @@ using GPO_BLAZOR.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
 using System.Xml;
+using Microsoft.EntityFrameworkCore;
 using System.Xml.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -23,8 +24,11 @@ using MigraDoc.DocumentObjectModel;
 using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.FiledConfiguration.Document;
 using DBAgent.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 
 namespace GPO_BLAZOR
@@ -267,8 +271,8 @@ namespace GPO_BLAZOR
             string textFromFile = Encoding.Default.GetString(buffer);
 
             #region Create Accesor
-            var CustomDoc = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
-            var h1 = CustomDoc.GetNames().GroupBy(x=>x.Name).Select(x=>new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) => 
+            var CustomDoc = PdfFilePrinting.MakeTemplate.MakeAskFormTemplate.Make();
+            var h1 = CustomDoc.GetNames().Concat(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().GetNames()).GroupBy(x=>x.Name).Select(x=>new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) => 
             {
                 a.AddGet += b.getter;
                 a.AddSet += b.setter;
@@ -276,17 +280,23 @@ namespace GPO_BLAZOR
             })));
             var h2 = h1.ToDictionary();
             var tempManeM = "FactoryLeaderName";//"OrganiztionLeaderName";
-            h2[tempManeM].Set("Сергеев Сергей Сергеевич");
-            foreach (var it in h2)
-            {
-                Console.WriteLine($"{it.Key} {it.Value.Get()}");
-            }
+            //h2[tempManeM].Set("Сергеев Сергей Сергеевич");
+
             var RDoc = CustomDoc.Render();
             PdfDocumentRenderer renderer = new PdfDocumentRenderer();
-            renderer.Document = RDoc;
+            renderer.Document = PdfFilePrinting.MakeTemplate.MakeAskFormTemplate.Make().Render();
             renderer.RenderDocument();
             var result = renderer.PdfDocument;
             result.Save("Pdf4.pdf");
+            renderer = new PdfDocumentRenderer();
+
+            renderer.Document = RDoc;
+            renderer.RenderDocument();
+            result = renderer.PdfDocument;
+            result.Save("Pdf5.pdf");
+
+            RtfDocumentRenderer rtfren = new RtfDocumentRenderer();
+            rtfren.Render(PdfFilePrinting.MakeTemplate.MakeAskFormTemplate.Make().Render(), "Rtf4.rtf", "./");
             #endregion
 
             #region Create Fields
@@ -307,8 +317,52 @@ namespace GPO_BLAZOR
             var cntyui = Environment.GetEnvironmentVariables();
             Console.WriteLine($"Envirment Tunnel URL {urlstr}");
             Console.Write("Data Base Password: ");
-            Gpo2Context cntx = new Gpo2Context(Console.ReadLine());
+            var Password = Console.ReadLine();
+            Gpo2Context cntx = new Gpo2Context(Password);
 
+
+            var FieldsTemplate = cntx.Fields.Select(x => (FiledConfiguration.FieldCont.IField) new FiledConfiguration.FieldCont.Field()
+            {
+                Name = x.Name,
+                Path = new FiledConfiguration.FieldCont.Path()
+                {
+                    Block = x.Block,
+                    Page = x.Page
+                },
+                Template = new FiledConfiguration.FieldDateContainer(x.Name, x.Type, x.Name, x.Text, !x.Mutability),
+            });
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Document));
+            var DocTemplate = cntx.Templates
+                .Select(x=>new KeyValuePair<string, Document>(x.Name, (Document)xmlSerializer
+                    .Deserialize(new StringReader(x.TemplateBody))));
+
+
+            var DocFieldsTemps = DocTemplate
+                .AsEnumerable()
+                .Select(x => new KeyValuePair<string, IEnumerable<string>>
+                (
+                    x.Key,
+                    x.Value
+                        .GetNames()
+                        .Select(y => y.Name)
+                        .Distinct()
+                ));
+
+            var DocFields = DocFieldsTemps
+                .Select(x => (IDocument) new FiledConfiguration.Document.Documnet()
+                {
+                    Name = x.Key,
+                    Fields = x.Value
+                        .Select(y=>(IFields) new Fields() { Name = y})
+                });
+
+            IDictionary<string, FiledConfiguration.FieldCont.IField> FiledResult;
+
+
+            var DocFieldsToList = DocFields;
+
+           var RequestTemplates = FiledConfiguration.Constructor.GetFields(FieldsTemplate, DocFieldsToList, out FiledResult);
 
             // DBConnector.F(null);
 
@@ -352,7 +406,8 @@ namespace GPO_BLAZOR
                 });
 
 
-
+            string connection = builder.Configuration.GetConnectionString("DefaultConnection")+Password;
+            builder.Services.AddDbContext<Gpo2Context>(options => options.UseNpgsql(connection));
             //builder.Services.AddAuthorizationCore();
 
             var app = builder.Build();
@@ -408,51 +463,130 @@ namespace GPO_BLAZOR
             app.UseAntiforgery();
 
 
-            ///API ñïèñêà ïîëåé
-            app.MapGet("/GetAtributes/{Field}", [Authorize] async (string Field, HttpContext context) =>
+            ///<summary>
+            ///Выдача атрибутов для поля
+            ///</summary>
+            app.MapGet("/GetAtributes/{Field}", [Authorize] async (string Field, HttpContext context, Gpo2Context cntx) =>
             {
-                if (Field == "Postlist")
-                {
-                    var username = context.User.Identity.Name;
-                    var UserInDB = await cntx.Users.AsNoTracking().Where(x => x.Email == username).FirstOrDefaultAsync();
-                    var AskForms = cntx.AskForms.AsNoTracking().Where(x=>x.Student==UserInDB.Id);
-                    if ((await AskForms.FirstOrDefaultAsync()) is null)
-                    {
-                        return ["Заявление"];
-                    }
-                    else
-                    {
-                        var SingleForm = await AskForms.FirstOrDefaultAsync();
-                        var contracts = await cntx.Contracts.AsNoTracking().Where(x => x.AskForms.Contains(SingleForm)).FirstOrDefaultAsync();
-                        if (contracts is not null)
-                        {
-                            return ["Заявление","Договор"];
-                        }
-                        else
-                        {
-                            return ["Иное"];
-                        }
-                    }
-                }
-                
                 try
                 {
-                    var responce = SpecialArray[Field];
-                    return responce;
+                    
+                    var Identity = context.User.Identity;
+                    string username;
+                    if (Identity == null)
+                        return Results.NoContent();
+                    else
+                        username = Identity.Name;
+                    ///<summary>
+                    ///Получения списка доступных для создания документов
+                    ///</summary>
+                    switch (Field)
+                    {
+                        case "Postlist":
+
+                            var UserInDB = await cntx.Users.AsNoTracking().Where(x => x.Email == username).FirstOrDefaultAsync();
+                            var AskForms = cntx.AskForms.AsNoTracking().Where(x => x.Student == UserInDB.Id);
+                            if ((await AskForms.FirstOrDefaultAsync()) is null)
+                            {
+                                return Results.Json(new string[] { "Заявление" });
+                            }
+                            else
+                            {
+                                var SingleForm = await AskForms.FirstOrDefaultAsync();
+                                var contracts = await cntx.Contracts.AsNoTracking().Where(x => x.AskForms.Contains(SingleForm)).FirstOrDefaultAsync();
+                                if (contracts is not null)
+                                {
+                                    return Results.Json(new string[] { "Заявление", "Договор" });
+                                }
+                                else
+                                {
+                                    return Results.Json(new string[] { "Иное" });
+                                }
+                            }
+
+                        case "Cafedral":
+                            return Results
+                                .Json(cntx.Students
+                                    .Include(x => x.UserNavigation)
+                                    .Where(x => x.UserNavigation.Email == username)
+                                    .Select(z => z.GroupNavigation.CafedralNavigation.EncriptedName)
+                                    .ToArray());
+                        case "Cafedral Leader":
+                            return Results
+                                .Json(cntx.Students
+                                    .Include(x => x.UserNavigation)
+                                    .Where(x => x.UserNavigation.Email == username)
+                                    .Select(z => z.GroupNavigation.CafedralNavigation.LeaderNavigation)
+                                    .Select(y => $"{y.LastName} {y.FirstName} {y.MiddleName}")
+                                    .ToArray());
+                        case "Practic Type":
+                            return Results
+                                .Json(cntx.PracticeTypes
+                                    .Select(x => x.Name)
+                                    .ToArray());
+                        case "Practic Sort":
+                            return Results
+                                .Json(cntx.PracticeTypes
+                                    .Select(x => x.Name)
+                                    .ToArray());
+                        case "DerictionType":
+                            return Results
+                                .Json(cntx.Students
+                                    .Include(x => x.UserNavigation)
+                                    .Where(x => x.UserNavigation.Email == username)
+                                    .Select(z => z.GroupNavigation.DirectionNavigation.Name)
+                                    .ToArray());
+                        case "CafedralPracticFielderLeader":
+                            return Results
+                                .Json(cntx.Students
+                                .Include(x => x.UserNavigation)
+                                .Where(x => x.UserNavigation.Email == username)
+                                .Select(z => z.GroupNavigation.DirectionNavigation.LeaderNavigation)
+                                .Select(y => $"{y.LastName} {y.FirstName} {y.MiddleName}")
+                                .ToArray());
+                        case "Curse":
+                            return Results
+                                .Json(cntx.Students
+                                .Include(x => x.UserNavigation)
+                                .Where(x => x.UserNavigation.Email == username)
+                                .Select(z => z.GroupNavigation.Cours.ToString())
+                                .ToArray());
+                        case "Group":
+                            return Results
+                                .Json(cntx.Students
+                                .Include(x => x.UserNavigation)
+                                .Where(x => x.UserNavigation.Email == username)
+                                .Select(z => z.GroupNavigation.Groups)
+                                .ToArray());
+                        default:
+                            try
+                            {
+                                var responce = SpecialArray[Field];
+                                return Results.Json(responce);
+                            }
+                            catch
+                            {
+                                return Results.Problem();
+                            }
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return new List<string>(){ "a", "b" };
+                    app.Logger.LogError($"Error: {ex.Message}");
+                    return Results.Problem();
                 }
+                
             });
 
 
-            app.MapGet("/GetAtributes", () => new string[] { "A", "Á", "Â" });
+            app.MapGet("/GetAtributes", () => Results.NotFound("Atribute"));
 
             app.Logger.LogDebug("DEBUGSTART:");
 
-            ///API àâòîðèçàöèè
-            app.MapPost("/autorization", async (Autorization.AutorizationDate date) =>
+            ///<summary>
+            ///Авторизация
+            ///</summary>
+            app.MapPost("/autorization", async (Autorization.AutorizationDate date, Gpo2Context cntx) =>
             {
                 try
                 {
@@ -475,7 +609,7 @@ namespace GPO_BLAZOR
                             issuer: AuthOptions.ISSUER,
                             audience: AuthOptions.AUDIENCE,
                             claims: claims,
-                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // âðåìÿ äåéñòâèÿ 2 ìèíóòû
+                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(40)), // âðåìÿ äåéñòâèÿ 2 ìèíóòû
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
 
@@ -497,6 +631,9 @@ namespace GPO_BLAZOR
                 }
             });
 
+            ///<summary>
+            ///Обнволение токена
+            ///</summary>
             ///API ïåðåâûäà÷à òîêåíà
             app.Map("/newJWT", (HttpContext a) =>
             {
@@ -512,7 +649,10 @@ namespace GPO_BLAZOR
                     var jwt = new JwtSecurityToken(
                             issuer: AuthOptions.ISSUER,
                             claims: claims,
-                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // âðåìÿ äåéñòâèÿ 2 ìèíóòû
+                            /// <summary>
+                            /// Время жизни токена - 2 минуты
+                            /// </summary>
+                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), 
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
                     app.Logger.LogInformation($"User: {a.User.Identity.Name} \nnewJWT: {jwt}");
                     return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt) });
@@ -527,7 +667,7 @@ namespace GPO_BLAZOR
             ///Получение списка заявлений
             ///</summary>
             ///API ñïèñêà çàÿâëåíèé
-            app.MapGet("/getstatmens/user:{Token}",[Authorize](string Token, HttpContext context)=>
+            app.MapGet("/getstatmens/user:{Token}",[Authorize](string Token, HttpContext context, Gpo2Context cntx)=>
             {
                 var UserMail = context.User.Identity.Name;
                 var AskFormStudent = cntx.AskForms.Include(x => x.StudentNavigation);
@@ -536,8 +676,8 @@ namespace GPO_BLAZOR
                 var Includers = Forms.Include(x => x.ContractNavigation);
                 var Contracts = Includers.Select(x => x.ContractNavigation);
 
-                var Contaner1 = Forms.Select(x=>new {Id=x.Id.ToString(), Time = DateTime.Now, practicType = x.PracticeType, state = x.Status });
-                var Contaner2 = Contracts.Select(x => new { Id = x.Id.ToString(), Time = DateTime.Now, practicType = x.AskForms.FirstOrDefault().PracticeType, state = x.AskForms.FirstOrDefault().Status });
+                var Contaner1 = Forms.Select(x=>new {Id=x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.Status });
+                var Contaner2 = Contracts.Select(x => new { Id = x.Id.ToString(), Type = "Договор", Time = DateTime.Now, practicType = x.AskForms.FirstOrDefault().PracticeType, state = x.AskForms.FirstOrDefault().Status });
                 var result = Contaner1.Concat(Contaner2);
                 return result;
             });
@@ -546,7 +686,7 @@ namespace GPO_BLAZOR
             ///<summary>
             ///Запись и чтение значений
             ///</summary>
-            app.MapGet("/getformDate:{ID}", [Authorize] async (string ID, HttpContext context) => {
+            app.MapGet("/getformDate:{ID}", [Authorize] async (string ID, HttpContext context, Gpo2Context cntx) => {
 
                 var askForms = cntx.AskForms.Include(x=>x.ContractNavigation);
                 var askForm = await askForms.FirstAsync(x => x.Id == Int32.Parse(ID));
@@ -618,10 +758,15 @@ namespace GPO_BLAZOR
             /// API получение шаблона
             /// Ошибка - не тот шаблон
             /// </summary>
-            app.MapGet("/GetTemplate", [Authorize]() => cntx.Templates.FirstOrDefault().TemplateBody);
+            
+            app.MapGet("/getTepmlate/{TemplateName}", [Authorize] async(string TemplateName, HttpContext context) =>
+            {
+                var results = StatmenDate.DefaultInfoF();
+                return RequestTemplates.First().Value;
+            });
 
             //API øàáëîíà ïå÷àòè
-            app.MapGet("/GetPrintAtribute/{TemplateName}", [Authorize](string TemplateName) => PrintTemplate[TemplateName]);
+            app.MapGet("/GetPrintAtribute/{TemplateName}", [Authorize](string TemplateName) => cntx.Templates.FirstOrDefault().TemplateBody);
             app.UseStaticFiles();
             app.MapStaticAssets();
             app.MapRazorComponents<App>()

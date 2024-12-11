@@ -307,7 +307,7 @@ namespace GPO_BLAZOR.FiledConfiguration
         /// <returns></returns>
         public static (IDictionary<string, IDateContainer<PageDateContainer>> Templates, IDictionary<string, FieldCont.IField> Values) ExperementalTemplate ()
         {
-            IDocument doc = new Documnet()
+            IDocument FieldInDocument = new Documnet()
             {
                 Name = "Заявление",
                 Description = "Что-то",
@@ -317,7 +317,7 @@ namespace GPO_BLAZOR.FiledConfiguration
                     (IFields)(new Fields() { Name = "TreeNameTextField" }) }
             };
 
-            FieldCont.IField[] d = new[] {
+            FieldCont.IField[] FieldCollextion = new[] {
                 (FieldCont.IField)new FieldCont.Field() {
                 Name = "FirstNameTextField",
                 Path = new FieldCont.Path() {
@@ -339,7 +339,7 @@ namespace GPO_BLAZOR.FiledConfiguration
 
             IDictionary<string, FieldCont.IField> t;
 
-            return (Constructor.GetFields(d, new[] { doc } , out t), t);
+            return (Constructor.GetFields(FieldCollextion, new[] { FieldInDocument } , out t), t);
         }
         static public IDateContainer<PageDateContainer> DefaultInfoF ()
         {

@@ -203,7 +203,7 @@ namespace GPO_BLAZOR.Client.Class.Date
 
         private void TimeSkipAndRewrite(System.Timers.Timer timer)
         {
-            timer = new System.Timers.Timer(20000);
+            timer = new System.Timers.Timer(20*60*1000);
             timer.AutoReset = true;
             timer.Elapsed += new ElapsedEventHandler(RewriteJWT);
             timer.Start();

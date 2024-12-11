@@ -13,4 +13,7 @@ public partial class Field
     public string Block { get; set; } = null!;
     public string Page { get; set; } = null!;
     public bool Mutability { get; set; }
+    public string Type { get; set; }
+    public string Text { get; set; } = null!;
+
 }
