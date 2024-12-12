@@ -29,6 +29,10 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Collections;
+using System;
 
 
 namespace GPO_BLAZOR
@@ -272,7 +276,7 @@ namespace GPO_BLAZOR
 
             #region Create Accesor
             var CustomDoc = PdfFilePrinting.MakeTemplate.MakeAskFormTemplate.Make();
-            var h1 = CustomDoc.GetNames().Concat(PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().GetNames()).GroupBy(x=>x.Name).Select(x=>new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) => 
+            var h1 = CustomDoc.GetNames().GroupBy(x => x.Name).Select(x => new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) =>
             {
                 a.AddGet += b.getter;
                 a.AddSet += b.setter;
@@ -285,6 +289,10 @@ namespace GPO_BLAZOR
             var RDoc = CustomDoc.Render();
             PdfDocumentRenderer renderer = new PdfDocumentRenderer();
             renderer.Document = PdfFilePrinting.MakeTemplate.MakeAskFormTemplate.Make().Render();
+            foreach (var iuy in PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make().GetNames().Select(x => x.Name).Distinct())
+            {
+                Console.WriteLine("Result.Add(\"" + iuy + "\", );");
+            }
             renderer.RenderDocument();
             var result = renderer.PdfDocument;
             result.Save("Pdf4.pdf");
@@ -304,7 +312,7 @@ namespace GPO_BLAZOR
             {
                 Name = "Заявление",
                 Description = "Something",
-                Fields = CustomDoc.GetNames().Select(x=>x.Name).Distinct().Select(x=>(IFields)(new Fields() { Name = x}))
+                Fields = CustomDoc.GetNames().Select(x => x.Name).Distinct().Select(x => (IFields)(new Fields() { Name = x }))
             };
             #endregion
 
@@ -312,7 +320,7 @@ namespace GPO_BLAZOR
 
 
 
-            
+
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
             Console.WriteLine($"Envirment Tunnel URL {urlstr}");
@@ -321,7 +329,7 @@ namespace GPO_BLAZOR
             Gpo2Context cntx = new Gpo2Context(Password);
 
 
-            var FieldsTemplate = cntx.Fields.Select(x => (FiledConfiguration.FieldCont.IField) new FiledConfiguration.FieldCont.Field()
+            var FieldsTemplate = cntx.Fields.Select(x => (FiledConfiguration.FieldCont.IField)new FiledConfiguration.FieldCont.Field()
             {
                 Name = x.Name,
                 Path = new FiledConfiguration.FieldCont.Path()
@@ -334,7 +342,7 @@ namespace GPO_BLAZOR
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Document));
             var DocTemplate = cntx.Templates
-                .Select(x=>new KeyValuePair<string, Document>(x.Name, (Document)xmlSerializer
+                .Select(x => new KeyValuePair<string, Document>(x.Name, (Document)xmlSerializer
                     .Deserialize(new StringReader(x.TemplateBody))));
 
 
@@ -350,11 +358,11 @@ namespace GPO_BLAZOR
                 ));
 
             var DocFields = DocFieldsTemps
-                .Select(x => (IDocument) new FiledConfiguration.Document.Documnet()
+                .Select(x => (IDocument)new FiledConfiguration.Document.Documnet()
                 {
                     Name = x.Key,
                     Fields = x.Value
-                        .Select(y=>(IFields) new Fields() { Name = y})
+                        .Select(y => (IFields)new Fields() { Name = y })
                 });
 
             IDictionary<string, FiledConfiguration.FieldCont.IField> FiledResult;
@@ -362,7 +370,7 @@ namespace GPO_BLAZOR
 
             var DocFieldsToList = DocFields;
 
-           var RequestTemplates = FiledConfiguration.Constructor.GetFields(FieldsTemplate, DocFieldsToList, out FiledResult);
+            var RequestTemplates = FiledConfiguration.Constructor.GetFields(FieldsTemplate, DocFieldsToList, out FiledResult);
 
             // DBConnector.F(null);
 
@@ -406,7 +414,7 @@ namespace GPO_BLAZOR
                 });
 
 
-            string connection = builder.Configuration.GetConnectionString("DefaultConnection")+Password;
+            string connection = builder.Configuration.GetConnectionString("DefaultConnection") + Password;
             builder.Services.AddDbContext<Gpo2Context>(options => options.UseNpgsql(connection));
             //builder.Services.AddAuthorizationCore();
 
@@ -470,7 +478,7 @@ namespace GPO_BLAZOR
             {
                 try
                 {
-                    
+
                     var Identity = context.User.Identity;
                     string username;
                     if (Identity == null)
@@ -575,7 +583,7 @@ namespace GPO_BLAZOR
                     app.Logger.LogError($"Error: {ex.Message}");
                     return Results.Problem();
                 }
-                
+
             });
 
 
@@ -598,11 +606,11 @@ namespace GPO_BLAZOR
 
                     app.Logger.LogInformation($"User loging: {date.login}");
 
-                    var claims = new List<Claim> 
-                        { 
+                    var claims = new List<Claim>
+                        {
                             new Claim(ClaimTypes.Name, date.login),
-                            new Claim(ClaimTypes.Role, "student"), 
-                            new Claim ("ID",userID.ToString()) 
+                            new Claim(ClaimTypes.Role, "student"),
+                            new Claim ("ID",userID.ToString())
                         };
 
                     var jwt = new JwtSecurityToken(
@@ -614,10 +622,10 @@ namespace GPO_BLAZOR
 
 
 
-                    return Results.Json(new Date(){
+                    return Results.Json(new Date() {
                         token = (Guid.NewGuid()),
-                        jwt = new JwtSecurityTokenHandler().WriteToken(jwt), 
-                        role = "student" 
+                        jwt = new JwtSecurityTokenHandler().WriteToken(jwt),
+                        role = "student"
                     });
                     /*
                     return !(API_Functions.Autorization.checkuser(date, cntx).Result) ?
@@ -644,7 +652,7 @@ namespace GPO_BLAZOR
                     var claims = a.User.Claims;
                     foreach (var i in claims)
                     {
-                        app.Logger.LogDebug("claim " + i.Value +i.ValueType+" "+i.Type+" "+i.Subject+" ");
+                        app.Logger.LogDebug("claim " + i.Value + i.ValueType + " " + i.Type + " " + i.Subject + " ");
                     }
                     var jwt = new JwtSecurityToken(
                             issuer: AuthOptions.ISSUER,
@@ -652,31 +660,34 @@ namespace GPO_BLAZOR
                             /// <summary>
                             /// Время жизни токена - 2 минуты
                             /// </summary>
-                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), 
+                            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(40)),
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
                     app.Logger.LogInformation($"User: {a.User.Identity.Name} \nnewJWT: {jwt}");
                     return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt) });
                 }
-                app.Logger.LogError($"Error new JWT: {a.User.Identity.Name} "+o+" "+o.IsAuthenticated );
+                app.Logger.LogError($"Error new JWT: {a.User.Identity.Name} " + o + " " + o.IsAuthenticated);
                 return Results.NotFound();
 
-                
+
             });
 
             ///<summary>
             ///Получение списка заявлений
             ///</summary>
             ///API ñïèñêà çàÿâëåíèé
-            app.MapGet("/getstatmens/user:{Token}",[Authorize](string Token, HttpContext context, Gpo2Context cntx)=>
+            app.MapGet("/getstatmens/user:{Token}", [Authorize] (string Token, HttpContext context, Gpo2Context cntx) =>
             {
                 var UserMail = context.User.Identity.Name;
                 var AskFormStudent = cntx.AskForms.Include(x => x.StudentNavigation);
-                var Forms = AskFormStudent.Where(x=>x.StudentNavigation.Email== UserMail);
+                var Forms = AskFormStudent.Where(x => x.StudentNavigation.Email == UserMail);
 
                 var Includers = Forms.Include(x => x.ContractNavigation);
                 var Contracts = Includers.Select(x => x.ContractNavigation);
 
-                var Contaner1 = Forms.Select(x=>new {Id=x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.Status });
+                ///<summary>
+                ///Конструирование списка заявлений
+                ///</summary>
+                var Contaner1 = Forms.Select(x => new { Id = x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.Status });
                 var Contaner2 = Contracts.Select(x => new { Id = x.Id.ToString(), Type = "Договор", Time = DateTime.Now, practicType = x.AskForms.FirstOrDefault().PracticeType, state = x.AskForms.FirstOrDefault().Status });
                 var result = Contaner1.Concat(Contaner2);
                 return result;
@@ -684,53 +695,176 @@ namespace GPO_BLAZOR
 
             ///API çàÿâëåíèÿ
             ///<summary>
-            ///Запись и чтение значений
+            ///Получение формы для запроса данных
             ///</summary>
-            app.MapGet("/getformDate:{ID}", [Authorize] async (string ID, HttpContext context, Gpo2Context cntx) => {
+            app.MapGet("/getformDate", [Authorize] async (string ID, string Type, HttpContext context, Gpo2Context cntx) => {
 
-                var askForms = cntx.AskForms.Include(x=>x.ContractNavigation);
-                var askForm = await askForms.FirstAsync(x => x.Id == Int32.Parse(ID));
+                Dictionary<string, string> Result = new Dictionary<string, string>();
 
+#warning Добавить просмотр для рукводящей роли
+
+                switch (Type)
+                {
+                    case "Договор":
+                        Result.Add("id", ID);
+                        Result.Add("Template", "Contract");
+                        break;
+                    case "Заявление":
+                        Result.Add("id", ID);
+                        Result.Add("Template", "AskForm");
+                        break;
+                    default:
+                        return Results.NotFound();
+                }
+
+                var UserMail = context.User.Identity.Name;
+                var User = await cntx.Users
+                    .Include(x => x.Student)
+                        .ThenInclude(x => x.GroupNavigation)
+                        .ThenInclude(x => x.DirectionNavigation)
+                        .ThenInclude(x => x.LeaderNavigation)
+                    .Include(x => x.Student)
+                        .ThenInclude(x => x.GroupNavigation)
+                        .ThenInclude(x => x.CafedralNavigation)
+                        .ThenInclude(x => x.LeaderNavigation)
+                    .FirstAsync(x => x.Email == UserMail);
+
+
+
+                ///<summary>
+                ///Создать новое заявление
+                ///</summary>
+                if (ID == "New")
+                {
+                    switch (Type)
+                    {
+                        case "Заявление":
+
+                            Contract contract = new Contract()
+                            {
+                                
+                                Organisation = 1,
+                            };
+                            contract.Number = contract.Id.ToString();
+
+                            AskForm AskForm = new AskForm()
+                            {
+                                PracticeLeaderNavigation = User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation,
+                                ConsultantLeaderNavigation = User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation,
+#warning Выяснить кто есть руководитель консультант
+                                AskFormResposebleNavigation = User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation,
+#warning Выяснить кто отвественен за заполнение
+                                ContractNavigation = contract,
+                                GroupNavigation = User.Student.GroupNavigation,
+                                StudentNavigation = User,
+                                Status = 0,
+                            };
+                            await cntx.AskForms.AddAsync(AskForm);
+                            await cntx.SaveChangesAsync();
+                            Result["id"] = (await cntx.AskForms.Where(x => x.StudentNavigation.Email == UserMail).MaxAsync(x => x.Id)).ToString();
+                            ID = Result["id"];
+                            break;
+                        case "Договор":
+                            Result["id"] = (await cntx.AskForms.Where(x => x.StudentNavigation.Email == UserMail).MaxAsync(x => x.Id)).ToString();
+                            ID = Result["id"];
+                            break;
+                    }
+                }
+
+
+                int NumID = Int32.Parse(ID);
+                var askForms = cntx.AskForms.Include(x => x.ContractNavigation);
+                var askForm = await askForms
+                   .Include(x => x.PracticeTypeNavigation)
+                   .Include(x => x.ContractNavigation)
+                   .ThenInclude(x => x.OrganizationNavigation)
+                   .FirstAsync(x => x.Id == NumID);
+
+                switch (Type)
+                {
+                    case "Заявление":
+                        Result.Add("Cafedral", User.Student.GroupNavigation.CafedralNavigation.EncriptedName ?? "");
+                        Result.Add("Cafedral Leader", $"{User.Student.GroupNavigation.CafedralNavigation.LeaderNavigation.LastName ?? ""} " +
+                            $"{User.Student.GroupNavigation.CafedralNavigation.LeaderNavigation.FirstName ?? ""}" +
+                            $"{User.Student.GroupNavigation.CafedralNavigation.LeaderNavigation.MiddleName ?? ""}");
+                        Result.Add("Group", User.Student.GroupNavigation.Groups ?? "");
+                        Result.Add("StudentName", $"{User.LastName ?? ""} {User.FirstName ?? ""} {User.MiddleName ?? ""}");
+                        Result.Add("Practic Type", askForm.PracticeTypeNavigation.Name ?? "");
+                        Result.Add("Practic Sort", askForm.PracticeTypeNavigation.Name ?? "");
+                        Result.Add("FactoryName", askForm.ContractNavigation.OrganizationNavigation.Name ?? "");
+                        Result.Add("FactoryAdress", askForm.ContractNavigation.OrganizationNavigation.Adress ?? "");
+                        Result.Add("StartDate", askForm.ContractNavigation.DateStart.ToShortDateString().Replace('/', '.') ?? "");
+                        Result.Add("EndDate", askForm.ContractNavigation.DateEnd.ToShortDateString().Replace('/', '.') ?? "");
+                        Result.Add("AskFormTime", DateTime.Now.ToShortDateString().Replace('/', '.') ?? "");
+                        Result.Add("Cafedral Practic Leader", $"{User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.LastName ?? ""}" +
+                            $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.FirstName ?? ""}" +
+                            $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.MiddleName ?? ""}");
+                        break;
+                    case "Договор":
+                        Result.Add("ContractNumber", askForm.ContractNavigation.Number ?? "");
+                        Result.Add("ContractDate", DateTime.Now.ToShortDateString().Replace('/', '.') ?? "");
+                        Result.Add("FactoryName", askForm.ContractNavigation.OrganizationNavigation.Name ?? "");
+                        Result.Add("OrganizationRule", askForm.ContractNavigation.OrganizationNavigation.Document ?? "");
+                        Result.Add("DerictionType", User.Student.GroupNavigation.DirectionNavigation.Name ?? "");
+                        Result.Add("FactoryLeaderName", askForm.ContractNavigation.OrganizationNavigation.FactoryLeader ?? "");
+                        Result.Add("FactoryLocation", askForm.ContractNavigation.OrganizationNavigation.Adress ?? "");
+                        Result.Add("FactoryRank", (askForm.ContractNavigation.OrganizationNavigation.Rank ?? ""));
+                        Result.Add("CafedralPracticFielderLeader", "И.А. Трубчинова");
+                        Result.Add("Practic Type", askForm.PracticeTypeNavigation.Name ?? "");
+                        Result.Add("StudentOnFactoryCount", askForm.ContractNavigation.AskForms.Count().ToString() ?? "");
+                        Result.Add("StudentName", $"{User.LastName ?? ""} {User.FirstName ?? ""} {User.MiddleName ?? ""}");
+                        Result.Add("Curse", User.Student.GroupNavigation.Cours.ToString() ?? "");
+                        Result.Add("Group", User.Student.GroupNavigation.Groups ?? "");
+                        Result.Add("TimePrepand", $"{(askForm.ContractNavigation.DateStart.DayNumber - askForm.ContractNavigation.DateEnd.DayNumber)} дней");
+#warning Исправить
+                        Result.Add("Cafedral Practic Leader", $"{User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.LastName ?? ""}" +
+                            $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.FirstName ?? ""}" +
+                            $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.MiddleName ?? ""}");
+                        Result.Add("WorksRooms", (await cntx.AskForms.FirstAsync(x => x.Id == NumID)).ContractNavigation.Room ?? "");
+                        Result.Add("WorkRoomAddress", (await cntx.AskForms.FirstAsync(x => x.Id == NumID)).ContractNavigation.OrganizationNavigation.Adress ?? "");
+                        Result.Add("Practic Used Tools", (await cntx.AskForms.FirstAsync(x => x.Id == NumID)).ContractNavigation.Equipment ?? "");
+                        break;
+                }
+
+                return Results.NotFound(Result);
 
                 if (askForm is not null)
                 {
                     if (askForm.ContractNavigation is not null)
                     {
-                        var temp = new { id = ID, Template = "Договор" };
+                        var temp = new { id = ID, Template = "Contract" };
                         return Results.Json(temp);
                     }
                     else
                     {
-                        return Results.Json(new { id = ID, Template = "Заявление" });
+                        return Results.Json(new { id = ID, Template = "AskForm" });
                     }
                 }
                 else
                 {
-                    var UserMail = context.User.Identity.Name;
-                    var User = await cntx.Users.FirstAsync(x => x.Email == UserMail);
-                    var newForm = new AskForm() {StudentNavigation = User, Student = User.Id};
+                    var newForm = new AskForm() { StudentNavigation = User, Student = User.Id };
                     await cntx.AskForms.AddAsync(newForm);
-                    return Results.Json(new { id = ID, Template = "Договор" });
+                    return Results.Json(new { id = ID, Template = "AskForm" });
                 }
                 int id;
                 if (Int32.TryParse(ID, out id))
                 {
-                    app.Logger.LogInformation($"{ID}: {temp[id]}"); 
+                    app.Logger.LogInformation($"{ID}: {temp[id]}");
                     return Results.Json(temp[id]);
                 }
                 else
                 {
                     return Results.Json(new { id = ID + "new", Template = ID });
                 }
-                
+
             });
             //app.MapGet("/getformDate:{TypePost}", [Authorize] (string TypePost) => new { id = TypePost + "new", Template = TypePost });
 
             ///API Ïîëó÷åíèå ïîëåé äàííûõ
             ///<summary>
-            ///Запись и чтение значений
+            ///Запись значений
             ///</summary>
-            app.MapPost("/getInfo", (Dictionary<string, string> x)=>
+            app.MapPost("/getInfo", (Dictionary<string, string> x) =>
             {
                 Console.WriteLine("------------------------------------------------");
                 string accamulator = "";
@@ -747,26 +881,40 @@ namespace GPO_BLAZOR
                 ///Çàïîëíåíèå àêêàìóëÿòîðà äëÿ ëîãà + äîáàâëåíèå â ñëîâàðü
                 foreach (var item in x)
                 {
-                     accamulator+=$"{item.Key}: {(item.Value==null||item.Value==("")?("none"):item.Value)}: {AddOnDictionary(temp[id], item)}\n";
+                    accamulator += $"{item.Key}: {(item.Value == null || item.Value == ("") ? ("none") : item.Value)}: {AddOnDictionary(temp[id], item)}\n";
                     //Console.WriteLine($"{item.Key} ^ {item.Value} - WriteLine");
                 }
-                    app.Logger.LogInformation((new EventId(calculator++, "getInfo")), accamulator);
-                    return Results.Ok("sucsefull");
+                app.Logger.LogInformation((new EventId(calculator++, "getInfo")), accamulator);
+                return Results.Ok("sucsefull");
             });
 
             /// <summary>
             /// API получение шаблона
             /// Ошибка - не тот шаблон
             /// </summary>
-            
-            app.MapGet("/getTepmlate/{TemplateName}", [Authorize] async(string TemplateName, HttpContext context) =>
+
+            app.MapGet("/getTepmlate/{TemplateName}", [Authorize] async (string TemplateName, HttpContext context) =>
             {
                 var results = StatmenDate.DefaultInfoF();
-                return RequestTemplates.First().Value;
+                return RequestTemplates[TemplateName];
             });
 
             //API øàáëîíà ïå÷àòè
-            app.MapGet("/GetPrintAtribute/{TemplateName}", [Authorize](string TemplateName) => cntx.Templates.FirstOrDefault().TemplateBody);
+            app.MapGet("/GetPrintAtribute/{TemplateName}", [Authorize] (string TemplateName) => 
+            { 
+                switch (TemplateName)
+                {
+                    case "Заявление":
+                        TemplateName = "AskForm";
+                        break;
+                    case "Договор":
+                        TemplateName = "Contract";
+                        break;
+
+                }
+                return cntx.Templates.Where(x => x.Name == TemplateName).FirstOrDefault().TemplateBody;
+                
+            });
             app.UseStaticFiles();
             app.MapStaticAssets();
             app.MapRazorComponents<App>()

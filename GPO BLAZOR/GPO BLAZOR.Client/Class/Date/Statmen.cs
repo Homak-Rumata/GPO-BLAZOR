@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace GPO_BLAZOR.Client.Class.Date
@@ -55,13 +56,16 @@ namespace GPO_BLAZOR.Client.Class.Date
             return AddId(result);
         }
 
-        public async static Task<IStatmen> Create(string id, IJSRuntime jsr)
+        public async static Task<IStatmen> Create(string id, IJSRuntime jsr, string StatmenType)
         {
             Dictionary<string, string> values;
             try
             {
-                    values = await Requesting.AutorizationedGetRequest<Dictionary<string, string>>(
-                        new Uri($"https://{IPaddress.IPAddress}/getformDate:{id}"),
+#if DEBUG
+                Console.WriteLine("Statmen Id "+id);
+#endif
+                values = await Requesting.AutorizationedGetRequest<Dictionary<string, string>>(
+                        new Uri($"https://{IPaddress.IPAddress}/getformDate?ID={id}&Type={StatmenType}"),
                         jsr);
             }
             catch (Exception ex)

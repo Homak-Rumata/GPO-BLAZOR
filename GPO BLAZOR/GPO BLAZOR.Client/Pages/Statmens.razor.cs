@@ -42,16 +42,16 @@ namespace GPO_BLAZOR.Client.Pages
         private bool isLoadind { get; set; } = false;
 
 
-        async Task Click((string id, int num) item)
+        async Task Click((string id, int num, string TypeValue) item)
         {
-            var command = (async (string id, int num) => {
-                string way = $"statmen/{num}";
+            var command = (async (string id, int num, string TypeValue) => {
+                string way = $"statmen?Number={num}&Type={TypeValue}";
                 Navigation.NavigateTo(way);
             });
 
-            command(item.id, item.num);
+            command(item.id, item.num, item.TypeValue);
 
-            await ViemStatmen.InvokeAsync(item);
+            await ViemStatmen.InvokeAsync((id: item.id, num: item.num));
         }
 
 

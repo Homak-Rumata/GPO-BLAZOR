@@ -28,6 +28,7 @@
             <div class="content">
                 <PageValuesBlock Date="SelectedPage"/>
                 <input class="inputbutton" type="button" value="Отправить" @onclick="(async) => { SetDate();}" style="background-color:@InterfaceColor.TusurColor" />
+                <GPO_BLAZOR.Client.Class.Field.Print TemplateName=@Type Statmen="Date" />
             </div>
         }
         else

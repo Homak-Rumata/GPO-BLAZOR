@@ -10,6 +10,54 @@ using System.Xml.Serialization;
 
 namespace GPO_BLAZOR.Client.Class.Field
 {
+    struct GetSet
+    {
+        public delegate string Getter(string Name);
+        public delegate void Setter(string Name, string Value);
+        private Func<string>? _getter;
+        private Action<string>? _setter;
+
+
+        public event Func<string> AddGet
+        {
+            add
+            {
+                _getter += value;
+            }
+            remove
+            {
+                if (_getter != null)
+                    _getter -= value;
+            }
+        }
+
+        public event Action<string> AddSet
+        {
+            add
+            {
+                _setter += value;
+            }
+            remove
+            {
+                if (_setter is not null)
+                    _setter -= value;
+            }
+        }
+
+        public string Get()
+        {
+            if (_getter is not null)
+                return _getter();
+            return "";
+        }
+
+        public void Set(string Value)
+        {
+            if (_setter != null)
+                _setter(Value);
+        }
+
+    }
     public partial class Print: ComponentBase
     {
         [Inject]
@@ -20,7 +68,8 @@ namespace GPO_BLAZOR.Client.Class.Field
         public string TemplateName { get; set; }
 
         //[EditorRequired]
-        public Statmen Statmen { get; set; }       
+        [Parameter]
+        public IStatmen Statmen { get; set; }       
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -39,13 +88,25 @@ namespace GPO_BLAZOR.Client.Class.Field
         {
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(PdfFilePrinting.DocumentService.Document));
-            var reques = await Date.Requesting.AutorizationedRequest(new Uri($"https://{IPaddress.IPAddress}/GetTemplate"), JSRuntime);
+            var reques = await Date.Requesting.AutorizationedRequest(new Uri($"https://{IPaddress.IPAddress}/GetPrintAtribute/{TemplateName}"), JSRuntime);
             var result = xmlSerializer.Deserialize(reques) as PdfFilePrinting.DocumentService.Document?;
 
             PdfDocumentRenderer pdfDocumentRenderer = new PdfDocumentRenderer();
             try
             {
-                pdfDocumentRenderer.Document = result.Value.Render();
+                var structures = Statmen.Date.SelectMany(x => x.Date).SelectMany(y => y.Date).Select(z => new KeyValuePair<string, string>(z.Name, z.value));
+                var doc = result.Value;
+                var Names = doc.GetNames().GroupBy(x => x.Name).Select(x => new KeyValuePair<string, GetSet>(x.Key, x.Aggregate(new GetSet(), (a, b) =>
+                {
+                    a.AddGet += b.getter;
+                    a.AddSet += b.setter;
+                    return a;
+                }))).ToDictionary();
+                foreach (var temp in structures)
+                {
+                    Names[temp.Key].Set(temp.Value);
+                }
+                pdfDocumentRenderer.Document = doc.Render();
             //pdfDocumentRenderer.Document = pdfrend;
                 pdfDocumentRenderer.RenderDocument();
             }

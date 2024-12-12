@@ -9,54 +9,33 @@
 
 
 @page "/"
-@if (NewPostMenuViem)
-{
-    <div>
-        <div>
-            <NewPostForm Navigator="Navigation"/>
-        </div>
-        <input type="button" value="Закрыть" @onclick="PostWrotten" style="background-color:@InterfaceColor.TusurColor"/>
-    </div>
-}
-else
-{
-    <div>
-        <PageTitle>Таблица заявлений</PageTitle>
-        <table>
-            <thead>
-                <tr>
-                    <td>
-                        Создано
-                    </td>
-                    <td>
-                        Вид практики
-                    </td>
-                    <td>
-                        Статус
-                    </td>
-                    <td>
+<div>
+    <PageTitle>Таблица заявлений</PageTitle>
+    <table>
+        <thead>
+            <tr>
+                <td>
+                    Создано
+                </td>
+                <td>
+                    Вид практики
+                </td>
+                <td>
+                    Статус
+                </td>
+                <td>
 
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                @if (isLoadind)
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (isLoadind)
+            {
+                @if (Date != null)
                 {
-                    @if (Date != null)
+                    @foreach (IStatmenTableLineModel temp in Date.Lines)
                     {
-                        @foreach (IStatmenTableLineModel temp in Date.Lines)
-                        {
-                            <Label Date="temp" ViemStatmen="Click"/>
-                        }
-
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="4">
-                                <h3>Данные отсутствуют</h3>
-                            </td>
-                        </tr>
+                        <Label Date="temp" ViemStatmen="Click"/>
                     }
 
                 }
@@ -64,16 +43,37 @@ else
                 {
                     <tr>
                         <td colspan="4">
-                            <h3>Загрузка данных</h3>
+                            <h3>Данные отсутствуют</h3>
                         </td>
                     </tr>
                 }
 
-            </tbody>
-        </table>
-    </div>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">
+                        <h3>Загрузка данных</h3>
+                    </td>
+                </tr>
+            }
 
-        <input type="button" value="Создать" @onclick="NewPost" style="background-color:@InterfaceColor.TusurColor"/>
+        </tbody>
+    </table>
+</div>
+<div class="NewPostBlock">
+@if (NewPostMenuViem)
+{
+        <div>
+            <NewPostForm Navigator="Navigation" />
+        </div>
+        <input type="button" value="Закрыть" @onclick="PostWrotten" style="background-color:@InterfaceColor.TusurColor" />
 }
+else
+{
+    <input type="button" value="Создать" @onclick="NewPost" style="background-color:@InterfaceColor.TusurColor"/>
+}
+</div>
+
 
 

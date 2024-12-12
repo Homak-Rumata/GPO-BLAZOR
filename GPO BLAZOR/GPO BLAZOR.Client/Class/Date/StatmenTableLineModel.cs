@@ -5,6 +5,7 @@
     /// </summary>
     public record StatmenTableLineModel: IStatmenTableLineModel
     {
+        public string Type { get; init; }
         public string id { get; init; }
         public DateTime Time { get; init; }
         public State State { get; init; }

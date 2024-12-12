@@ -1,6 +1,9 @@
 ﻿using System.Data;
+using System.Diagnostics;
 using GPO_BLAZOR.Client.Class.Date;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Scaffolding;
+using Microsoft.EntityFrameworkCore.Storage;
 
 
 namespace GPO_BLAZOR.Client.Pages
@@ -11,7 +14,11 @@ namespace GPO_BLAZOR.Client.Pages
         public IStatmen? Date { get; set; }
 
         [Parameter]
-        public int Number { get; set; }
+        [SupplyParameterFromQuery]
+        public int? Number { get; set; }
+        [Parameter]
+        [SupplyParameterFromQuery]
+        public string Type { get; set; }
 
         [Parameter]
         public EventCallback Return { get; set; }
@@ -50,8 +57,12 @@ namespace GPO_BLAZOR.Client.Pages
             isLoading = false;
             try
             {
-                 string id = (await StatmenTableModel.Create(jsr)).Lines[Number].id;
-                 Date = await Class.Date.Statmen.Create(id, jsr);
+                string id;
+                if (Number.HasValue)
+                    id = (await StatmenTableModel.Create(jsr)).Lines[Number.Value].id;
+                else
+                    id = "New";
+                 Date = await Class.Date.Statmen.Create(id, jsr, Type);
                  SelectedPage = Date.Date.First();
             }
             catch (Exception ex)

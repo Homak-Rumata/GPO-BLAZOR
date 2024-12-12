@@ -40,13 +40,13 @@ public partial class Contract
     /// Помещение
     /// </summary>
     [Column("Помещение")]
-    public string Room { get; set; } = null!;
+    public string Room { get; set; }
 
     /// <summary>
     /// Материально техническое обеспече
     /// </summary>
     [Column("МатериальноТехническоеОбеспече")]
-    public string Equipment { get; set; } = null!;
+    public string Equipment { get; set; }
 
 
     public virtual ICollection<AskForm> AskForms { get; set; } = new List<AskForm>();

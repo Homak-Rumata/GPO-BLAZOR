@@ -25,6 +25,11 @@ input {
     border-radius: 10px;
 }
 
+div.NewPostBlock {
+    display: inline-block;
+    margin-left: 7%
+}
+
 tr {
     margin-bottom: 15px;
 }

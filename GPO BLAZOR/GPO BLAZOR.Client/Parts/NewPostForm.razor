@@ -5,25 +5,32 @@
 @inject IJSRuntime jsr
 
 @page "/joj"
-<form>
-    <InputSelect @bind-Value="@actionWord" @onchange="@Click" @bind-Value:after="@Click">
-        @if (postModel is null)
-        {
-            <h1>Загрузка данных</h1>
-        }
-        else
-        {
-            @if (postModel.Fields.Count()==1)
+<body>
+    <div>
+        <InputSelect @bind-Value="@actionWord" @onchange="@Click" @onselect="@Click" @bind-Value:after="@Click" DisplayName="error" class="NewPost">
+            @if (postModel is null)
             {
-                actionWord = postModel.Fields.Keys.First();
-                Click();
+                <h1>Загрузка данных</h1>
             }
-            @foreach (var el in postModel.Fields.Keys)
+            else
             {
-                <option value="@el"><h3>@el</h3></option>
+                @if (postModel.Fields.Count()==1)
+                {
+                    actionWord = postModel.Fields.Keys.First();
+                    Click();
+                }
+                else
+                {
+                    <option value=""></option>
+                }
+                @foreach (var el in postModel.Fields.Keys)
+                {
+
+                    <option value="@el"><h3>@el</h3></option>
+                }
             }
-        }
-    </InputSelect>
-</form>
+            </InputSelect>
+    </div>
+</body>
 
 

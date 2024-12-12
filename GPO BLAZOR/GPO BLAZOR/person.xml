@@ -5,13 +5,13 @@
       <Paragrapf SpaceBefore="1" Alignment="Right">
         <RawText>Заведующему кафедрой </RawText>
         <InjectElement Name="Cafedral">КИБЭВС</InjectElement>
-        <RawText>
+        <RawText>\n
 </RawText>
         <InjectElement Name="Cafedral Leader">Шелупанову Александру Александровичу</InjectElement>
         <RawText>
 от студента гр. </RawText>
         <InjectElement Name="Group">711-1</InjectElement>
-        <RawText>
+        <RawText>\n
 </RawText>
         <InjectElement Name="StudentName">Репникова Никиты Ивановича</InjectElement>
       </Paragrapf>
