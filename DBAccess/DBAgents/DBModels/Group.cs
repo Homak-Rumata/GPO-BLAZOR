@@ -37,7 +37,7 @@ public partial class Group
     /// <summary>
     /// Год поступления
     /// </summary>
-    [Column("ГодПоступления")]
+    [Column("Год поступления")]
     public string Year { get; set; } = null!;
 
     public virtual ICollection<AskForm> AskFroms { get; set; } = new List<AskForm>();

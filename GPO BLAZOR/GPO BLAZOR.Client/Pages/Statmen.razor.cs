@@ -10,6 +10,10 @@ namespace GPO_BLAZOR.Client.Pages
 {
     public partial class Statmen
     {
+        [Inject]
+        public IAutorizationStruct? AutStruct { get; set; }
+
+
         [Parameter]
         public IStatmen? Date { get; set; }
 
@@ -37,7 +41,7 @@ namespace GPO_BLAZOR.Client.Pages
 
             try
             {
-                Console.WriteLine($"SendDateMessage -> {await Date.SendDate()}");
+                Console.WriteLine($"SendDateMessage -> {await Date.SendDate(jsr)}");
             }
             catch (Exception ex)
             {

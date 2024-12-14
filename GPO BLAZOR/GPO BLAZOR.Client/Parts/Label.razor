@@ -18,8 +18,12 @@
         }
     </td>
     <td>
+        @Date.State
+        @*
         @switch (Date.State)
         {
+            
+
             case State.Partial:
                 <a>Незаполненно</a>
                 break;
@@ -30,6 +34,7 @@
                 <a>Заполненно</a>
                 break;
         }
+                        *@
     </td>
     <td>
         <input type="button" @onclick="Click" value="Открыть" style="background-color:@InterfaceColor.TusurColor" />

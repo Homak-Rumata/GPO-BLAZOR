@@ -17,6 +17,9 @@ namespace GPO_BLAZOR.Client.Pages
         [Required]
         public required IAuthorizationDate AuthorizationInterface { get; set; }
 
+        [Inject]
+        IAutorizationStruct? Autorizer { get; set; }
+
         [Parameter]
         public EventCallback<IAuthorizationDate> AuthorizationInterfaceChanged { get; set; }
 
@@ -171,7 +174,7 @@ namespace GPO_BLAZOR.Client.Pages
         {
             if (e.Code == "Enter" || e.Code == "NumpadEnter")
             {
-                await AuthorizationInterface.Send(value, timer); 
+                await AuthorizationInterface.Send(value, timer, Autorizer); 
                 await ButtonClicked();
             }
         }

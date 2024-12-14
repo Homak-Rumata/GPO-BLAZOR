@@ -34,19 +34,19 @@ public partial class Contract
     /// Организация
     /// </summary>
     [Column("Организация")]
-    public int Organisation { get; set; }
+    public int? Organisation { get; set; }
 
     /// <summary>
     /// Помещение
     /// </summary>
     [Column("Помещение")]
-    public string Room { get; set; }
+    public string? Room { get; set; }
 
     /// <summary>
     /// Материально техническое обеспече
     /// </summary>
     [Column("МатериальноТехническоеОбеспече")]
-    public string Equipment { get; set; }
+    public string? Equipment { get; set; }
 
 
     public virtual ICollection<AskForm> AskForms { get; set; } = new List<AskForm>();

@@ -1,4 +1,27 @@
-﻿<h3>Commentary</h3>
+﻿    @using GPO_BLAZOR.Client.Class.Date;
+    @inherits Class.Field.Field
+
+    <RoleController Role="@Class.Date.Roles.Student" >
+    <body>
+        <div>
+            @{
+                base.BuildRenderTree(__builder);
+            }
+            <input id="@Date.Id" type="text" class="@Date.ClassType" name="@Date.Name" @bind="@Date.value" disabled=true />
+        </div>
+    </body>
+    </RoleController>
+
+    <RoleController Role="@Class.Date.Roles.FieldCommander" >
+    <body>
+        <div>
+            @{
+                base.BuildRenderTree(__builder);
+            }
+            <input id="@Date.Id" type="text" class="@Date.ClassType" name="@Date.Name" @bind="@Date.value" disabled=false />
+        </div>
+    </body>
+    </RoleController>
 
 @code {
 

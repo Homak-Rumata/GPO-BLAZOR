@@ -1,10 +1,9 @@
-﻿@using GPO_BLAZOR.Client.Parts
-@using GPO_BLAZOR.Client.Class.Date
+﻿@using GPO_BLAZOR.Client.Parts;
+@using GPO_BLAZOR.Client.Class.Date;
 @using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
-@using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Web
-@inject NavigationManager Navigation
-@inject IJSRuntime jsr
+@using Microsoft.AspNetCore.Components.Routing;
+@using Microsoft.AspNetCore.Components.Web;
+
 
 
 
@@ -62,6 +61,7 @@
     </table>
 </div>
 <div class="NewPostBlock">
+<RoleController Role="@Class.Date.Roles.Student" >
 @if (NewPostMenuViem)
 {
         <div>
@@ -73,6 +73,7 @@ else
 {
     <input type="button" value="Создать" @onclick="NewPost" style="background-color:@InterfaceColor.TusurColor"/>
 }
+</RoleController>
 </div>
 
 

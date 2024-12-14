@@ -44,7 +44,7 @@
         </h3>
         <input type="password" class="DateInput" @bind-value="AuthorizationInterface.Password" @onkeypress="Enter" @onkeydown=@Enter />
 
-        <input type="button" class="AgreeButton" value="Отправить" @onkeypress="Enter" @onkeydown=@Enter @onclick="async ()=>{await AuthorizationInterface.Send(value, timer); await ButtonClicked();}" />
+        <input type="button" class="AgreeButton" value="Отправить" @onkeypress="Enter" @onkeydown=@Enter @onclick="async ()=>{await AuthorizationInterface.Send(value, timer, Autorizer); await ButtonClicked();}" />
 
 
 

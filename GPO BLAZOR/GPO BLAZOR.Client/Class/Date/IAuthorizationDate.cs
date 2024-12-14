@@ -39,7 +39,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        Task Send(string value, System.Timers.Timer timer);
+        Task Send(string value, System.Timers.Timer timer, IAutorizationStruct autorizaer);
     }
     /// <summary>
     /// Делегат записи в хралище

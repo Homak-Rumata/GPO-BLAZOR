@@ -92,7 +92,7 @@ namespace GPO_BLAZOR
     {
         public Guid token { get; set; }
         public string jwt { get; set; }
-        public string role { get; set; }
+        public string[] role { get; set; }
     }
 
     /*record FieldDateContainer
@@ -378,6 +378,7 @@ namespace GPO_BLAZOR
 
             builder.Services.AddScoped<CookieStorageAccessor>();
             builder.Services.AddScoped<LocalStorageAccessor>();
+            builder.Services.AddSingleton<IAutorizationStruct, AutorizationStruct>();
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
@@ -606,10 +607,14 @@ namespace GPO_BLAZOR
 
                     app.Logger.LogInformation($"User loging: {date.login}");
 
+                    var RoleConstructor = cntx.Users.Where(x => x.Email == date.login).Include(x => x.Рольs);
+
+                    var Rols = RoleConstructor.FirstOrDefault().Рольs.Select(x=>x.Name).Aggregate((x,y)=>x+"\n"+y);
+
                     var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, date.login),
-                            new Claim(ClaimTypes.Role, "student"),
+                            new Claim(ClaimTypes.Role, Rols),
                             new Claim ("ID",userID.ToString())
                         };
 
@@ -625,7 +630,8 @@ namespace GPO_BLAZOR
                     return Results.Json(new Date() {
                         token = (Guid.NewGuid()),
                         jwt = new JwtSecurityTokenHandler().WriteToken(jwt),
-                        role = "student"
+                        role = Rols.Split('\n') 
+                        
                     });
                     /*
                     return !(API_Functions.Autorization.checkuser(date, cntx).Result) ?
@@ -663,7 +669,7 @@ namespace GPO_BLAZOR
                             expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(40)),
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
                     app.Logger.LogInformation($"User: {a.User.Identity.Name} \nnewJWT: {jwt}");
-                    return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt) });
+                    return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt)});
                 }
                 app.Logger.LogError($"Error new JWT: {a.User.Identity.Name} " + o + " " + o.IsAuthenticated);
                 return Results.NotFound();
@@ -675,11 +681,21 @@ namespace GPO_BLAZOR
             ///Получение списка заявлений
             ///</summary>
             ///API ñïèñêà çàÿâëåíèé
-            app.MapGet("/getstatmens/user:{Token}", [Authorize] (string Token, HttpContext context, Gpo2Context cntx) =>
+            app.MapGet("/getstatmens/user:{Token}", [Authorize] async (string Token, HttpContext context, Gpo2Context cntx) =>
             {
                 var UserMail = context.User.Identity.Name;
-                var AskFormStudent = cntx.AskForms.Include(x => x.StudentNavigation);
-                var Forms = AskFormStudent.Where(x => x.StudentNavigation.Email == UserMail);
+                var role = context.User.Claims.First(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split('\n');
+                
+                var AskFormStudent = cntx.AskForms.Include(x => x.StudentNavigation).Include(x=>x.StatusNavigation);
+                IQueryable<AskForm> Forms;
+                if (role.Contains("Student"))
+                {
+                    Forms = AskFormStudent.Where(x => x.StudentNavigation.Email == UserMail);
+                }
+                else
+                {
+                    Forms = AskFormStudent.Where(x => x.Status > 2);
+                }
 
                 var Includers = Forms.Include(x => x.ContractNavigation);
                 var Contracts = Includers.Select(x => x.ContractNavigation);
@@ -687,11 +703,12 @@ namespace GPO_BLAZOR
                 ///<summary>
                 ///Конструирование списка заявлений
                 ///</summary>
-                var Contaner1 = Forms.Select(x => new { Id = x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.Status });
-                var Contaner2 = Contracts.Select(x => new { Id = x.Id.ToString(), Type = "Договор", Time = DateTime.Now, practicType = x.AskForms.FirstOrDefault().PracticeType, state = x.AskForms.FirstOrDefault().Status });
+                var Contaner1 = Forms.Select(x => new { Id = x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.StatusNavigation.StatusName });
+                var Contaner2 = Forms.Select(x => new { Id = x.Id.ToString(), Type = "Договор", Time = DateTime.Now, practicType = x.PracticeType, state = x.StatusNavigation.StatusName });
                 var result = Contaner1.Concat(Contaner2);
-                return result;
+                return result;                
             });
+            
 
             ///API çàÿâëåíèÿ
             ///<summary>
@@ -719,6 +736,7 @@ namespace GPO_BLAZOR
 
                 var UserMail = context.User.Identity.Name;
                 var User = await cntx.Users
+                    .Where(x => x.Email == UserMail)
                     .Include(x => x.Student)
                         .ThenInclude(x => x.GroupNavigation)
                         .ThenInclude(x => x.DirectionNavigation)
@@ -749,16 +767,25 @@ namespace GPO_BLAZOR
 
                             AskForm AskForm = new AskForm()
                             {
+                                
                                 PracticeLeaderNavigation = User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation,
+                                PracticeLeader = User.Student.GroupNavigation.DirectionNavigation.LeaderName,
                                 ConsultantLeaderNavigation = User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation,
+                                ConsultantLeader = User.Student.GroupNavigation.DirectionNavigation.LeaderName,
 #warning Выяснить кто есть руководитель консультант
                                 AskFormResposebleNavigation = User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation,
+                                AskFormResposeble = User.Student.GroupNavigation.DirectionNavigation.LeaderName,
 #warning Выяснить кто отвественен за заполнение
                                 ContractNavigation = contract,
+                                Contract = contract.Id,
                                 GroupNavigation = User.Student.GroupNavigation,
+                                Group = User.Student.Group,
                                 StudentNavigation = User,
-                                Status = 0,
+                                Student = User.Id,
+                                PracticeType = 1,
+                                Status = 1,
                             };
+                            
                             await cntx.AskForms.AddAsync(AskForm);
                             await cntx.SaveChangesAsync();
                             Result["id"] = (await cntx.AskForms.Where(x => x.StudentNavigation.Email == UserMail).MaxAsync(x => x.Id)).ToString();
@@ -774,11 +801,36 @@ namespace GPO_BLAZOR
 
                 int NumID = Int32.Parse(ID);
                 var askForms = cntx.AskForms.Include(x => x.ContractNavigation);
-                var askForm = await askForms
+
+
+                
+
+                var askFormSeq = askForms
+                   .Where(x => x.Id == NumID)
                    .Include(x => x.PracticeTypeNavigation)
                    .Include(x => x.ContractNavigation)
-                   .ThenInclude(x => x.OrganizationNavigation)
-                   .FirstAsync(x => x.Id == NumID);
+                   .ThenInclude(x => x.OrganizationNavigation);
+
+                AskForm askForm;
+
+                var role = context.User.Claims.First(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split('\n');
+                if (role.Contains("Student"))
+                {
+                    try
+                    {
+                        askForm = await askFormSeq.FirstAsync(x => x.StudentNavigation.Email == UserMail && x.Id == NumID);
+                    }
+                    catch(Exception ex)
+                    {
+                        return Results.StatusCode(401);
+                    }
+                }
+                else
+                    askForm = await askFormSeq.FirstAsync(x => x.Id == NumID);
+
+                Result.Add("State", askForm.Status.ToString());
+                if (askForm.Commentary is not null)
+                    Result.Add("Commentary", askForm.Commentary);
 
                 switch (Type)
                 {
@@ -864,22 +916,45 @@ namespace GPO_BLAZOR
             ///<summary>
             ///Запись значений
             ///</summary>
-            app.MapPost("/getInfo", (Dictionary<string, string> x) =>
+            app.MapPost("/getInfo", [Authorize] async (int? ID, Dictionary<string, string> UserForm, HttpContext context, Gpo2Context cntx) =>
             {
+                var role = context.User.Claims.First(x=>x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split('\n');
+                
+
+                if (role.Contains("PracticFieldLeader"))
+                { var AskForm = (await cntx.AskForms.FindAsync(ID));
+                    AskForm.Commentary = UserForm["Commentary"];
+                    cntx.AskForms.Update(AskForm);
+                    cntx.SaveChanges();
+                }
+                   
+
+                switch (UserForm["Template"])
+                {
+                    case "Contract":
+
+                        break;
+                    case "AskForm":
+
+                        break;
+                }
+
+
+
                 Console.WriteLine("------------------------------------------------");
                 string accamulator = "";
 
-                if (temp.TryAdd(Int32.Parse(x["id"]), new Dictionary<string, string>()))
+                if (temp.TryAdd(Int32.Parse(UserForm["id"]), new Dictionary<string, string>()))
                 {
-                    app.Logger.LogError($"AddedStatmen: {x["id"]}");
+                    app.Logger.LogError($"AddedStatmen: {UserForm["id"]}");
                 }
 
-                int id = Int32.Parse(x["id"]);
+                int id = Int32.Parse(UserForm["id"]);
 
-                x.Remove("id");
+                UserForm.Remove("id");
 
                 ///Çàïîëíåíèå àêêàìóëÿòîðà äëÿ ëîãà + äîáàâëåíèå â ñëîâàðü
-                foreach (var item in x)
+                foreach (var item in UserForm)
                 {
                     accamulator += $"{item.Key}: {(item.Value == null || item.Value == ("") ? ("none") : item.Value)}: {AddOnDictionary(temp[id], item)}\n";
                     //Console.WriteLine($"{item.Key} ^ {item.Value} - WriteLine");

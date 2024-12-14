@@ -21,9 +21,10 @@ namespace GPO_BLAZOR.Client.Class.Date
 
     public class Statmen: DictionaryValueGetter, IStatmen
     {
+        private string _id = null!;
+        private string _Template = null!;
+        public int State { get; set; }
         public Page[] Date { get; set; }
-
-        private string? _id = "";
 
         private string Id 
         {
@@ -86,9 +87,13 @@ namespace GPO_BLAZOR.Client.Class.Date
                 {
                     if (!values.ContainsKey("Template"))
                         values.Add("Template", values["template"]);
-                    StatmenTemplate = addId(await Requesting.AutorizationedGetRequest<Statmen>(
+                    var tempTemplates = addId(await Requesting.AutorizationedGetRequest<Statmen>(
                         new Uri($"https://{IPaddress.IPAddress}/getTepmlate/{values["Template"]}"),
                         jsr), id);
+                    tempTemplates._id = id;
+                    tempTemplates._Template = values["Template"];
+                    tempTemplates.State = Int32.Parse(values["State"]);
+                    StatmenTemplate = tempTemplates;
 
                     var t = FillTemplate(values, StatmenTemplate);
 
@@ -146,11 +151,9 @@ namespace GPO_BLAZOR.Client.Class.Date
             return voidTemplate;
         }
 
-        public async Task<string> SendDate()
+        public async Task<string> SendDate(IJSRuntime jsr)
         {
             using HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri($"https://{IPaddress.IPAddress}/getInfo");
-
             Dictionary<string, string> temp = new Dictionary<string, string>();
             foreach (var item in GetValues())
             {
@@ -159,12 +162,12 @@ namespace GPO_BLAZOR.Client.Class.Date
 #endif
                 temp.TryAdd(item.Key, item.Value.value);
             }
-
-            var response = await httpClient.PostAsJsonAsync(httpClient.BaseAddress, temp);
+            Uri uri = new Uri($"https://{IPaddress.IPAddress}/getInfo?ID={_id}&Template={_Template}");
+            var result = await Requesting.AutorizationedPostRequest<string, Dictionary<string, string>>(uri, jsr, temp);
 
             //var a = (httpClient.Send(new HttpRequestMessage())).Content.ReadAsStream();
 
-            return await response.Content.ReadAsStringAsync();
+            return result;
         }
     }
 }
