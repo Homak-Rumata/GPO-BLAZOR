@@ -51,7 +51,7 @@ namespace GPO_BLAZOR.Client.Pages
             try
             {
                 Console.WriteLine(AuthorizationInterface);
-                await AuthorizationInterface.GetValues(ReadCookies, timer);
+                await AuthorizationInterface.GetValues(ReadCookies, timer, Autorizer);
                 await AuthorizationInterfaceChanged.InvokeAsync(AuthorizationInterface);
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace GPO_BLAZOR.Client.Pages
                         Console.WriteLine("CheckCookie");
 #endif
                         AuthorizationInterface = new AuthorizationDate(ReadCookies, WriteCookies);
-                        await AuthorizationInterface.GetValues(ReadCookies, timer);
+                        await AuthorizationInterface.GetValues(ReadCookies, timer, Autorizer);
                         await AuthorizationInterfaceChanged.InvokeAsync(AuthorizationInterface);
                     }
                     else { }
@@ -133,7 +133,7 @@ namespace GPO_BLAZOR.Client.Pages
 
         protected async Task Checer()
         {
-            await AuthorizationInterface.GetValues(ReadCookies, timer);
+            await AuthorizationInterface.GetValues(ReadCookies, timer, Autorizer);
             await AuthorizationInterfaceChanged.InvokeAsync();
         }
 

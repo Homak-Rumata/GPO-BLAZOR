@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DBAccess.DBAgents.DBModels;
 using DBAgent.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -74,6 +75,8 @@ public partial class Gpo2Context : DbContext
     /// </summary>
     public virtual DbSet<Student> Students { get; set; }
 
+    public virtual DbSet<PracticTime> PracticTimes { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
     {
@@ -83,6 +86,30 @@ public partial class Gpo2Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresEnum("mutability", new[] { "mutable", "immutable" });
+
+        modelBuilder.Entity<Field>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Fields_pkey");
+
+            entity.HasIndex(e => e.Name, "NameUnique").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Type).HasMaxLength(35);
+        });
+
+        modelBuilder.Entity<Template>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Templates_pkey");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.TemplateBody).HasColumnType("xml");
+        });
+
+
+
+
+
         modelBuilder.Entity<AskForm>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Анкета_pkey");
@@ -147,6 +174,21 @@ public partial class Gpo2Context : DbContext
                 .HasColumnName("ID");
         });
 
+        modelBuilder.Entity<PracticTime>(entity =>
+        {
+            entity.HasKey(e => e.ID).HasName("Даты практики_pkey");
+
+            entity.ToTable("Даты практики");
+
+            entity.Property(e => e.ID).HasColumnName("ID");
+            entity.Property(e => e.DateStart).HasColumnName("Дата начала");
+            entity.Property(e => e.DateEnd).HasColumnName("Дата окончания");
+
+            entity.HasOne(d => d.DirectionNavigation).WithMany(p => p.PracticTymes)
+                .HasForeignKey(d => d.Direction)
+                .HasConstraintName("fkey_name");
+        });
+
         modelBuilder.Entity<Field>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Fields_pkey");
@@ -197,15 +239,24 @@ public partial class Gpo2Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
-            entity.Property(e => e.DateStart).HasColumnName("Дата начала практики");
-            entity.Property(e => e.DateEnd).HasColumnName("Дата окончания практики");
             entity.Property(e => e.Equipment).HasColumnName("Материально-Техническое обеспече");
             entity.Property(e => e.Number).HasColumnName("Номер договора о практике");
+
+            entity.HasOne(d => d.PracticTimenNavigation).WithMany(p => p.Contracts)
+                .HasForeignKey(d => d.DataPractic)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("date_fkey");
 
             entity.HasOne(d => d.OrganizationNavigation).WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.Organisation)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("организация_fkey");
+
+            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Contracts)
+                .HasForeignKey(d => d.Status)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("stat_fkey");
+
         });
 
         modelBuilder.Entity<Cafedral>(entity =>

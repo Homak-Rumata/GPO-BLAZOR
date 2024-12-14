@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBAccess.DBAgents.DBModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,16 +20,10 @@ public partial class Contract
     public string Number { get; set; } = null!;
 
     /// <summary>
-    /// Дата начала практики
+    /// Дата практики
     /// </summary>
-    [Column("ДатаНачалаПрактики")]
-    public DateOnly DateStart { get; set; }
-
-    /// <summary>
-    /// Дата окончания практики
-    /// </summary>
-    [Column("ДатаОкончанияПрактики")]
-    public DateOnly DateEnd { get; set; }
+    [Column("Дата практики")]
+    public int DataPractic { get; set; }
 
     /// <summary>
     /// Организация
@@ -42,6 +37,13 @@ public partial class Contract
     [Column("Помещение")]
     public string? Room { get; set; }
 
+
+    /// <summary>
+    /// Статус
+    /// </summary>
+    [Column("Статус")]
+    public int Status { get; set; }
+
     /// <summary>
     /// Материально техническое обеспече
     /// </summary>
@@ -52,4 +54,7 @@ public partial class Contract
     public virtual ICollection<AskForm> AskForms { get; set; } = new List<AskForm>();
 
     public virtual Organization OrganizationNavigation { get; set; } = null!;
+    public virtual PracticTime PracticTimenNavigation { get; set; } = null!;
+    public virtual Status StatusNavigation { get; set; } = null!;
+
 }

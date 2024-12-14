@@ -58,23 +58,38 @@ namespace GPO_BLAZOR.Client.Class.Date
         /// </summary>
         /// <param name="reader"> Делегат для чтения из хранилища </param>
         /// <returns></returns>
-        public async Task GetValues (Reader reader, System.Timers.Timer timer)
+        public async Task GetValues (Reader reader, System.Timers.Timer timer, IAutorizationStruct autorizationStruct)
         {
             try
-            {
-                if (reader != null)
+            { 
+                var IsReader = reader is not null;
+                if (IsReader)
                 {
-                    string temp = await reader("Autorization");
+                    string temp = (await reader("Autorization")) ?? "";
                     if (temp != null && temp != "")
                     {
                         IsCookies = true;
+                        await RewriteJWT();
+                        autorizationStruct.Role = roles.Select(AutorizationStruct.RoleSelector).ToArray();
                         TimeSkipAndRewrite(timer);
                     }
+#if DEBUG
+                    else
+                    {
+                        Console.WriteLine("HAS TEMP IS VAR OF ::: "+temp);
+                    }
+#endif
                 }
+#if DEBUG
+                else
+                {
+                    Console.WriteLine("HAS TEMP IS VAR OF ->->->");
+                }
+#endif
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); 
+                Console.WriteLine("GetValueError -> "+ex.Message); 
             }
         }
         /// <summary>
@@ -100,6 +115,9 @@ namespace GPO_BLAZOR.Client.Class.Date
                 _name = value;
             }
         }
+
+        private string[] roles;
+
         /// <summary>
         /// Поле для хранения заполненного пароля
         /// </summary>
@@ -142,7 +160,16 @@ namespace GPO_BLAZOR.Client.Class.Date
         /// Обновление  JWT
         /// </summary>
         /// <returns></returns>
-        private async void RewriteJWT (object source, ElapsedEventArgs e)
+        private async void RewriteJWT(object source, ElapsedEventArgs e)
+        {
+            await RewriteJWT();
+        }
+
+        /// <summary>
+        /// Обновление  JWT
+        /// </summary>
+        /// <returns></returns>
+        private async Task RewriteJWT ()
         {
             try
             {
@@ -180,8 +207,12 @@ namespace GPO_BLAZOR.Client.Class.Date
 #endif
                     if (tempresponce.IsSuccessStatusCode)
                     {
-                        string newjwt = (await tempresponce.Content.ReadFromJsonAsync<NewJWTResponce>()).jwt;
+                        var result = await tempresponce.Content.ReadFromJsonAsync<Date>();
+                        string newjwt = result.jwt;
                         await _writer("Autorization", newjwt);
+                        if (roles == null)
+                            roles = result.role;
+                        
 #if DEBUG
                         Console.WriteLine("GetNewJWT: " + newjwt);
 #endif
@@ -251,21 +282,9 @@ namespace GPO_BLAZOR.Client.Class.Date
                     {
                         Date newPerson = await response.Content.ReadFromJsonAsync<Date>();
 
-                        autorizer.Role = newPerson.role.Select(x=>
-                        {
-                            switch (x)
-                            {
-                                case "Student":
-                                    return Roles.Student;
-                                case "CafedralLeader":
-                                    return Roles.CafedralLeader;
-                                case "FieldCommander":
-                                    return Roles.FieldCommander;
-                                default:
-                                    return Roles.Student;
-                            }
-                        })
+                        autorizer.Role = newPerson.role.Select(AutorizationStruct.RoleSelector)
                             .ToArray();
+                        
 
                         if (newPerson != null) { 
 
@@ -334,6 +353,8 @@ namespace GPO_BLAZOR.Client.Class.Date
                 if (temp != "")
                 {
                     IsCookies = true;
+
+                    
 #if DEBUG
                     Console.WriteLine("Set CookieTrue");
 #endif

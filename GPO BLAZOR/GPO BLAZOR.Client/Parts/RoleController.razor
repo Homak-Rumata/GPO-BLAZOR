@@ -1,8 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
 
-<body>
+
     @if (Autorize.HasValue(Role))
+    {
         @ChildContent
-</body>
+    }
+
+
 

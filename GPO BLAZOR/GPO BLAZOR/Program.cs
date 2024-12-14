@@ -35,6 +35,8 @@ using System.Collections;
 using System;
 
 
+
+
 namespace GPO_BLAZOR
 {
 
@@ -316,8 +318,8 @@ namespace GPO_BLAZOR
             };
             #endregion
 
-
-
+            
+           
 
 
 
@@ -353,6 +355,8 @@ namespace GPO_BLAZOR
                     x.Key,
                     x.Value
                         .GetNames()
+                        .Append((Name: "Commentary", getter: ()=>"", setter: (string x) => { }
+                ))
                         .Select(y => y.Name)
                         .Distinct()
                 ));
@@ -371,6 +375,7 @@ namespace GPO_BLAZOR
             var DocFieldsToList = DocFields;
 
             var RequestTemplates = FiledConfiguration.Constructor.GetFields(FieldsTemplate, DocFieldsToList, out FiledResult);
+
 
             // DBConnector.F(null);
 
@@ -649,13 +654,13 @@ namespace GPO_BLAZOR
             ///Обнволение токена
             ///</summary>
             ///API ïåðåâûäà÷à òîêåíà
-            app.Map("/newJWT", (HttpContext a) =>
+            app.Map("/newJWT", (HttpContext context) =>
             {
                 app.Logger.LogInformation("ResponceJWT");
-                var o = a.User.Identity;
+                var o = context.User.Identity;
                 if (o is not null && o.IsAuthenticated)
                 {
-                    var claims = a.User.Claims;
+                    var claims = context.User.Claims;
                     foreach (var i in claims)
                     {
                         app.Logger.LogDebug("claim " + i.Value + i.ValueType + " " + i.Type + " " + i.Subject + " ");
@@ -668,10 +673,11 @@ namespace GPO_BLAZOR
                             /// </summary>
                             expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(40)),
                             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-                    app.Logger.LogInformation($"User: {a.User.Identity.Name} \nnewJWT: {jwt}");
-                    return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt)});
+                    app.Logger.LogInformation($"User: {context.User.Identity.Name} \nnewJWT: {jwt}");
+                    var role = context.User.Claims.First(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split('\n');
+                    return Results.Json(new { jwt = new JwtSecurityTokenHandler().WriteToken(jwt), role = role});
                 }
-                app.Logger.LogError($"Error new JWT: {a.User.Identity.Name} " + o + " " + o.IsAuthenticated);
+                app.Logger.LogError($"Error new JWT: {context.User.Identity.Name} " + o + " " + o.IsAuthenticated);
                 return Results.NotFound();
 
 
@@ -686,7 +692,12 @@ namespace GPO_BLAZOR
                 var UserMail = context.User.Identity.Name;
                 var role = context.User.Claims.First(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split('\n');
                 
-                var AskFormStudent = cntx.AskForms.Include(x => x.StudentNavigation).Include(x=>x.StatusNavigation);
+                var AskFormStudent = cntx.AskForms
+                    .Include(x => x.StudentNavigation)
+                    .Include(x=>x.StatusNavigation)
+                    .Include(x=>x.ContractNavigation)
+                    .ThenInclude(x=>x.PracticTimenNavigation);
+
                 IQueryable<AskForm> Forms;
                 if (role.Contains("Student"))
                 {
@@ -845,8 +856,8 @@ namespace GPO_BLAZOR
                         Result.Add("Practic Sort", askForm.PracticeTypeNavigation.Name ?? "");
                         Result.Add("FactoryName", askForm.ContractNavigation.OrganizationNavigation.Name ?? "");
                         Result.Add("FactoryAdress", askForm.ContractNavigation.OrganizationNavigation.Adress ?? "");
-                        Result.Add("StartDate", askForm.ContractNavigation.DateStart.ToShortDateString().Replace('/', '.') ?? "");
-                        Result.Add("EndDate", askForm.ContractNavigation.DateEnd.ToShortDateString().Replace('/', '.') ?? "");
+                        Result.Add("StartDate", askForm.ContractNavigation.PracticTimenNavigation.DateStart.ToShortDateString().Replace('/', '.') ?? "");
+                        Result.Add("EndDate", askForm.ContractNavigation.PracticTimenNavigation.DateEnd.ToShortDateString().Replace('/', '.') ?? "");
                         Result.Add("AskFormTime", DateTime.Now.ToShortDateString().Replace('/', '.') ?? "");
                         Result.Add("Cafedral Practic Leader", $"{User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.LastName ?? ""}" +
                             $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.FirstName ?? ""}" +
@@ -867,7 +878,7 @@ namespace GPO_BLAZOR
                         Result.Add("StudentName", $"{User.LastName ?? ""} {User.FirstName ?? ""} {User.MiddleName ?? ""}");
                         Result.Add("Curse", User.Student.GroupNavigation.Cours.ToString() ?? "");
                         Result.Add("Group", User.Student.GroupNavigation.Groups ?? "");
-                        Result.Add("TimePrepand", $"{(askForm.ContractNavigation.DateStart.DayNumber - askForm.ContractNavigation.DateEnd.DayNumber)} дней");
+                        Result.Add("TimePrepand", $"{(askForm.ContractNavigation.PracticTimenNavigation.DateStart.DayNumber - (askForm.ContractNavigation.PracticTimenNavigation.DateEnd.DayNumber))} дней");
 #warning Исправить
                         Result.Add("Cafedral Practic Leader", $"{User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.LastName ?? ""}" +
                             $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.FirstName ?? ""}" +
@@ -876,9 +887,11 @@ namespace GPO_BLAZOR
                         Result.Add("WorkRoomAddress", (await cntx.AskForms.FirstAsync(x => x.Id == NumID)).ContractNavigation.OrganizationNavigation.Adress ?? "");
                         Result.Add("Practic Used Tools", (await cntx.AskForms.FirstAsync(x => x.Id == NumID)).ContractNavigation.Equipment ?? "");
                         break;
+                    default:
+                        return Results.NotFound();
                 }
 
-                return Results.NotFound(Result);
+                return Results.Json(Result);
 
                 if (askForm is not null)
                 {
@@ -971,6 +984,7 @@ namespace GPO_BLAZOR
             app.MapGet("/getTepmlate/{TemplateName}", [Authorize] async (string TemplateName, HttpContext context) =>
             {
                 var results = StatmenDate.DefaultInfoF();
+
                 return RequestTemplates[TemplateName];
             });
 

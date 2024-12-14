@@ -13,9 +13,25 @@ namespace GPO_BLAZOR.Client.Class.Date
         Roles[] Role { get; set; }
 
         bool HasValue(Roles role);
+
     }
     public class AutorizationStruct : IAutorizationStruct
     {
+
+        static public Roles RoleSelector(string x)
+        {
+            switch (x)
+            {
+                case "Student":
+                    return Roles.Student;
+                case "CafedralLeader":
+                    return Roles.CafedralLeader;
+                case "FieldCommander":
+                    return Roles.FieldCommander;
+                default:
+                    return Roles.Student;
+            }
+        }
         public AutorizationStruct()
         {
 
@@ -38,12 +54,14 @@ namespace GPO_BLAZOR.Client.Class.Date
             {
                 return Role.Contains(role);
             }
-            catch
+            catch (Exception ex)
             {
+                {
 #if DEBUG
-                Console.WriteLine(role);
+                    Console.WriteLine($"Role: {role} selector exception -> {ex.Message}");
 #endif
-                return false;
+                    return false;
+                }
             }
         }
     }
