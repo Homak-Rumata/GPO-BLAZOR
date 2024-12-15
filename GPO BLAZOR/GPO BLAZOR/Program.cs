@@ -815,13 +815,15 @@ namespace GPO_BLAZOR
                 var askForms = cntx.AskForms.Include(x => x.ContractNavigation);
 
 
-                
+
 
                 var askFormSeq = askForms
                    .Where(x => x.Id == NumID)
                    .Include(x => x.PracticeTypeNavigation)
                    .Include(x => x.ContractNavigation)
-                   .ThenInclude(x => x.OrganizationNavigation);
+                   .ThenInclude(x => x.PracticTimenNavigation)
+                   .Include(x => x.ContractNavigation.OrganizationNavigation);
+                   //.ThenInclude(x => x.OrganizationNavigation);
 
                 AskForm askForm;
 
