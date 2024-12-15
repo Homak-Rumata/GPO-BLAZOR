@@ -1,6 +1,18 @@
-﻿div.body {
-    margin-left: 40%;
-    margin-top: 15%;
+﻿span.body {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    justify-content: center;
+
+}
+
+div.body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    justify-content: center;
+
 }
 
 input.DateInput {
@@ -9,7 +21,9 @@ input.DateInput {
     border: 1px solid black;
     height: 30px;
     border-radius: 10px;
-    display: block 
+    vertical-align: middle;
+    justify-content: center;
+    position: relative
 }
 input.AgreeButton {
     font-weight: 400;
@@ -17,24 +31,35 @@ input.AgreeButton {
     width: 150px;
     height: 40px;
     background-color: var(--button-color);
-    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
     color: white;
     font-size: large;
     text-align: left;
     position: relative;
     margin-top: 20px;
-    position: center
+    position: center;
+    display: block;
+    justify-content: center;
+    border-radius: 10px;
 }
-   input.AgreeButton:hover {
-        color: black;
-        background-color: #eae625;
-        
-    }
-    h1 {
-    font-weight: normal
+input.AgreeButton:hover {
+    position: relative;
+    color: black;
+    background-color: #eae625;
+    vertical-align: middle;
+    justify-content: center;
+}
+
+h1 {
+    font-weight: normal;
+    justify-content: center;
+    vertical-align: middle;
 }
 
 h3 {
-    font-weight: normal
+    font-weight: normal;
+    justify-content: center;
+    vertical-align: middle;
 }
 

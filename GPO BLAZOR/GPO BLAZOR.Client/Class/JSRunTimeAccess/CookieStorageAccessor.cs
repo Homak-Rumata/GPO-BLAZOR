@@ -16,7 +16,7 @@ namespace GPO_BLAZOR.Client.Class.JSRunTimeAccess
             try
             {
                 await WaitForReference();
-                await _accessorJsRef.Value.InvokeVoidAsync("WriteCookie", key, value, 1);
+                await _accessorJsRef.Value.InvokeVoidAsync("WriteCookie", key, value, Time.Minute);
             }
             catch (Exception ex)
             {

@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Sections>
+    <Section>
+      <Paragrapf SpaceBefore="1" Alignment="Right">
+        <RawText>Заведующему кафедрой </RawText>
+        <InjectElement Name="Cafedral">КИБЭВС</InjectElement>
+        <RawText>\n
+</RawText>
+        <InjectElement Name="Cafedral Leader">Шелупанову Александру Александровичу</InjectElement>
+        <RawText>
+от студента гр. </RawText>
+        <InjectElement Name="Group">711-1</InjectElement>
+        <RawText>\n
+</RawText>
+        <InjectElement Name="StudentName">Репникова Никиты Ивановича</InjectElement>
+      </Paragrapf>
+      <Paragrapf Bold="true" SpaceBefore="1" SpaceAfter="1" Alignment="Center">
+        <RawText>Заявление</RawText>
+      </Paragrapf>
+      <Paragrapf SpaceBefore="1" SpaceAfter="1" Tab="true">
+        <RawText>Прошу направить меня для прохождения </RawText>
+        <InjectElement Name="Practic Type">Производственной практики</InjectElement>
+        <RawText>: </RawText>
+        <InjectElement Name="Practic Sort">Эксплуатационной практики</InjectElement>
+        <RawText> в профильную организацию </RawText>
+        <InjectElement Name="FactoryName">ООО "ДИВИЛАЙН"</InjectElement>
+        <RawText> (адрес: </RawText>
+        <InjectElement Name="FactoryAdress">ул. Вершинина д. 46/1</InjectElement>
+        <RawText>) с </RawText>
+        <InjectElement Name="StartDate">11.12.2024</InjectElement>
+        <RawText> по </RawText>
+        <InjectElement Name="EndDate">25.12.2024</InjectElement>
+      </Paragrapf>
+      <Table SpaceBefore="1" SpaceAfter="1">
+        <Head>
+          <Cells>
+            <Cell Alignment="Left">
+              <Text>
+                <Paragrapf Alignment="Left">
+                  <RawText>Дата </RawText>
+                  <InjectElement Name="AskFormTime">11.12.2024</InjectElement>
+                </Paragrapf>
+              </Text>
+            </Cell>
+            <Cell Alignment="Right">
+              <Text>
+                <Paragrapf Alignment="Right">
+                  <RawText>Подпись</RawText>
+                  <RawText Underline="Single" SpecialLine="true">			</RawText>
+                </Paragrapf>
+              </Text>
+            </Cell>
+          </Cells>
+        </Head>
+        <Columns>
+          <Column />
+          <Column />
+        </Columns>
+      </Table>
+      <Paragrapf SpaceBefore="1" SpaceAfter="1" />
+      <Table SpaceBefore="1" SpaceAfter="1">
+        <Head>
+          <Cells>
+            <Cell Alignment="Left">
+              <Text>
+                <Paragrapf Alignment="Left">
+                  <RawText>Согласовано: </RawText>
+                </Paragrapf>
+              </Text>
+            </Cell>
+          </Cells>
+        </Head>
+        <Rows>
+          <Row>
+            <Cells>
+              <Cell Alignment="Right">
+                <Text>
+                  <Paragrapf Alignment="Right">
+                    <RawText>Зав. кафедрой </RawText>
+                    <InjectElement Name="Cafedral">КИБЭВС</InjectElement>
+                  </Paragrapf>
+                </Text>
+              </Cell>
+              <Cell>
+                <Borders>
+                  <Top>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Top>
+                  <Left>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Left>
+                  <Bottom>
+                    <Visible>true</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Bottom>
+                  <Right>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Right>
+                  <DiagonalUp>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </DiagonalUp>
+                  <DiagonalDown>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </DiagonalDown>
+                  <Visible>false</Visible>
+                  <Style>None</Style>
+                  <Width>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </Width>
+                  <Color>
+                    <Argb>0</Argb>
+                    <RGB>0</RGB>
+                  </Color>
+                  <DistanceFromTop>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromTop>
+                  <DistanceFromBottom>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromBottom>
+                  <DistanceFromLeft>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromLeft>
+                  <DistanceFromRight>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromRight>
+                  <BordersCleared>false</BordersCleared>
+                </Borders>
+                <Text>
+                  <Paragrapf>
+                    <RawText>	</RawText>
+                  </Paragrapf>
+                </Text>
+              </Cell>
+              <Cell>
+                <Text>
+                  <Paragrapf>
+                    <InjectElement Name="Cafedral Leader">Шелупанов Александр Александрович</InjectElement>
+                  </Paragrapf>
+                </Text>
+              </Cell>
+            </Cells>
+          </Row>
+          <Row>
+            <Cells>
+              <Cell Alignment="Right">
+                <Text>
+                  <Paragrapf Alignment="Right">
+                    <RawText>Зав. кафедрой </RawText>
+                    <InjectElement Name="Cafedral">КИБЭВС</InjectElement>
+                  </Paragrapf>
+                </Text>
+              </Cell>
+              <Cell>
+                <Borders>
+                  <Top>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Top>
+                  <Left>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Left>
+                  <Bottom>
+                    <Visible>true</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Bottom>
+                  <Right>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </Right>
+                  <DiagonalUp>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </DiagonalUp>
+                  <DiagonalDown>
+                    <Visible>false</Visible>
+                    <Style>None</Style>
+                    <Width>
+                      <Value>0</Value>
+                      <Type>Point</Type>
+                      <Point>0</Point>
+                      <Centimeter>0</Centimeter>
+                      <Inch>0</Inch>
+                      <Millimeter>0</Millimeter>
+                      <Pica>0</Pica>
+                    </Width>
+                    <Color>
+                      <Argb>0</Argb>
+                      <RGB>0</RGB>
+                    </Color>
+                    <BorderCleared>false</BorderCleared>
+                  </DiagonalDown>
+                  <Visible>false</Visible>
+                  <Style>None</Style>
+                  <Width>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </Width>
+                  <Color>
+                    <Argb>0</Argb>
+                    <RGB>0</RGB>
+                  </Color>
+                  <DistanceFromTop>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromTop>
+                  <DistanceFromBottom>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromBottom>
+                  <DistanceFromLeft>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromLeft>
+                  <DistanceFromRight>
+                    <Value>0</Value>
+                    <Type>Point</Type>
+                    <Point>0</Point>
+                    <Centimeter>0</Centimeter>
+                    <Inch>0</Inch>
+                    <Millimeter>0</Millimeter>
+                    <Pica>0</Pica>
+                  </DistanceFromRight>
+                  <BordersCleared>false</BordersCleared>
+                </Borders>
+                <Text>
+                  <Paragrapf>
+                    <RawText>	</RawText>
+                  </Paragrapf>
+                </Text>
+              </Cell>
+              <Cell>
+                <Text>
+                  <Paragrapf>
+                    <InjectElement Name="Cafedral Practic Leader">Новохрёстов Алексей Константинович</InjectElement>
+                  </Paragrapf>
+                </Text>
+              </Cell>
+            </Cells>
+          </Row>
+        </Rows>
+        <Columns>
+          <Column />
+          <Column />
+          <Column />
+        </Columns>
+      </Table>
+    </Section>
+  </Sections>
+  <margin right="45" left="60" top="60" bottom="60" />
+</Document>

@@ -31,7 +31,7 @@ namespace GPO_BLAZOR.Client.Class.Date
                 Func<string, Func<Task>> nav = null;
                 try
                 {
-                    nav = (string str) => async () => Navigator.NavigateTo($"/statmen/New/{str}", true);
+                    nav = (string str) => async () => Navigator.NavigateTo($"/newstatmen/{str}", true);
                 }
                 catch (Exception ex)
                 {

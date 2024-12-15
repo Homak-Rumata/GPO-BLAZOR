@@ -1,4 +1,5 @@
 ﻿using DBAgent;
+using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.FiledConfiguration;
 using GPO_BLAZOR.FiledConfiguration;
 using GPO_BLAZOR.FiledConfiguration.Document;
@@ -41,7 +42,11 @@ namespace GPO_BLAZOR.FiledConfiguration
         {
             public readonly string Name { get; init; }
             public readonly string Description { get; init; }
+
+            
             private Stack<IFields> _fields;
+
+            [XmlArray]
             public IEnumerable<IFields> Fields 
             { 
                 get => _fields; 
@@ -53,6 +58,8 @@ namespace GPO_BLAZOR.FiledConfiguration
         {
             public string Name { get; init; }
             public string Attribute { get; init; }
+
+            
             private Dictionary<string, IAttribute> _attributes;
             public IDictionary<string, IAttribute> Attributes { get;}
             [XmlIgnore]
@@ -117,7 +124,9 @@ namespace GPO_BLAZOR.FiledConfiguration
         }
         record struct Path : IPath
         {
+            [XmlAttribute]
             public readonly string Page { get; init; }
+            [XmlAttribute]
             public readonly string Block { get; init; }
         }
 
@@ -129,8 +138,9 @@ namespace GPO_BLAZOR.FiledConfiguration
                 _getter = Getter;
                 _setter = Setter;
             }
-
+            [XmlIgnore]
             Func<string, string> _getter;
+            [XmlIgnore]
             Action<string, string> _setter;
 
             public string Name { get; init; }
@@ -182,14 +192,30 @@ namespace GPO_BLAZOR.FiledConfiguration
 
     static class Constructor
     {
-        public static IDictionary<string, IDateContainer<PageDateContainer>> GetFields (IList<IField> Fields, IEnumerable<IDocument> Document, out IDictionary<string, IField> FieldsDictionary)
+        public static IDictionary<string, IDateContainer<PageDateContainer>> GetFields(IEnumerable<FieldCont.IField> Fields, IEnumerable<IDocument> Document, out IDictionary<string, FieldCont.IField> FieldsDictionary)
         {
             FieldsDictionary = Fields.Select(static x => KeyValuePair.Create(x.Name, x)).ToFrozenDictionary();
+            var GroupedElement = Fields.GroupBy(x => x.Path.Page).Select(x => x.GroupBy(y => y.Path.Block));
 
-            var GetDocFieldsTuple = static (IDictionary<string, IField> Fields) => (IDocument document) => ((DocName: document, Field: document.Fields.Select(f => Fields[f.Name])));
+            var DocNames = Document.Select(x => (Key: x.Name, Value: Fields.Where(z => x.Fields.Select(y => y.Name).Contains(z.Name))));
+
+            var DocNamesPage = DocNames.Select(pair => (Key: pair.Key, Value: pair.Value.GroupBy(x => x.Path.Page)));
+            var DocNamesBlock = DocNamesPage.Select(pair => (Key: pair.Key, Value: pair.Value.Select(y => (PageName: y.Key, Value: y.GroupBy(x => x.Path.Block)))));
+            var g = DocNamesBlock
+                .Select(x => new KeyValuePair<string, IDateContainer<PageDateContainer>>(x.Key, new StatmenDateContainer() { Name = x.Key, Date = x.Value
+                    .Select(z => new PageDateContainer() { Name = z.PageName, Date = z.Value
+                        .Select(a => new BlockDateContainer(){Name = a.Key, Date = a
+                            .Select(b => b.Template)})}
+                    )}))
+                .ToDictionary();
+
+            return g;
+            ////
+            /*
+            var GetDocFieldsTuple = static (IDictionary<string, FieldCont.IField> Fields) => (IDocument document) => ((DocName: document, Field: document.Fields.Select(f => Fields[f.Name])));
             var DocsFieldConnect = Document.Select(GetDocFieldsTuple (FieldsDictionary));
 
-            static IDateContainer<PageDateContainer> ContainerCreator(IField Field)
+            static IDateContainer<PageDateContainer> ContainerCreator(FieldCont.IField Field)
             {
                 var block = new BlockDateContainer(Field.Path.Block, [Field.Template]);
                 return new StatmenDateContainer([new PageDateContainer(Field.Path.Page, [block])]);
@@ -200,7 +226,7 @@ namespace GPO_BLAZOR.FiledConfiguration
                     .Aggregate(new StatmenDateContainer() as IDateContainer<PageDateContainer>, (a, b) => a.Summ(ContainerCreator(b)))))
                 .Select(static x=>new KeyValuePair<string, IDateContainer<PageDateContainer>>(x.Name, x.Struct.ToFronzeFieldContainer())).ToFrozenDictionary();
 
-            return result;
+            return result;*/
                 
         }
     }

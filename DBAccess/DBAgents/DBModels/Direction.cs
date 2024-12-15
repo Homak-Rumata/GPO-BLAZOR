@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBAccess.DBAgents.DBModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,6 +33,7 @@ public partial class Direction
     public int LeaderName { get; set; }
 
     public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
+    public virtual ICollection<PracticTime> PracticTymes { get; set; } = new List<PracticTime>();
 
     public virtual User LeaderNavigation { get; set; } = null!;
 }

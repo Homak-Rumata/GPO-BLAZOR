@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using System.Net.Http.Json;
 
 namespace GPO_BLAZOR.Client.Class.Date
 {
@@ -8,6 +10,8 @@ namespace GPO_BLAZOR.Client.Class.Date
     /// </summary>
     public record CollectionValues
     {
+        
+
         private CollectionValues(string[] value)
         {
 
@@ -19,18 +23,14 @@ namespace GPO_BLAZOR.Client.Class.Date
 
         public string[] Values { get; init; }
 
-        public static async Task<CollectionValues> Create(string Name)
+        public static async Task<CollectionValues> Create(string Name, IJSRuntime jsr)
         {
-            return new CollectionValues(await GetAtributes(Name));
+            return new CollectionValues(await GetAtributes(Name, jsr));
         }
 
-        private static async Task<string[]> GetAtributes(string Field)
+        private static async Task<string[]> GetAtributes(string Field, IJSRuntime jsr)
         {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                httpClient.BaseAddress = new Uri($"https://{IPaddress.IPAddress}/GetAtributes/{Field}");
-                return await httpClient.GetFromJsonAsync<string[]>(httpClient.BaseAddress);
-            }
+            return await Requesting.AutorizationedGetRequest<string[]>(new Uri($"https://{IPaddress.IPAddress}/GetAtributes/{Field}"), jsr);
         }
 
     }

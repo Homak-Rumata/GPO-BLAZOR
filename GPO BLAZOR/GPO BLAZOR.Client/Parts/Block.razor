@@ -5,10 +5,10 @@
     <h3>
         @Date.BlockName
     </h3>
-    
+
     <div>
-    @foreach (IField temp in Date.Date)
-    {
+        @foreach (IField temp in Date.Date)
+        {
             switch (temp.ClassType)
             {
                 case "CollectionInformationField":
@@ -19,6 +19,10 @@
                     break;
                 case "TymeInformationField":
                     <TymeField Date="temp" />
+                    break;
+                case "CommentaryInformationField":
+                    <Commentary Date="temp" />
+                    break;
                     break;
                 default:
                     <h1> ComponentError </h1>

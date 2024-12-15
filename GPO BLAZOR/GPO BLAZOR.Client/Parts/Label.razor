@@ -4,7 +4,7 @@
 
 <tr>
     <td>
-        @Date.Time.ToString()
+        @Date.Type
     </td>
     <td>
         @switch (Date.PracticType)
@@ -18,8 +18,12 @@
         }
     </td>
     <td>
+        @Date.State
+        @*
         @switch (Date.State)
         {
+            
+
             case State.Partial:
                 <a>Незаполненно</a>
                 break;
@@ -30,6 +34,7 @@
                 <a>Заполненно</a>
                 break;
         }
+                        *@
     </td>
     <td>
         <input type="button" @onclick="Click" value="Открыть" style="background-color:@InterfaceColor.TusurColor" />
@@ -41,11 +46,11 @@
     public IStatmenTableLineModel Date { get; set; }
 
     [Parameter]
-    public EventCallback<(string, int)> ViemStatmen { get; set; }
+    public EventCallback<(string, int, string)> ViemStatmen { get; set; }
 
     async Task Click()
     {
-        await ViemStatmen.InvokeAsync((Date.id, Date.Number));
+        await ViemStatmen.InvokeAsync((Date.id, Date.Number, Date.Type));
     }
 
 }

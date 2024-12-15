@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using System.Net.Http.Json;
 using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace GPO_BLAZOR.Client.Pages
 {
@@ -15,6 +16,9 @@ namespace GPO_BLAZOR.Client.Pages
         [Parameter]
         [Required]
         public required IAuthorizationDate AuthorizationInterface { get; set; }
+
+        [Inject]
+        IAutorizationStruct? Autorizer { get; set; }
 
         [Parameter]
         public EventCallback<IAuthorizationDate> AuthorizationInterfaceChanged { get; set; }
@@ -47,7 +51,7 @@ namespace GPO_BLAZOR.Client.Pages
             try
             {
                 Console.WriteLine(AuthorizationInterface);
-                await AuthorizationInterface.GetValues(ReadCookies, timer);
+                await AuthorizationInterface.GetValues(ReadCookies, timer, Autorizer);
                 await AuthorizationInterfaceChanged.InvokeAsync(AuthorizationInterface);
             }
             catch (Exception ex)
@@ -64,20 +68,28 @@ namespace GPO_BLAZOR.Client.Pages
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
 #if DEBUG
-            Console.WriteLine("Рендер " + firstRender);
-            Console.WriteLine("Loading 1  " + isLoading);
+            Console.WriteLine("Рендер: " + firstRender);
+            Console.WriteLine("Loading 1:  " + isLoading);
 #endif
             this.firstRender = !firstRender;
             isLoading = false;
             try
             {
-                if (AuthorizationInterface._writer == null)
+                if (AuthorizationInterface._writer != null)
                     if (firstRender)
                     {
+#if DEBUG
+                        Console.WriteLine("CheckCookie");
+#endif
                         AuthorizationInterface = new AuthorizationDate(ReadCookies, WriteCookies);
-                        await AuthorizationInterface.GetValues(ReadCookies, timer);
+                        await AuthorizationInterface.GetValues(ReadCookies, timer, Autorizer);
                         await AuthorizationInterfaceChanged.InvokeAsync(AuthorizationInterface);
                     }
+                    else { }
+                else
+                {
+                    Console.WriteLine(AuthorizationInterface._writer);
+                }
             }
             catch (Exception ex)
             {
@@ -87,10 +99,13 @@ namespace GPO_BLAZOR.Client.Pages
             finally
             {
 #if DEBUG
-                Console.WriteLine("Loading 2  " + isLoading);
+                Console.WriteLine("Loading 2:  " + isLoading);
 #endif
                 if (firstRender)
                 {
+#if DEBUG
+                    Console.WriteLine($"Refresh Page: {firstRender}");
+#endif
                     this.StateHasChanged();
                 }
             }
@@ -118,7 +133,7 @@ namespace GPO_BLAZOR.Client.Pages
 
         protected async Task Checer()
         {
-            await AuthorizationInterface.GetValues(ReadCookies, timer);
+            await AuthorizationInterface.GetValues(ReadCookies, timer, Autorizer);
             await AuthorizationInterfaceChanged.InvokeAsync();
         }
 
@@ -128,28 +143,40 @@ namespace GPO_BLAZOR.Client.Pages
         protected async Task WriteCookies(string key, string value)
         {
 #if DEBUG
-            Console.WriteLine(DateTime.Now.AddMinutes(1));
+            Console.WriteLine("Write Cookie Time: "+DateTime.Now.AddMinutes(1));
 #endif
-                await cookieStorage.WriteCookieAsync(key, value, DateTime.Now.AddMinutes(1));
+                await cookieStorage.WriteCookieAsync(key, value, DateTime.Now.AddMinutes(20));
         }
 
 
         protected async Task<string> ReadCookies(string key)
         {
-                string temp = await cookieStorage.ReadCookieAsync<string>(key) ?? "";
-                try
+            string temp = await cookieStorage.ReadCookieAsync<string>(key) ?? "";
+            try
+            {
+                if (temp != "")
                 {
-                    if (temp != "")
-                    {
-                        await AuthorizationInterfaceChanged.InvokeAsync(AuthorizationInterface);
-                    }
-                    return temp ?? "";
+                    await AuthorizationInterfaceChanged.InvokeAsync(AuthorizationInterface);
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    return ("ReadCookies Error");
-                }
+#if DEBUG
+                Console.WriteLine($"Autorization read temp: {temp}");
+#endif
+                return temp ?? "";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return ("ReadCookies Error");
+            }
+        }
+
+        public async void Enter(KeyboardEventArgs e)
+        {
+            if (e.Code == "Enter" || e.Code == "NumpadEnter")
+            {
+                await AuthorizationInterface.Send(value, timer, Autorizer); 
+                await ButtonClicked();
+            }
         }
 
     }

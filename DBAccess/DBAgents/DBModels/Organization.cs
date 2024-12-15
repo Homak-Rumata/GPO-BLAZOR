@@ -16,25 +16,31 @@ public partial class Organization
     /// Название
     /// </summary>
     [Column("Название")]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
     /// <summary>
     /// Адрес
     /// </summary>
     [Column("Адрес")]
-    public string Adress { get; set; } = null!;
+    public string Adress { get; set; }
 
     /// <summary>
     /// Руководитель организации
     /// </summary>
     [Column("РуководительОрганизации")]
-    public string FactoryLeader { get; set; } = null!;
+    public string FactoryLeader { get; set; }
 
     /// <summary>
     /// Документ
     /// </summary>
     [Column("Документ")]
-    public string Document { get; set; } = null!;
+    public string Document { get; set; }
+
+    /// <summary>
+    /// Должность руководителя
+    /// </summary>
+    [Column("Должность руководителя")]
+    public string Rank { get; set; }
 
     public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
