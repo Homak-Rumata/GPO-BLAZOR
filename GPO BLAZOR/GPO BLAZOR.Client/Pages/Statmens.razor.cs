@@ -1,7 +1,14 @@
 ﻿using GPO_BLAZOR.Client.Class.Date;
 using GPO_BLAZOR.Client.Parts;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using RoleController = GPO_BLAZOR.Client.Parts.RoleController;
 using Navigation = Microsoft.AspNetCore.Components.NavigationManager;
+using GPO_BLAZOR.Client.Parts;
+using GPO_BLAZOR.Client.Class.Date;
+using GPO_BLAZOR.Client.Class.JSRunTimeAccess;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
 
 
 namespace GPO_BLAZOR.Client.Pages
@@ -11,6 +18,11 @@ namespace GPO_BLAZOR.Client.Pages
         //private Statmens c { get; set; } = new Statmens();
 
         //
+
+        [Inject]
+        IJSRuntime jsr { get; set; }
+        [Inject]
+        Navigation Navigation { get; set; }
 
         [Parameter]
         public EventCallback<(string, int)> ViemStatmen { get; set; }
@@ -42,16 +54,16 @@ namespace GPO_BLAZOR.Client.Pages
         private bool isLoadind { get; set; } = false;
 
 
-        async Task Click((string id, int num) item)
+        async Task Click((string id, int num, string TypeValue) item)
         {
-            var command = (async (string id, int num) => {
-                string way = $"statmen/{num}";
+            var command = (async (string id, int num, string TypeValue) => {
+                string way = $"statmen?Number={num}&Type={TypeValue}";
                 Navigation.NavigateTo(way);
             });
 
-            command(item.id, item.num);
+            command(item.id, item.num, item.TypeValue);
 
-            await ViemStatmen.InvokeAsync(item);
+            await ViemStatmen.InvokeAsync((id: item.id, num: item.num));
         }
 
 

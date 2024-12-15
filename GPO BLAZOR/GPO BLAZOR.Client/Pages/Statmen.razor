@@ -4,9 +4,8 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime jsr
 
-
 <body>
-        @if(isLoading) {
+    @if(isLoading) {
         @if (Date is not null)
         {
             <div class="sidebar">
@@ -27,7 +26,25 @@
             </div>
             <div class="content">
                 <PageValuesBlock Date="SelectedPage"/>
-                <input class="inputbutton" type="button" value="Отправить" @onclick="(async) => { SetDate();}" style="background-color:@InterfaceColor.TusurColor" />
+                @switch (Date.State)
+                {
+                    case 1:
+                         <RoleController Role="@Class.Date.Roles.Student" >
+                            <input class="inputbutton" type="button" value="Отправить" @onclick="(async) => { SetDate();}" style="background-color:@InterfaceColor.TusurColor" />
+                        </RoleController>
+                        break;
+                    case 2:
+                        <RoleController Role="@Class.Date.Roles.FieldCommander" >
+                            <input class="inputbutton" type="button" value="Принять" @onclick="(async) => { SetDate();}" style="background-color:@InterfaceColor.TusurColor" />
+                            <input class="inputbutton" type="button" value="Отказать" @onclick="(async) => { SetDate();}" style="background-color:@InterfaceColor.TusurColor" />
+                        </RoleController>
+                        break;
+                    case 3:
+                    <RoleController Role="@Class.Date.Roles.Student" >
+                        <GPO_BLAZOR.Client.Class.Field.Print TemplateName=@Type Statmen="Date" />
+                    </RoleController>
+                    break;
+                }
             </div>
         }
         else

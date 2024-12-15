@@ -28,6 +28,8 @@ namespace GPO_BLAZOR.Client.Class.Date
             
         }
 
+
+
         /// <summary>
         /// Пустой блок - на случай ошибки доступа
         /// </summary>
@@ -56,23 +58,38 @@ namespace GPO_BLAZOR.Client.Class.Date
         /// </summary>
         /// <param name="reader"> Делегат для чтения из хранилища </param>
         /// <returns></returns>
-        public async Task GetValues (Reader reader, System.Timers.Timer timer)
+        public async Task GetValues (Reader reader, System.Timers.Timer timer, IAutorizationStruct autorizationStruct)
         {
             try
-            {
-                if (reader != null)
+            { 
+                var IsReader = reader is not null;
+                if (IsReader)
                 {
-                    string temp = await reader("Autorization");
+                    string temp = (await reader("Autorization")) ?? "";
                     if (temp != null && temp != "")
                     {
                         IsCookies = true;
+                        await RewriteJWT();
+                        autorizationStruct.Role = roles.Select(AutorizationStruct.RoleSelector).ToArray();
                         TimeSkipAndRewrite(timer);
                     }
+#if DEBUG
+                    else
+                    {
+                        Console.WriteLine("HAS TEMP IS VAR OF ::: "+temp);
+                    }
+#endif
                 }
+#if DEBUG
+                else
+                {
+                    Console.WriteLine("HAS TEMP IS VAR OF ->->->");
+                }
+#endif
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); 
+                Console.WriteLine("GetValueError -> "+ex.Message); 
             }
         }
         /// <summary>
@@ -98,6 +115,9 @@ namespace GPO_BLAZOR.Client.Class.Date
                 _name = value;
             }
         }
+
+        private string[] roles;
+
         /// <summary>
         /// Поле для хранения заполненного пароля
         /// </summary>
@@ -119,7 +139,7 @@ namespace GPO_BLAZOR.Client.Class.Date
         private class Date
         {
             public string token { get; set; }
-            public string role { get; set; }
+            public string[] role { get; set; }
             public string jwt { get; set; }
         }
 
@@ -140,7 +160,16 @@ namespace GPO_BLAZOR.Client.Class.Date
         /// Обновление  JWT
         /// </summary>
         /// <returns></returns>
-        private async void RewriteJWT (object source, ElapsedEventArgs e)
+        private async void RewriteJWT(object source, ElapsedEventArgs e)
+        {
+            await RewriteJWT();
+        }
+
+        /// <summary>
+        /// Обновление  JWT
+        /// </summary>
+        /// <returns></returns>
+        private async Task RewriteJWT ()
         {
             try
             {
@@ -178,8 +207,12 @@ namespace GPO_BLAZOR.Client.Class.Date
 #endif
                     if (tempresponce.IsSuccessStatusCode)
                     {
-                        string newjwt = (await tempresponce.Content.ReadFromJsonAsync<NewJWTResponce>()).jwt;
+                        var result = await tempresponce.Content.ReadFromJsonAsync<Date>();
+                        string newjwt = result.jwt;
                         await _writer("Autorization", newjwt);
+                        if (roles == null)
+                            roles = result.role;
+                        
 #if DEBUG
                         Console.WriteLine("GetNewJWT: " + newjwt);
 #endif
@@ -203,7 +236,7 @@ namespace GPO_BLAZOR.Client.Class.Date
 
         private void TimeSkipAndRewrite(System.Timers.Timer timer)
         {
-            timer = new System.Timers.Timer(20000);
+            timer = new System.Timers.Timer(20*60*1000);
             timer.AutoReset = true;
             timer.Elapsed += new ElapsedEventHandler(RewriteJWT);
             timer.Start();
@@ -218,7 +251,7 @@ namespace GPO_BLAZOR.Client.Class.Date
         /// Отправка данных и запись оных в внутреннее хранилище
         /// </summary>
         /// <returns></returns>
-        public async Task SendDate(System.Timers.Timer timer)
+        public async Task SendDate(System.Timers.Timer timer, IAutorizationStruct autorizer)
             ///Отправка
         {
 
@@ -248,18 +281,13 @@ namespace GPO_BLAZOR.Client.Class.Date
                     if (response.IsSuccessStatusCode)
                     {
                         Date newPerson = await response.Content.ReadFromJsonAsync<Date>();
-                        if (newPerson != null) { 
-                            switch (newPerson.role)
-                            {
-                                case "censor":
-                                    InterfaceColor.TusurColor = "#3c388d";
-                                    break;
-                                default:
-                                case "student":
-                                    InterfaceColor.TusurColor = "#3c388d";
-                                    break;
 
-                            }
+                        autorizer.Role = newPerson.role.Select(AutorizationStruct.RoleSelector)
+                            .ToArray();
+                        
+
+                        if (newPerson != null) { 
+
 
                             await _writer("token", newPerson.token);
                             await _writer("Autorization", newPerson.jwt);
@@ -316,15 +344,17 @@ namespace GPO_BLAZOR.Client.Class.Date
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task Send(string value, System.Timers.Timer timer)
+        public async Task Send(string value, System.Timers.Timer timer, IAutorizationStruct autorizaer)
         {
             try
             {
-                await SendDate(timer);
+                await SendDate(timer, autorizaer);
                 string temp = await _reader("Autorization") ?? "";
                 if (temp != "")
                 {
                     IsCookies = true;
+
+                    
 #if DEBUG
                     Console.WriteLine("Set CookieTrue");
 #endif

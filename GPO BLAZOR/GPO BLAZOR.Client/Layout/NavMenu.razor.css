@@ -5,6 +5,10 @@ div {
     width: 100%;
 }
 
+nav{
+    margin-left: 7%
+}
+
 button {
     margin: 0px;
     padding: 0px;

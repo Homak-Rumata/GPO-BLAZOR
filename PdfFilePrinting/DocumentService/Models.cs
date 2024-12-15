@@ -179,6 +179,13 @@ namespace PdfFilePrinting.DocumentService
         [XmlAttribute]
         [DefaultValue(false)]
         public bool KeepTogether { get; set; } = false;
+        [XmlAttribute]
+        [DefaultValue(1.5)]
+        public double SpaceLine { get; set; } = 1.5;
+
+        [XmlAttribute]
+        [DefaultValue(LineSpacingRule.OnePtFive)]
+        public LineSpacingRule SpaceLineRule { get; set; } = LineSpacingRule.OnePtFive;
 
         protected ParagraphFormat SetParametress(ParagraphFormat paragraphFormat)
         {
@@ -188,6 +195,8 @@ namespace PdfFilePrinting.DocumentService
             paragraphFormat.Font.Bold = Bold;
             paragraphFormat.Font.Underline = Underline;
             paragraphFormat.Font.Italic = Italic;
+            paragraphFormat.LineSpacing = SpaceLine;
+            paragraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
             paragraphFormat.SpaceBefore = SpaceBefore * paragraphFormat.Font.Size;
             paragraphFormat.SpaceAfter = SpaceAfter * paragraphFormat.Font.Size;
             if (Borders is null || Borders.BordersCleared)
@@ -377,7 +386,7 @@ namespace PdfFilePrinting.DocumentService
 
         public override IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetName()
         {
-            var tempRows = Rows.SelectMany(x => x.GetName());
+            var tempRows = (Rows ?? new Row[] { }).SelectMany(x => x.GetName());
             var tempColumns = Columns.SelectMany(x => x.GetName());
             var tempHead = Head is not null ? Head.GetName() : null;
             var tempsumm = tempRows.Concat(tempColumns);

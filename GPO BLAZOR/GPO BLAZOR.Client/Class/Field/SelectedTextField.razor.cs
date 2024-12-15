@@ -1,5 +1,6 @@
 ﻿using GPO_BLAZOR.Client.Class.Date;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace GPO_BLAZOR.Client.Class.Field
 {
@@ -10,12 +11,15 @@ namespace GPO_BLAZOR.Client.Class.Field
 
         private CollectionValues collection;
 
+        [Inject]
+        public IJSRuntime JSRuntime {get; set;}
+
         protected override async Task OnInitializedAsync()
         {
             IsLoading = false;
             try
             {
-                collection = (Date is not null)?await CollectionValues.Create(Date.Id):collection;
+                collection = (Date is not null)?await CollectionValues.Create(Date.Id, JSRuntime) :collection;
             }
             finally
             {
@@ -28,7 +32,7 @@ namespace GPO_BLAZOR.Client.Class.Field
             try
             {
                 
-                collection = await CollectionValues.Create(Date.Id);
+                collection = await CollectionValues.Create(Date.Id, JSRuntime);
                 
 
             }

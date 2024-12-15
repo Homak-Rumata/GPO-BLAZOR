@@ -9,12 +9,16 @@
         @if (collection is not null && collection.Values is not null && collection.Values.Length!=0)
         {
             <InputSelect @bind-Value="@Date.value" id="@Date.Id" class="@Date.ClassType" disabled=@Date.IsDisabled >
+                @if (collection.Values.Count() == 1)
+                {
+                    Date.value = collection.Values.FirstOrDefault();
+                }
                 @foreach (string item in collection.Values)
                 {
                     <option value="@item">@item</option>
                 }
             
-        </InputSelect>
+            </InputSelect>
         }
         else if (IsLoading)
         {

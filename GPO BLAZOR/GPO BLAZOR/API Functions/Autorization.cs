@@ -10,11 +10,16 @@ namespace GPO_BLAZOR.API_Functions
             public string Password { get; init; }
         }
 
-        static public async Task<bool> checkuser(AutorizationDate Date, Gpo2Context contex)
+        static public async Task<(bool, int)> checkuser(AutorizationDate Date, Gpo2Context contex)
         {
-            return (contex.Users
+            var users = (contex.Users
                         .Where(x => (x.Email == Date.login && x.Password == Date.Password))
-                        .FirstOrDefault() is not null);
+                        .FirstOrDefault());
+            if (users == null)
+            {
+                return (false, 0);
+            }
+            return (users is not null, users.Id);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace GPO_BLAZOR.Client.Class.Date
@@ -20,9 +21,10 @@ namespace GPO_BLAZOR.Client.Class.Date
 
     public class Statmen: DictionaryValueGetter, IStatmen
     {
+        private string _id = null!;
+        private string _Template = null!;
+        public int State { get; set; }
         public Page[] Date { get; set; }
-
-        private string? _id = "";
 
         private string Id 
         {
@@ -55,13 +57,16 @@ namespace GPO_BLAZOR.Client.Class.Date
             return AddId(result);
         }
 
-        public async static Task<IStatmen> Create(string id, IJSRuntime jsr)
+        public async static Task<IStatmen> Create(string id, IJSRuntime jsr, string StatmenType)
         {
             Dictionary<string, string> values;
             try
             {
-                    values = await Requesting.AutorizationedGetRequest<Dictionary<string, string>>(
-                        new Uri($"https://{IPaddress.IPAddress}/getformDate:{id}"),
+#if DEBUG
+                Console.WriteLine("Statmen Id "+id);
+#endif
+                values = await Requesting.AutorizationedGetRequest<Dictionary<string, string>>(
+                        new Uri($"https://{IPaddress.IPAddress}/getformDate?ID={id}&Type={StatmenType}"),
                         jsr);
             }
             catch (Exception ex)
@@ -77,14 +82,28 @@ namespace GPO_BLAZOR.Client.Class.Date
                     statmen.Id = id;
                     return statmen;
                 };
+                IStatmen StatmenTemplate = null;
+                if (values != null)
+                {
+                    if (!values.ContainsKey("Template"))
+                        values.Add("Template", values["template"]);
+                    var tempTemplates = addId(await Requesting.AutorizationedGetRequest<Statmen>(
+                        new Uri($"https://{IPaddress.IPAddress}/getTepmlate/{values["Template"]}"),
+                        jsr), id);
+                    tempTemplates._id = id;
+                    tempTemplates._Template = values["Template"];
+                    tempTemplates.State = Int32.Parse(values["State"]);
+                    StatmenTemplate = tempTemplates;
 
-                IStatmen StatmenTemplate = addId(await Requesting.AutorizationedGetRequest<Statmen>(
-                    new Uri($"https://{IPaddress.IPAddress}/getTepmlate/{values["Template"]}"),
-                    jsr), id);
+                    var t = FillTemplate(values, StatmenTemplate);
 
-                var t = FillTemplate(values, StatmenTemplate);
-
-                return t;
+                    return t;
+                }
+                else
+                {
+                    throw new Exception("Template collection dictionary is nullable ");
+                }
+                
                 
             }
             catch (Exception ex)
@@ -132,11 +151,9 @@ namespace GPO_BLAZOR.Client.Class.Date
             return voidTemplate;
         }
 
-        public async Task<string> SendDate()
+        public async Task<string> SendDate(IJSRuntime jsr)
         {
             using HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri($"https://{IPaddress.IPAddress}/getInfo");
-
             Dictionary<string, string> temp = new Dictionary<string, string>();
             foreach (var item in GetValues())
             {
@@ -145,12 +162,12 @@ namespace GPO_BLAZOR.Client.Class.Date
 #endif
                 temp.TryAdd(item.Key, item.Value.value);
             }
-
-            var response = await httpClient.PostAsJsonAsync(httpClient.BaseAddress, temp);
+            Uri uri = new Uri($"https://{IPaddress.IPAddress}/getInfo?ID={_id}&Template={_Template}");
+            var result = await Requesting.AutorizationedPostRequest<string, Dictionary<string, string>>(uri, jsr, temp);
 
             //var a = (httpClient.Send(new HttpRequestMessage())).Content.ReadAsStream();
 
-            return await response.Content.ReadAsStringAsync();
+            return result;
         }
     }
 }

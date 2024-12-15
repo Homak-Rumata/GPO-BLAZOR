@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="reader"> Делегат для чтения из хранилища </param>
         /// <returns></returns>
-        public Task GetValues(Reader reader, System.Timers.Timer timer);
+        public Task GetValues(Reader reader, System.Timers.Timer timer, IAutorizationStruct autorizationStruct);
 
         //public Task<string> SendLogin();
         /// <summary>
@@ -39,7 +39,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        Task Send(string value, System.Timers.Timer timer);
+        Task Send(string value, System.Timers.Timer timer, IAutorizationStruct autorizaer);
     }
     /// <summary>
     /// Делегат записи в хралище

@@ -37,14 +37,14 @@
             <h3> 
             Логин (e-mail) 
         </h3>
-        <input type="email" class="DateInput" @bind-value="AuthorizationInterface.Name"/>
+        <input type="email" class="DateInput" @bind-value="AuthorizationInterface.Name" @onkeypress="Enter" @onkeydown=@Enter />
 
         <h3>
             Пароль 
         </h3>
-        <input type="password" class="DateInput" @bind-value="AuthorizationInterface.Password"/>
+        <input type="password" class="DateInput" @bind-value="AuthorizationInterface.Password" @onkeypress="Enter" @onkeydown=@Enter />
 
-        <input type="button" class="AgreeButton" value="Отправить" @onclick="async ()=>{await AuthorizationInterface.Send(value, timer); await ButtonClicked();}"/>
+        <input type="button" class="AgreeButton" value="Отправить" @onkeypress="Enter" @onkeydown=@Enter @onclick="async ()=>{await AuthorizationInterface.Send(value, timer, Autorizer); await ButtonClicked();}" />
 
 
 

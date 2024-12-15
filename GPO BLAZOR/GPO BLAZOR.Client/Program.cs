@@ -13,10 +13,10 @@ namespace GPO_BLAZOR.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.Services.AddScoped<AuthenticationStateProvider, IdentetyAuthenticationStateProvider>();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddSingleton<IAutorizationStruct, AutorizationStruct>();
             builder.Services.AddScoped<CookieStorageAccessor>();
             builder.Services.AddScoped<LocalStorageAccessor>();
             builder.Services.AddScoped<PdfDocumentRenderer>();
-
 
 
             var app = builder.Build();
@@ -29,6 +29,7 @@ namespace GPO_BLAZOR.Client
             IPaddress.IPAddress = uri.Host + (uri.Port == null || uri.Port == 0 ? "": ":"+uri.Port);
 
             //Console.WriteLine("BaseAddress "+ c);
+
 
 
             await app.RunAsync();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Contracts;
 
 namespace DBAgent.Models;
 
@@ -19,4 +20,6 @@ public partial class Status
     public string StatusName { get; set; } = null!;
 
     public virtual ICollection<AskForm> AskForms { get; set; } = new List<AskForm>();
+    public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
+
 }
