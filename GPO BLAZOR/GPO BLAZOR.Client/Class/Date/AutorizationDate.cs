@@ -219,6 +219,9 @@ namespace GPO_BLAZOR.Client.Class.Date
                     }
                     else
                     {
+                        await _writer("Autorization", "");
+                        IsCookies = false;
+                        ErrorInAutorization();
                         throw (new Exception("Invalid Status Code: "+tempresponce.StatusCode));
                     }
 

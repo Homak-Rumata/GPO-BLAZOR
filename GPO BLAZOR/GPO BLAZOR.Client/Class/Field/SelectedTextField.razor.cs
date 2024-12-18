@@ -9,7 +9,7 @@ namespace GPO_BLAZOR.Client.Class.Field
 
         private bool IsLoading;
 
-        private CollectionValues collection;
+        private CollectionValues? collection;
 
         [Inject]
         public IJSRuntime JSRuntime {get; set;}
@@ -31,8 +31,8 @@ namespace GPO_BLAZOR.Client.Class.Field
         {
             try
             {
-                
-                collection = await CollectionValues.Create(Date.Id, JSRuntime);
+                if (collection == null) 
+                    collection = await CollectionValues.Create(Date.Id, JSRuntime);
                 
 
             }
