@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PdfFilePrinting.DocumentService.TextFormat">
+    <Position X="15.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAgCAAAIAgAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.FormatedElement">
+    <Position X="12.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgCCAAAACAAAAQABAAAAQAAAAAEAAAAAAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.BaseParagraph">
+    <Position X="13.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.Paragrapf">
+    <Position X="12.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAgAAAAAAAAAAAAAAAAgAAIAJAAAAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.MyltiplyParagraph">
+    <Position X="12.25" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIABAAAAAAAAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.Table">
+    <Position X="14.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACMAAAAAAAAAABBAAAAAAABAAAAgABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.Row">
+    <Position X="16.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAIAAAQAAAAAAAAAABAAAAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.Column">
+    <Position X="7.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAABAAAAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.Cell">
+    <Position X="10" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAABAACAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.BaseElement">
+    <Position X="21" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREAAAAQBAg=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.InjectElement">
+    <Position X="21.25" Y="9.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAEAAAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.MyltiplyInjectElement">
+    <Position X="22.25" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAABAAQAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PdfFilePrinting.DocumentService.RawText">
+    <Position X="19" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="PdfFilePrinting.DocumentService.Section" Collapsed="true">
+    <Position X="25.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKBAAAAAAAAA=</HashCode>
+      <FileName>DocumentService\Models.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

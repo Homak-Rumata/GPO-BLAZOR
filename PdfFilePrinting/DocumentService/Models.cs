@@ -15,92 +15,8 @@ using System.Collections.Generic;
 namespace PdfFilePrinting.DocumentService
 {
 
-    public interface IElement
-    {
-        //void Render();
-    }
-
-    public interface IElement<T> : IElement
-    {
-        void Render (in T element);
-    }
-
-    public interface IDocument : IElement;
-    public interface ISections : IElement<RenderingDocument>;
-
-
-    public interface IParagraph : IElement<RenderingSection>;
-
     
-    public interface IBaseElement : IElement<Paragraph>
-    {
-        string TextValue { get; set; }
-    }
-    public interface IInjectValue : IBaseElement
-    {
-    }
-    public interface IText: IBaseElement
-    {
-    }
-
-    public record struct Margins
-    { 
-        public Margins()
-        {
-
-        }
-        public Margins(int right, int left, int top, int bottom)
-        {
-            Right = right;
-            Left = left;
-            Top = top;
-            Bottom = bottom;
-        }
-        [XmlAttribute("right")]
-        public int Right { get; init; }
-        [XmlAttribute("left")]
-        public int Left { get; init; }
-        [XmlAttribute("top")]
-        public int Top { get; init; }
-        [XmlAttribute("bottom")]
-        public int Bottom { get; init; }
-    }
-
-
-
-    [DataContract]
-    //[XmlRoot(Namespace = "Templates", ElementName = "Document", IsNullable = false, DataType = "string")]
-    [XmlInclude(typeof(Paragrapf))]
-    public struct Document: IDocument
-    {
-        public Document()
-        {
-
-        }
-        [XmlArray]
-        public Section[] Sections { get; set; }
-        public Margins margin { get; set; } = new(45, 60, 60, 60);
-
-        public RenderingDocument Render()
-        {
-            var document = new RenderingDocument();
-            foreach (var section in Sections)
-            {
-                section.Render(document);
-            }
-
-            return document;
-        }
-
-        public IEnumerable<(string Name, Func<string> getter, Action<string> setter)> GetNames()
-        {
-            var temp = Sections.SelectMany(x => x.GetNames());
-
-            return temp;
-        }
-    }
-
-    public record struct Section: ISections
+    public struct Section
     {
         public Section()
         {
@@ -118,7 +34,7 @@ namespace PdfFilePrinting.DocumentService
             document.AddStyle("OS TUSUR", "normal");
             section.PageSetup = document.DefaultPageSetup.Clone();
             section.PageSetup.PageFormat = PageFormat.A4;
-            foreach (IParagraph temp in paragrapfs)
+            foreach (BaseParagraph temp in paragrapfs)
             {
                 temp.Render(section);
             }
@@ -137,7 +53,7 @@ namespace PdfFilePrinting.DocumentService
     [JsonArray]
     [Serializable]
     [JsonDerivedType(typeof(TextFormat), "TextFormat")]
-    public abstract record class TextFormat
+    public abstract class TextFormat
     {
 
         [XmlAttribute]
@@ -166,7 +82,7 @@ namespace PdfFilePrinting.DocumentService
     [JsonArray]
     [Serializable]
     [JsonDerivedType(typeof(FormatedElement), "FormatedElement")]
-    public abstract record class FormatedElement: TextFormat
+    public abstract class FormatedElement: TextFormat
     {
         [XmlAttribute]
         [DefaultValue(ParagraphAlignment.Justify)]
@@ -223,7 +139,7 @@ namespace PdfFilePrinting.DocumentService
     [JsonDerivedType(typeof(Paragrapf), "Paragrapf")]
     [JsonDerivedType(typeof(MyltiplyParagraph), "MyltiplyParagraph")]
     [JsonDerivedType(typeof(Table), "Table")]
-    public abstract record class BaseParagraph : FormatedElement, IParagraph
+    public abstract class BaseParagraph : FormatedElement
     {
         public abstract void Render(in RenderingSection element);
         public abstract void Render(in RenderingTable.Cell element);
@@ -236,7 +152,7 @@ namespace PdfFilePrinting.DocumentService
     [Serializable]
     [JsonDerivedType(typeof(MyltiplyParagraph), "MyltiplyParagraph")]
     [XmlType("Paragrapf")]
-    public record class Paragrapf: BaseParagraph, IParagraph
+    public class Paragrapf: BaseParagraph
     {
         public Paragrapf()
         {
@@ -264,7 +180,7 @@ namespace PdfFilePrinting.DocumentService
             paragraph.AddSpace(SpaceNum);
             if (tab) paragraph.AddTab();
             if (text is not null)
-                foreach (IBaseElement temp in text)
+                foreach (BaseElement temp in text)
                 {
                     temp.Render(paragraph);
                 }
@@ -278,7 +194,7 @@ namespace PdfFilePrinting.DocumentService
             paragraph.AddSpace(SpaceNum);
             if (tab) paragraph.AddTab();
             if (text is not null)
-                foreach (IBaseElement temp in text)
+                foreach (BaseElement temp in text)
                 {
                     temp.Render(paragraph);
                 }
@@ -293,7 +209,7 @@ namespace PdfFilePrinting.DocumentService
             paragraph.AddSpace(SpaceNum);
             if (tab) paragraph.AddTab();
             if (text is not null)
-                foreach (IBaseElement temp in text)
+                foreach (BaseElement temp in text)
                 {
                     temp.Render(paragraph);
                 }
@@ -314,7 +230,7 @@ namespace PdfFilePrinting.DocumentService
     }
 
     [XmlType("MyltiplyParagraph")]
-    public record class MyltiplyParagraph : Paragrapf
+    public class MyltiplyParagraph : Paragrapf
     {
         [XmlElementAttribute(Type = typeof(RawText))]
         [XmlElementAttribute(Type = typeof(MyltiplyInjectElement))]
@@ -369,7 +285,7 @@ namespace PdfFilePrinting.DocumentService
     }
 
     [XmlType("Table")]
-    public record class Table: BaseParagraph
+    public class Table: BaseParagraph
     {
         public Table()
         {
@@ -488,7 +404,7 @@ namespace PdfFilePrinting.DocumentService
         }
     }
 
-    public record class  Row: FormatedElement
+    public class  Row: FormatedElement
     {
         public Row()
         {
@@ -525,7 +441,7 @@ namespace PdfFilePrinting.DocumentService
 
 
 
-    public record class Column: FormatedElement
+    public class Column: FormatedElement
     {
         public Column()
         {
@@ -565,7 +481,7 @@ namespace PdfFilePrinting.DocumentService
         }
     }
 
-    public record class Cell: FormatedElement
+    public class Cell: FormatedElement
     {
         public Cell()
         {
@@ -615,7 +531,7 @@ namespace PdfFilePrinting.DocumentService
     [JsonDerivedType(typeof(InjectElement), "InjectElement")]
     [JsonDerivedType(typeof(MyltiplyInjectElement), "MyltiplyInjectElement")]
     [JsonDerivedType(typeof(RawText), "Text")]
-    public abstract record class BaseElement : TextFormat, IBaseElement
+    public abstract class BaseElement : TextFormat
     {
         public BaseElement()
         {
@@ -651,7 +567,7 @@ namespace PdfFilePrinting.DocumentService
 
     [JsonDerivedType(typeof(MyltiplyInjectElement), "MyltiplyInjectElement")]
     [XmlType("InjectElement")]
-    public record class InjectElement: BaseElement, IInjectValue
+    public class InjectElement: BaseElement
     {
         public InjectElement()
         {
@@ -671,7 +587,7 @@ namespace PdfFilePrinting.DocumentService
         }
     }
     [XmlType("MyltiplyInjectElement")]
-    public record class MyltiplyInjectElement: InjectElement
+    public class MyltiplyInjectElement: InjectElement
     {
 
         [XmlArray("TextValue")]
@@ -718,7 +634,7 @@ namespace PdfFilePrinting.DocumentService
             }
     }
     [XmlType("RawText")]
-    public record class RawText : BaseElement, IText
+    public class RawText : BaseElement
     {
         public RawText()
         {

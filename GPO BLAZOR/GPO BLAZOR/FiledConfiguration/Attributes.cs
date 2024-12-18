@@ -25,30 +25,15 @@ namespace GPO_BLAZOR.FiledConfiguration
         }
         public Path path { get; init; }
         public FieldDateContainer field { get; init; }
-               
-    }
-
-    class FieldAccess<T>:Field
-    {
-        //public (T, bool) GetValue(string Name)
-//        {
-//
- //       }
-
-       // public bool SetValue(string Name, T Value)
-        //{
-
-        //}
 
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     public interface IPathElement
     {
-            string Name { get; init; }
+        string Name { get; init; }
     }
 
-    class PathElementComparer: IEqualityComparer<FieldDateContainer>, IEqualityComparer<IPathElement>
+    class PathElementComparer : IEqualityComparer<FieldDateContainer>, IEqualityComparer<IPathElement>
     {
         public bool Equals(IPathElement? b1, IPathElement? b2)
         {
@@ -81,21 +66,21 @@ namespace GPO_BLAZOR.FiledConfiguration
         IDateContainer<DateType> Summ(IDateContainer<DateType> A);
     }
 
-    public interface IDateSuperContainer<DateContainer, IValue>: IDateContainer<DateContainer> 
-        where DateContainer: IDateContainer<IValue>
+    public interface IDateSuperContainer<DateContainer, IValue> : IDateContainer<DateContainer>
+        where DateContainer : IDateContainer<IValue>
         where IValue : IPathElement
     {
-//        IDateSuperContainer<DateContainer, IValue> Summ(IDateSuperContainer<DateContainer, IValue> A);
+        //        IDateSuperContainer<DateContainer, IValue> Summ(IDateSuperContainer<DateContainer, IValue> A);
     }
 
-    public interface IFronzenContainer<T> where T: IPathElement
+    public interface IFronzenContainer<T> where T : IPathElement
     {
         IDateContainer<T> ToFronzeFieldContainer();
     }
 
-    record struct FieldDateContainer: IPathElement
+    record struct FieldDateContainer : IPathElement
     {
-        public FieldDateContainer (string Name, string ClassType, string Id, string Text, bool IsDisabled)
+        public FieldDateContainer(string Name, string ClassType, string Id, string Text, bool IsDisabled)
         {
             this.Name = Name;
             this.ClassType = ClassType;
@@ -111,12 +96,12 @@ namespace GPO_BLAZOR.FiledConfiguration
         public bool IsDisabled { get; set; }
     }
 
-    abstract record class Based<DateType>: IDateContainer<DateType> where DateType : IPathElement
+    abstract record class Based<DateType> : IDateContainer<DateType> where DateType : IPathElement
     {
         [JsonIgnore]
         [XmlIgnore]
         public abstract string Name { get; init; }
-        
+
 
         private IEnumerable<DateType> _date;
 
@@ -136,9 +121,9 @@ namespace GPO_BLAZOR.FiledConfiguration
         abstract public IDateContainer<DateType> Summ(IDateContainer<DateType> A);
     }
 
-    abstract record class SecondBased<DataContainer, DateType> : Based <DataContainer>, IDateContainer<DataContainer>
+    abstract record class SecondBased<DataContainer, DateType> : Based<DataContainer>, IDateContainer<DataContainer>
         where DataContainer : class, IDateContainer<DateType>
-        where DateType: IPathElement
+        where DateType : IPathElement
     {
         public override IDateContainer<DataContainer> ToFronzeFieldContainer()
         {
@@ -182,7 +167,7 @@ namespace GPO_BLAZOR.FiledConfiguration
             return new Container() { Name = A.Name, Date = uniue.Concat(intersectA).Concat(intersectB) };
         }
 
-//        public abstract IDateSuperContainer<DataContainer, DateType> Summ(IDateSuperContainer<DataContainer, DateType> A);
+        //        public abstract IDateSuperContainer<DataContainer, DateType> Summ(IDateSuperContainer<DataContainer, DateType> A);
     }
 
     record class BlockDateContainer : Based<FieldDateContainer>, IDateContainer<FieldDateContainer>
@@ -207,7 +192,7 @@ namespace GPO_BLAZOR.FiledConfiguration
             return newContainer;
         }
 
-        public static IDateContainer<FieldDateContainer> operator + (BlockDateContainer A, BlockDateContainer B )
+        public static IDateContainer<FieldDateContainer> operator +(BlockDateContainer A, BlockDateContainer B)
         {
             return A.Summ(B);
         }
@@ -224,7 +209,7 @@ namespace GPO_BLAZOR.FiledConfiguration
 
     }
 
-    record class PageDateContainer: SecondBased<BlockDateContainer, FieldDateContainer>, IDateContainer<BlockDateContainer>
+    record class PageDateContainer : SecondBased<BlockDateContainer, FieldDateContainer>, IDateContainer<BlockDateContainer>
     {
         public PageDateContainer()
         {
@@ -239,13 +224,13 @@ namespace GPO_BLAZOR.FiledConfiguration
         [XmlAttribute("PageName")]
         public override string Name { get; init; }
 
-        
+
         public override IDateContainer<BlockDateContainer> ToFronzeFieldContainer()
         {
-            return this with { Date = base.ToFronzeFieldContainer().Date};
+            return this with { Date = base.ToFronzeFieldContainer().Date };
         }
 
-        public static IDateContainer<BlockDateContainer> operator + (PageDateContainer A, PageDateContainer B)
+        public static IDateContainer<BlockDateContainer> operator +(PageDateContainer A, PageDateContainer B)
         {
             return A.Summ(B);
         }
@@ -256,7 +241,7 @@ namespace GPO_BLAZOR.FiledConfiguration
         }
     }
 
-    record class StatmenDateContainer: SecondBased<PageDateContainer, BlockDateContainer>, IDateContainer<PageDateContainer>
+    record class StatmenDateContainer : SecondBased<PageDateContainer, BlockDateContainer>, IDateContainer<PageDateContainer>
     {
         public StatmenDateContainer()
         {
@@ -278,7 +263,7 @@ namespace GPO_BLAZOR.FiledConfiguration
         }
 
 
-        public static IDateContainer<PageDateContainer> operator + (StatmenDateContainer A, StatmenDateContainer B)
+        public static IDateContainer<PageDateContainer> operator +(StatmenDateContainer A, StatmenDateContainer B)
         {
             return A.Summ(B);
         }
@@ -290,22 +275,13 @@ namespace GPO_BLAZOR.FiledConfiguration
     }
 
 
-    ////////////////////////////////////////////////////////////////|||||||||||||||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-
-
-    ////////////////////////////////////////////////////////////////|||||||||||||||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
     static class StatmenDate
     {
-        static public IDateContainer<PageDateContainer> DefaultInfo = DefaultInfoF();
-
         /// <summary>
         /// Метод сопоставления Списка полей и Полей в документе
         /// </summary>
         /// <returns></returns>
-        public static (IDictionary<string, IDateContainer<PageDateContainer>> Templates, IDictionary<string, FieldCont.IField> Values) ExperementalTemplate ()
+        public static (IDictionary<string, IDateContainer<PageDateContainer>> Templates, IDictionary<string, FieldCont.IField> Values) ExperementalTemplate()
         {
             IDocument FieldInDocument = new Documnet()
             {
@@ -339,135 +315,14 @@ namespace GPO_BLAZOR.FiledConfiguration
 
             IDictionary<string, FieldCont.IField> t;
 
-            return (Constructor.GetFields(FieldCollextion, new[] { FieldInDocument } , out t), t);
+            return (Constructor.GetFields(FieldCollextion, new[] { FieldInDocument }, out t), t);
         }
-        static public IDateContainer<PageDateContainer> DefaultInfoF ()
-        {
-            StatmenDateContainer DefaultInfo1 = new StatmenDateContainer(
-            new PageDateContainer[]{new PageDateContainer("Пользовательские данные",
-                new BlockDateContainer[]{
-                    new BlockDateContainer("Основные данные",
-                         new FieldDateContainer[]{
-                            new FieldDateContainer("FirstNameTextField", "InputInformationField", "FirstNameTextField1", "Имя", false),
-                            new FieldDateContainer("SecondNameTextField", "InputInformationField", "SecondNameTextField", "Фамилия", false),
-                            new FieldDateContainer("TreeNameTextField", "InputInformationField", "TreeNameTextField", "Отчество (при наличии)", false)
-                        }),
-                    new BlockDateContainer("",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("Grp", "CollectionInformationField", "Grp", "Группа", false),
-                            new FieldDateContainer("Direction", "CollectionInformationField", "Direction", "Направление подготовки", false)
-                        }),
-                    new BlockDateContainer("Практики",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("PracticeSort", "CollectionInformationField", "PracticeSort", "Вид практики", false),
-                            new FieldDateContainer("PracticeType", "CollectionInformationField", "PracticeType", "Тип практики", false),
-                            new FieldDateContainer("date", "TymeInformationField", "date", "Дата подачи заявления", true)
-                        }),
-                    }
-            ),
-                new PageDateContainer("Руководители",
-                new BlockDateContainer[]{
-                    new BlockDateContainer("Руководитель практики",
-                        new FieldDateContainer[]{
-                            new FieldDateContainer("WorkLeaderFirstNameTextField", "InputInformationField", "WorkLeaderFirstNameTextField", "Имя", false),
-                            new FieldDateContainer("WorkLeaderSecondNameTextField", "InputInformationField", "WorkLeaderSecondNameTextField", "Фамилия", false),
-                            new FieldDateContainer("WorkLeaderTreeNameTextField", "InputInformationField", "WorkLeaderTreeNameTextField", "Отчество (при наличии)", false)
-                        }),
-                    new BlockDateContainer("Заведующий кафеды",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("CafedralLeaderFirstNameTextField", "CollectionInformationField", "CafedralLeaderFirstNameTextField", "Имя", false),
-                            new FieldDateContainer("CafedralLeaderSecondNameTextField", "CollectionInformationField", "CafedralLeaderSecondNameTextField", "Фамилия", false),
-                            new FieldDateContainer("CafedralLeaderTreeNameTextField", "CollectionInformationField", "CafedralLeaderTreeNameTextField", "Отчество", false)
-                        }),
-                    }
-            ),
-                new PageDateContainer("Предприятия",
-                 new BlockDateContainer[]{
-                    new BlockDateContainer("Реквизиты Предприятия",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("FactoryNameTextField", "InputInformationField", "FactoryNameTextField", "Наименование", false)
-                        }),
-                    new BlockDateContainer("Адресс",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("RegionNameTextField", "CollectionInformationField", "RegionNameTextField", "Область", false),
-                            new FieldDateContainer("DistrictNameTextField", "CollectionInformationField", "DistrictNameTextField", "Район", false),
-                            new FieldDateContainer("LocalityNameTextField", "TymeInformationField", "LocalityNameTextField", "Населённый пункт", false)
-                        }),
-                    new BlockDateContainer("",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("StreetTextField", "CollectionInformationField", "StreetTextField", "Улица", false),
-                            new FieldDateContainer("buildingNumberTextField", "CollectionInformationField", "buildingNumberTextField", "Строение", false),
-                            new FieldDateContainer("MailPostNumberTextField", "NumberInformationField", "MailPostNumberTextField", "Номер ящика", false)
-                        })
-                    }
-            )
-        });
 
-            StatmenDateContainer DefaultInfo2 = new StatmenDateContainer(
-            new PageDateContainer[]{new PageDateContainer("Пользовательские данные",
-                new BlockDateContainer[]{
-                    new BlockDateContainer("Основные данные2",
-                         new FieldDateContainer[]{
-                            new FieldDateContainer("FirstNameTextField", "InputInformationField", "FirstNameTextField", "Имя", false),
-                            new FieldDateContainer("SecondNameTextField", "InputInformationField", "SecondNameTextField", "Фамилия", false),
-                            new FieldDateContainer("TreeNameTextField", "InputInformationField", "TreeNameTextField", "Отчество (при наличии)", false)
-                        }),
-                    new BlockDateContainer("",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("Grp2", "CollectionInformationField", "Grp2", "Группа", false),
-                            new FieldDateContainer("Direction", "CollectionInformationField", "Direction2", "Направление подготовки", false)
-                        }),
-                    new BlockDateContainer("Практики2",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("PracticeSort", "CollectionInformationField", "PracticeSort", "Вид практики", false),
-                            new FieldDateContainer("PracticeType", "CollectionInformationField", "PracticeType", "Тип практики", false),
-                            new FieldDateContainer("date", "TymeInformationField", "date", "Дата подачи заявления", true)
-                        }),
-                    }
-            ),
-                new PageDateContainer("Руководители",
-                new BlockDateContainer[]{
-                    new BlockDateContainer("Руководитель практики2",
-                        new FieldDateContainer[]{
-                            new FieldDateContainer("WorkLeaderFirstNameTextField", "InputInformationField", "WorkLeaderFirstNameTextField", "Имя", false),
-                            new FieldDateContainer("WorkLeaderSecondNameTextField", "InputInformationField", "WorkLeaderSecondNameTextField", "Фамилия", false),
-                            new FieldDateContainer("WorkLeaderTreeNameTextField", "InputInformationField", "WorkLeaderTreeNameTextField", "Отчество (при наличии)", false)
-                        }),
-                    new BlockDateContainer("Заведующий кафеды",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("CafedralLeaderFirstNameTextField", "CollectionInformationField", "CafedralLeaderFirstNameTextField", "Имя", false),
-                            new FieldDateContainer("CafedralLeaderSecondNameTextField", "CollectionInformationField", "CafedralLeaderSecondNameTextField", "Фамилия", false),
-                            new FieldDateContainer("CafedralLeaderTreeNameTextField", "CollectionInformationField", "CafedralLeaderTreeNameTextField", "Отчество", false)
-                        }),
-                    }
-            ),
-                new PageDateContainer("Предприятия2",
-                 new BlockDateContainer[]{
-                    new BlockDateContainer("Реквизиты Предприятия",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("FactoryNameTextField", "InputInformationField", "FactoryNameTextField", "Наименование", false)
-                        }),
-                    new BlockDateContainer("Адресс",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("RegionNameTextField", "CollectionInformationField", "RegionNameTextField", "Область", false),
-                            new FieldDateContainer("DistrictNameTextField", "CollectionInformationField", "DistrictNameTextField", "Район", false),
-                            new FieldDateContainer("LocalityNameTextField", "TymeInformationField", "LocalityNameTextField", "Населённый пункт", false)
-                        }),
-                    new BlockDateContainer("",
-                        new FieldDateContainer[] {
-                            new FieldDateContainer("StreetTextField", "CollectionInformationField", "StreetTextField", "Улица", false),
-                            new FieldDateContainer("buildingNumberTextField", "CollectionInformationField", "buildingNumberTextField", "Строение", false),
-                            new FieldDateContainer("MailPostNumberTextField", "NumberInformationField", "MailPostNumberTextField", "Номер ящика", false)
-                        })
-                    }
-            )
-        });
-            var t = DefaultInfo1;
-            return t.ToFronzeFieldContainer();
-        }
+
     }
-
 }
+
+
 
 
     /*
