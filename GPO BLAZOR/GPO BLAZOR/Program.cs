@@ -1052,7 +1052,7 @@ namespace GPO_BLAZOR
                             var DoubledContract = await cntx.Contracts
                                 .FirstOrDefaultAsync(x => x.OrganizationNavigation.Name == UserForm["FactoryName"] 
                                     && x.OrganizationNavigation.Adress == UserForm["FactoryLocation"]);
-
+                            ///Ожидается ошибка, если в договор уже записана AskForm
                             if (DoubledContract != null)
 #warning Добавить Руководителя практики от организации ^
                             {
