@@ -1307,7 +1307,7 @@ namespace PdfFilePrinting.MakeTemplate
                                                         {
                                                             new InjectElement()
                                                             {
-                                                                Name= "FactoryLeaderName",
+                                                                Name= "Factory Practic Leader Name",
                                                                 TextValue = "Иванов Иван Иванович"
                                                             }
                                                         }

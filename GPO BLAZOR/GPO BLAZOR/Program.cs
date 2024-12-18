@@ -33,6 +33,11 @@ using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Collections;
 using System;
+using PdfSharp.Pdf.Content.Objects;
+using PdfSharp.Pdf.Content;
+using PdfSharp.Pdf;
+using PdfSharp.Fonts;
+using System.IO.Compression;
 
 
 
@@ -197,6 +202,50 @@ namespace GPO_BLAZOR
     }
     //
 
+#region testingPdfextension
+    public static class PdfSharpExtensions
+    {
+        public static IEnumerable<string> ExtractText(this PdfPage page)
+        {
+            var content = ContentReader.ReadContent(page);
+            var text = content.ExtractText();
+            return text;
+        }
+
+        public static IEnumerable<string> ExtractText(this CObject cObject)
+        {
+            switch (cObject)
+            {
+                case COperator cOperator:
+                    if (cOperator.OpCode.OpCodeName == OpCodeName.Tj ||
+                    cOperator.OpCode.OpCodeName == OpCodeName.TJ)
+                    {
+                        foreach (var cOperand in cOperator.Operands)
+                            foreach (var txt in ExtractText(cOperand))
+                                yield return txt;
+                    }
+                    else
+                    {
+                        foreach (var cOperand in cOperator.Operands)
+                            foreach (var txt in ExtractText(cOperand))
+                                yield return txt+" - ethertype - "+ cOperator.OpCode.Name;
+                    }
+                    
+                    break;
+                case CSequence cSequence:
+                    foreach (var element in cSequence)
+                        foreach (var txt in ExtractText(element))
+                            yield return txt;
+                    break;
+                case CString cString:
+                    var type = cString.CStringType;
+                    yield return cString.Value;
+                    break;
+            }
+        }
+    }
+#endregion
+
     public class Program
     {
         static Dictionary<string, List<string>> SpecialArray = new Dictionary<string, List<string>>()
@@ -209,12 +258,78 @@ namespace GPO_BLAZOR
             {"",  new List<string>(){"based", "post", "contract"}}
         };
 
+        private static string EncodingHack(string str)
+        {
+            var encoding = Encoding.BigEndianUnicode;
+            var bytes = encoding.GetBytes(str);
+            var sb = new StringBuilder();
+            sb.Append((char)254);
+            sb.Append((char)255);
+            for (int i = 0; i < bytes.Length; ++i)
+            {
+                sb.Append((char)bytes[i]);
+            }
+            return sb.ToString();
+        }
+
         public static void Main(string[] args)
         {
 
-            /*{
+            {
+                var tyop = new PdfDocumentRenderer();
+
+                /*FileStream fstreams = new FileStream("./file1.pdf", FileMode.Open);
+                byte[] bufchar = new byte[fstreams.Length];
+
+                fstreams.Read(bufchar, 0, bufchar.Length);
+                StreamReader rtg = new StreamReader(fstreams);
+
+                Console.WriteLine(Encoding.UTF8.GetString(bufchar));
+
+                
+
+                    using (MemoryStream memoryStream = new MemoryStream(bufchar))
+                    {
+                        using (GZipStream gzipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+                        {
+                            
+                            using (StreamReader streamReader = new StreamReader(gzipStream))
+                            {
+                                Console.WriteLine( streamReader.ReadToEnd());
+                            }
+                        }
+                        //(Encoding.Default.GetString(memoryStream.ToArray())); 
+                    }
+               
+                */
+            tyop.PdfDocument = PdfSharp.Pdf.IO.PdfReader.Open("./Pdf5.pdf", PdfSharp.Pdf.IO.PdfDocumentOpenMode.ReadOnly);
+
+                PdfPage SamplePage = tyop.PdfDocument.Pages[0];
+                PdfDictionary.PdfStream stream = SamplePage.Contents.Elements.GetDictionary(0).Stream;
+                
+                var content = ContentReader.ReadContent(SamplePage);
+                var text = PdfSharpExtensions.ExtractText(content).ToArray();
+                foreach (var lol in text)
+                    Console.WriteLine(lol);
+
+                CObject tyui = ContentReader.ReadContent(tyop.PdfDocument.Pages[0]);
+                var textingpdf = tyui.ExtractText().ToArray();
+
+                
+                var rustran = EncodingHack("Эксплуатационной практики");
+
+                    foreach (var itmj in textingpdf)
+                        Console.WriteLine(itmj);
+
+                Uri uri = new Uri("https://egrul.nalog.ru");
+
+                HttpClient ugrn1 = new HttpClient();
+
+                HttpMessageHandler ugrn2 = new HttpClientHandler();
+
+
                 FileStream str = new FileStream("person.json", FileMode.OpenOrCreate);
-                var options = new JsonSerializerOptions()
+                var optionsed = new JsonSerializerOptions()
                 {
                     WriteIndented = true,
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -222,21 +337,21 @@ namespace GPO_BLAZOR
                     Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
                 };
-                var hjobj = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
-                var JSONSer = JsonSerializer.Serialize(hjobj, options);
+                var hjobj = PdfFilePrinting.MakeTemplate.MakeAskFormTemplate.Make();
+                var JSONSer = JsonSerializer.Serialize(hjobj, optionsed);
                 byte[] inputBuffer = Encoding.Default.GetBytes(JSONSer);
 
                 str.Write(inputBuffer, 0, inputBuffer.Length);
                 str.Close();
 
 
-                XmlSerializer xmlSerializer = new(typeof(Document));
+                XmlSerializer xmlSerializered = new(typeof(Document));
                 str = new FileStream("person.xml", FileMode.Create);
 
             // ïîëó÷àåì ïîòîê, êóäà áóäåì çàïèñûâàòü ñåðèàëèçîâàííûé îáúåêò
                 var rest = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
 
-                xmlSerializer.Serialize(str, rest);
+                xmlSerializered.Serialize(str, rest);
 
 
                 var rtfRender = new RtfDocumentRenderer();
@@ -250,7 +365,7 @@ namespace GPO_BLAZOR
 
                 str.Close();
                 str = new FileStream("person.xml", FileMode.Open);
-                Document? res = xmlSerializer.Deserialize(str) as Document?;
+                Document? res = xmlSerializered.Deserialize(str) as Document?;
             Document Res1 = PdfFilePrinting.MakeTemplate.MakeContractTemplate.Make();
             Document Res2 = res.Value;
             var pdfRenderer = new PdfDocumentRenderer();
@@ -268,9 +383,9 @@ namespace GPO_BLAZOR
             AllowTrailingCommas = true,
             Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
 
-        };*/
+        };
             //TestPrinter.F(new FileStream("./file123.pdf", FileMode.OpenOrCreate));
-
+/*
             FileStream fstream = new FileStream("person.xml", FileMode.Open);
             byte[] buffer = new byte[fstream.Length];
             fstream.ReadExactly(buffer);
@@ -320,11 +435,13 @@ namespace GPO_BLAZOR
 
             
            
-
+            */
 
 
             var urlstr = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
             var cntyui = Environment.GetEnvironmentVariables();
+
+
             Console.WriteLine($"Envirment Tunnel URL {urlstr}");
             Console.Write("Data Base Password: ");
             var Password = Console.ReadLine();
@@ -342,7 +459,7 @@ namespace GPO_BLAZOR
                 Template = new FiledConfiguration.FieldDateContainer(x.Name, x.Type, x.Name, x.Text, !x.Mutability),
             });
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Document));
+           XmlSerializer xmlSerializer = new XmlSerializer(typeof(Document));
             var DocTemplate = cntx.Templates
                 .Select(x => new KeyValuePair<string, Document>(x.Name, (Document)xmlSerializer
                     .Deserialize(new StringReader(x.TemplateBody))));
@@ -607,6 +724,7 @@ namespace GPO_BLAZOR
                     var (UserIsNotNull, userID) = await Autorization.checkuser(date, cntx);
                     if (!UserIsNotNull)
                     {
+                        app.Logger.LogWarning($"User: {date.login} Bad Autorization");
                         return Results.Problem("not login or password", "nonautorization", 401, "bad login or password)", "nontype", new Dictionary<string, object> { { "messege", "bad login or password" } });
                     }
 
@@ -714,8 +832,8 @@ namespace GPO_BLAZOR
                 ///<summary>
                 ///Конструирование списка заявлений
                 ///</summary>
-                var Contaner1 = Forms.Select(x => new { Id = x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.StatusNavigation.StatusName });
-                var Contaner2 = Forms.Select(x => new { Id = x.Id.ToString(), Type = "Договор", Time = DateTime.Now, practicType = x.PracticeType, state = x.StatusNavigation.StatusName });
+                var Contaner1 = Forms.Where(x=>x.Status!=0).Select(x => new { Id = x.Id.ToString(), Type = "Заявление", Time = DateTime.Now, practicType = x.PracticeType, state = x.StatusNavigation.StatusName });
+                var Contaner2 = Forms.Where(x => x.ContractNavigation.Status != 0).Select(x => new { Id = x.Id.ToString(), Type = "Договор", Time = DateTime.Now, practicType = x.PracticeType, state = x.ContractNavigation.StatusNavigation.StatusName });
                 var result = Contaner1.Concat(Contaner2);
                 return result;                
             });
@@ -772,6 +890,7 @@ namespace GPO_BLAZOR
 
                             Contract contract = new Contract()
                             {
+                                Status = 0,
                                 
                                 Organisation = 1,
                             };
@@ -806,6 +925,11 @@ namespace GPO_BLAZOR
                         case "Договор":
                             Result["id"] = (await cntx.AskForms.Where(x => x.StudentNavigation.Email == UserMail).MaxAsync(x => x.Id)).ToString();
                             ID = Result["id"];
+                            var form = await cntx.AskForms.FirstAsync(x => x.Id == Int32.Parse(ID));
+                            contract = await cntx.Contracts.FirstAsync(x=>x.Id==form.Contract);
+                            contract.Status = 1;
+                            cntx.Contracts.Update(contract);
+                            await cntx.SaveChangesAsync();
                             break;
                     }
                 }
@@ -867,6 +991,8 @@ namespace GPO_BLAZOR
                             $" {User.Student.GroupNavigation.DirectionNavigation.LeaderNavigation.MiddleName ?? ""}");
                         break;
                     case "Договор":
+                        if (askForm.ContractNavigation.Status == 0)
+                            return Results.NotFound();
                         Result.Add("ContractNumber", askForm.ContractNavigation.Number ?? "");
                         Result.Add("ContractDate", DateTime.Now.ToShortDateString().Replace('/', '.') ?? "");
                         Result.Add("FactoryName", askForm.ContractNavigation.OrganizationNavigation.Name ?? "");
@@ -896,35 +1022,6 @@ namespace GPO_BLAZOR
 
                 return Results.Json(Result);
 
-                if (askForm is not null)
-                {
-                    if (askForm.ContractNavigation is not null)
-                    {
-                        var temp = new { id = ID, Template = "Contract" };
-                        return Results.Json(temp);
-                    }
-                    else
-                    {
-                        return Results.Json(new { id = ID, Template = "AskForm" });
-                    }
-                }
-                else
-                {
-                    var newForm = new AskForm() { StudentNavigation = User, Student = User.Id };
-                    await cntx.AskForms.AddAsync(newForm);
-                    return Results.Json(new { id = ID, Template = "AskForm" });
-                }
-                int id;
-                if (Int32.TryParse(ID, out id))
-                {
-                    app.Logger.LogInformation($"{ID}: {temp[id]}");
-                    return Results.Json(temp[id]);
-                }
-                else
-                {
-                    return Results.Json(new { id = ID + "new", Template = ID });
-                }
-
             });
             //app.MapGet("/getformDate:{TypePost}", [Authorize] (string TypePost) => new { id = TypePost + "new", Template = TypePost });
 
@@ -935,20 +1032,64 @@ namespace GPO_BLAZOR
             app.MapPost("/getInfo", [Authorize] async (int? ID, Dictionary<string, string> UserForm, HttpContext context, Gpo2Context cntx) =>
             {
                 var role = context.User.Claims.First(x=>x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split('\n');
-                
+                var UserMail = context.User.Identity.Name;
 
                 if (role.Contains("PracticFieldLeader"))
                 { var AskForm = (await cntx.AskForms.FindAsync(ID));
-                    AskForm.Commentary = UserForm["Commentary"];
+                    AskForm.Commentary = UserForm["Commentary"] ?? "";
                     cntx.AskForms.Update(AskForm);
-                    cntx.SaveChanges();
+                    await cntx.SaveChangesAsync();
                 }
                    
+                
 
                 switch (UserForm["Template"])
                 {
                     case "Contract":
+                        var contract = cntx.Contracts.Include(x=>x.OrganizationNavigation);
+                        //
+                        {
+                            var DoubledContract = await cntx.Contracts
+                                .FirstOrDefaultAsync(x => x.OrganizationNavigation.Name == UserForm["FactoryName"] 
+                                    && x.OrganizationNavigation.Adress == UserForm["FactoryLocation"]);
+                            ///Ожидается ошибка, если в договор уже записана AskForm
+                            if (DoubledContract != null)
+#warning Добавить Руководителя практики от организации ^
+                            {
+                                var askForm = await cntx.AskForms
+                                    .Include(x=>x.StudentNavigation)
+                                    .FirstAsync(x => x.Id == ID.Value && x.StudentNavigation.Email == UserMail);
+                                DoubledContract.AskForms.Add(askForm);
+                                cntx.AskForms.Update(askForm);
+                                cntx.Contracts.Update(DoubledContract);
+                                await cntx.SaveChangesAsync();
+                                Results.Ok("sucsefull");
+                            }
+                            var Usercontract = (await cntx.AskForms
+                                .Include(x => x.StudentNavigation)
+                                .Where(x => x.StudentNavigation.Email == UserMail)
+                                .Include(x => x.ContractNavigation)
+                                //.ThenInclude(x=>x.OrganizationNavigation)
+                                .FirstAsync(x=>x.Id==ID)).ContractNavigation;
 
+                            var NewOrganisation = new Organization() 
+                            {
+                                Name = UserForm["FactoryName"] ?? "",
+                                Adress = UserForm["FactoryLocation"] ?? "",
+                                Rank = UserForm["FactoryRank"] ?? "",
+                                FactoryLeader = UserForm["FactoryLeaderName"] ?? "",
+                                Document = UserForm["OrganizationRule"] ?? "",
+                            };
+                            var orgTaskAdd = cntx.AddAsync(NewOrganisation);
+
+                            Usercontract.OrganizationNavigation = NewOrganisation;
+
+                            Usercontract.Room = UserForm["WorksRooms"];
+
+                            await orgTaskAdd;
+                            await cntx.SaveChangesAsync();
+                        }
+                        
                         break;
                     case "AskForm":
 
@@ -986,7 +1127,6 @@ namespace GPO_BLAZOR
 
             app.MapGet("/getTepmlate/{TemplateName}", [Authorize] async (string TemplateName, HttpContext context) =>
             {
-                var results = StatmenDate.DefaultInfoF();
 
                 return RequestTemplates[TemplateName];
             });

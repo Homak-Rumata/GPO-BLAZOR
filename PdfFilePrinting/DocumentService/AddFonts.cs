@@ -1,6 +1,7 @@
 ﻿using PdfSharp.Fonts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,6 +11,7 @@ namespace PdfFilePrinting.DocumentService
 {
     public class MyFontResolver : IFontResolver
     {
+        
         public FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
         {
 

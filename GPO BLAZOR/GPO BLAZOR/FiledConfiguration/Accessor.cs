@@ -210,24 +210,6 @@ namespace GPO_BLAZOR.FiledConfiguration
                 .ToDictionary();
 
             return g;
-            ////
-            /*
-            var GetDocFieldsTuple = static (IDictionary<string, FieldCont.IField> Fields) => (IDocument document) => ((DocName: document, Field: document.Fields.Select(f => Fields[f.Name])));
-            var DocsFieldConnect = Document.Select(GetDocFieldsTuple (FieldsDictionary));
-
-            static IDateContainer<PageDateContainer> ContainerCreator(FieldCont.IField Field)
-            {
-                var block = new BlockDateContainer(Field.Path.Block, [Field.Template]);
-                return new StatmenDateContainer([new PageDateContainer(Field.Path.Page, [block])]);
-            }
-
-            var result = DocsFieldConnect
-                .Select(static x => (Name: x.DocName.Name, Struct: x.Field
-                    .Aggregate(new StatmenDateContainer() as IDateContainer<PageDateContainer>, (a, b) => a.Summ(ContainerCreator(b)))))
-                .Select(static x=>new KeyValuePair<string, IDateContainer<PageDateContainer>>(x.Name, x.Struct.ToFronzeFieldContainer())).ToFrozenDictionary();
-
-            return result;*/
-                
         }
     }
     
